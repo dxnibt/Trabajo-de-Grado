@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6cbbbbdcefc571246ad6d5ffc335f2b9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - boton_estudiante: {instanceID: 0}
+  - boton_docente: {instanceID: 0}
+  - cursorManita: {fileID: 2800000, guid: 52197a3489c02ce43a2de76cd7bc0b8d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
