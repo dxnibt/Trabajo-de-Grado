@@ -8,5 +8,50 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/mp.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/mp_estudiante.unity
+    guid: 63934a08d60eef748a737c19305fc2a9
+  - enabled: 1
+    path: Assets/Scenes/mp_docente.unity
+    guid: 5b02cd21f781f6a419826210f3dbd23f
+  - enabled: 1
+    path: Assets/Scenes/mp_nivel1.unity
+    guid: 45e053a4730986148a32c9e1c7a92ad8
+  - enabled: 1
+    path: Assets/Scenes/mp_nivel2.unity
+    guid: fe9f1d1d2e4b64a429a37a891c7cff55
+  - enabled: 1
+    path: Assets/Scenes/n1_a1.unity
+    guid: 19612bee357dd8748881b919b7a80e99
+  - enabled: 1
+    path: Assets/Scenes/n1_a2.unity
+    guid: b26dab599e9ffe44881e7595c4a703e2
+  - enabled: 1
+    path: Assets/Scenes/n1_a3.unity
+    guid: e9c450707fe3ef746ad567b8f8858973
+  - enabled: 1
+    path: Assets/Scenes/n1_a4.unity
+    guid: 108f0ece73208894e867bb2a85afe911
+  - enabled: 1
+    path: Assets/Scenes/n1_a5.unity
+    guid: bb6a2fea348462f4b9f5d1ff416b6654
+  - enabled: 1
+    path: Assets/Scenes/n1_a6.unity
+    guid: 68f996709ac93234199498a5ea62d231
+  - enabled: 1
+    path: Assets/Scenes/n2_a1.unity
+    guid: df01f563d0a1d21479bdf1e9716c9143
+  - enabled: 1
+    path: Assets/Scenes/n2_a2.unity
+    guid: 418fceb3930b86342be1cb3a4c1765a9
+  - enabled: 1
+    path: Assets/Scenes/n2_a3.unity
+    guid: 64322cb806d95fc47bbeaab53e09942b
+  - enabled: 1
+    path: Assets/Scenes/n2_a4.unity
+    guid: 4bbe43c1550fedc4ea423da28aa7662f
+  - enabled: 1
+    path: Assets/Scenes/n2_a5.unity
+    guid: 2ac58314cf3937247b08e9af3af5f70f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
