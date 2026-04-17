@@ -81,16 +81,20 @@ namespace Infraestructura.SQLite.SQLiteGateway
 
                             foreach (string opcion in arreglo)
                             {
-                                opciones.Add(opcion);
+                                // 🔥 Trim para eliminar espacios en blanco
+                                opciones.Add(opcion.Trim());
                             }
                         }
+
+                        // 🔥 También trim a la respuesta correcta
+                        string respuestaTrim = respuestaCorrecta.Trim();
 
                         contenidos.Add(new Pregunta(
                             orden,
                             orden,
                             texto,
                             opciones,
-                            respuestaCorrecta
+                            respuestaTrim
                         ));
 
                         break;

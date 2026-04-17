@@ -38,19 +38,25 @@ namespace Dominio.entidades
     }
 
     public bool Avanzar()
-    {
-        if (ActividadActual == null) return false;
-        if (!PuedeAvanzar) return false;
+{
+    if (ActividadActual == null) return false;
 
-        if (IndiceContenido < ActividadActual.TotalContenidos - 1)
-        {
-            IndiceContenido++;
-            PuedeAvanzar = false;
-            return true;
-        }
+    var actual = ObtenerActual();
 
+    // ✅ Si es pregunta, validar respuesta
+    if (actual is Pregunta && !PuedeAvanzar)
         return false;
+
+    // ✅ Historia y Reto avanzan sin restricción
+    if (IndiceContenido < ActividadActual.TotalContenidos - 1)
+    {
+        IndiceContenido++;
+        PuedeAvanzar = false;
+        return true;
     }
+
+    return false;
+}
 
     public bool EstaFinalizado()
     {
