@@ -13,6 +13,7 @@ public class ActivityController : MonoBehaviour
     [Header("UI GENERAL")]
     public TMP_Text tituloText;
     public TMP_Text contenidoText;
+    public TMP_Text instruccionesText;
     public Button siguienteButton;
 
     [Header("PANELES")]
@@ -177,8 +178,15 @@ public class ActivityController : MonoBehaviour
         {
             panelReto.SetActive(true);
 
-            tituloText.text = "Reto";
+            tituloText.text = "Reto Práctico";
             contenidoText.text = reto.Texto;
+
+            // 🔥 Mostrar instrucciones desde la BD
+            if (instruccionesText != null)
+            {
+                instruccionesText.text = reto.Instrucciones;
+                instruccionesText.gameObject.SetActive(!string.IsNullOrEmpty(reto.Instrucciones));
+            }
 
             Sprite img = Resources.Load<Sprite>(reto.Recurso);
 
@@ -194,6 +202,8 @@ public class ActivityController : MonoBehaviour
 
             siguienteButton.gameObject.SetActive(true);
             siguienteButton.interactable = true;
+
+            Debug.Log("🎯 Reto mostrado con instrucciones");
         }
     }
 

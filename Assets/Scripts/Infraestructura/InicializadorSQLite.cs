@@ -35,6 +35,7 @@ namespace Infraestructura.SQLite
                 Recurso TEXT,
                 Opciones TEXT,
                 RespuestaCorrecta TEXT,
+                Instrucciones TEXT,
                 FOREIGN KEY (ActividadId) REFERENCES Actividad(Id)
             );
 
@@ -57,6 +58,20 @@ namespace Infraestructura.SQLite
             ";
 
             cmd.ExecuteNonQuery();
+
+            // 🔥 Agregar columna Instrucciones si no existe (migración)
+            try
+            {
+                cmd.CommandText = @"
+                ALTER TABLE ContenidoActividad
+                ADD COLUMN Instrucciones TEXT;
+                ";
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                // La columna ya existe, ignorar el error
+            }
         }
     }
 }

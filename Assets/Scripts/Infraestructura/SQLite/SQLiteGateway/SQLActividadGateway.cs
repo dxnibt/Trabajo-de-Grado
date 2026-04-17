@@ -43,7 +43,7 @@ namespace Infraestructura.SQLite.SQLiteGateway
 
             var cmd2 = conn.CreateCommand();
             cmd2.CommandText = @"
-            SELECT Tipo, Orden, Texto, Recurso, Opciones, RespuestaCorrecta
+            SELECT Tipo, Orden, Texto, Recurso, Opciones, RespuestaCorrecta, Instrucciones
             FROM ContenidoActividad
             WHERE ActividadId = $id
             ORDER BY Orden;
@@ -64,6 +64,7 @@ namespace Infraestructura.SQLite.SQLiteGateway
                 string recurso = reader2.IsDBNull(3) ? "" : reader2.GetString(3);
                 string opcionesTexto = reader2.IsDBNull(4) ? "" : reader2.GetString(4);
                 string respuestaCorrecta = reader2.IsDBNull(5) ? "" : reader2.GetString(5);
+                string instrucciones = reader2.IsDBNull(6) ? "" : reader2.GetString(6);
 
                 switch (tipo)
                 {
@@ -100,7 +101,7 @@ namespace Infraestructura.SQLite.SQLiteGateway
                         break;
 
                     case "Reto":
-                        contenidos.Add(new Reto(orden, texto, recurso));
+                        contenidos.Add(new Reto(orden, texto, recurso, instrucciones));
                         break;
                 }
             }

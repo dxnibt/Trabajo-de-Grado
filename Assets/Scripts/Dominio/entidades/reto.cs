@@ -8,12 +8,15 @@ namespace Dominio.entidades
 
         public string Recurso { get; set; }
 
-        public Reto(int orden, string texto, string recurso)
+        public string Instrucciones { get; set; }
+
+        public Reto(int orden, string texto, string recurso, string instrucciones = "")
         {
             Id = orden;
             Orden = orden;
             Texto = texto;
             Recurso = recurso;
+            Instrucciones = instrucciones;
         }
     }
 }
