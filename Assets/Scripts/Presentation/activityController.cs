@@ -8,15 +8,27 @@ using Infraestructura.SQLite.SQLiteGateway;
 
 public class ActivityController : MonoBehaviour
 {
-    [Header("UI")]
+    [Header("UI GENERAL")]
     public TMP_Text tituloText;
     public TMP_Text contenidoText;
-    public TMP_InputField respuestaInput;
-    public Button responderButton;
     public Button siguienteButton;
+
+    [Header("BOTONES OPCIONES")]
+    public Button opcion1Button;
+    public Button opcion2Button;
+    public Button opcion3Button;
+    public Button opcion4Button;
+
+    [Header("TEXTOS OPCIONES")]
+    public TMP_Text opcion1Text;
+    public TMP_Text opcion2Text;
+    public TMP_Text opcion3Text;
+    public TMP_Text opcion4Text;
+
+    [Header("RETO")]
     public Image retoImage;
 
-    [Header("Audio")]
+    [Header("AUDIO")]
     public AudioSource audioSource;
 
     private SQLiteActividadGateway actividadGateway;
@@ -24,7 +36,6 @@ public class ActivityController : MonoBehaviour
 
     private Actividad actividad;
     private Progreso progreso;
-
     private Nivel nivel;
 
     void Start()
@@ -41,30 +52,28 @@ public class ActivityController : MonoBehaviour
         progreso = new Progreso();
         progreso.IniciarActividad(actividad);
 
-        responderButton.onClick.AddListener(ValidarRespuesta);
         siguienteButton.onClick.AddListener(SiguienteContenido);
+
+        opcion1Button.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
+        opcion2Button.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
+        opcion3Button.onClick.AddListener(() => SeleccionarRespuesta(opcion3Text.text));
+        opcion4Button.onClick.AddListener(() => SeleccionarRespuesta(opcion4Text.text));
 
         siguienteButton.interactable = false;
 
         MostrarContenido();
     }
 
-    // ----------------------------
-    // MOSTRAR CONTENIDO
-    // ----------------------------
     void MostrarContenido()
     {
         var contenido = progreso.ObtenerActual();
 
-        contenidoText.text = "";
-        respuestaInput.text = "";
-        retoImage.gameObject.SetActive(false);
-
-        respuestaInput.gameObject.SetActive(false);
+        OcultarTodo();
 
         if (contenido is Historia historia)
         {
             tituloText.text = "Historia";
+            contenidoText.text = "Escucha la narración";
 
             AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
 
@@ -72,54 +81,63 @@ public class ActivityController : MonoBehaviour
             audioSource.clip = clip;
             audioSource.Play();
 
-            // ✔️ puede avanzar sin responder
             siguienteButton.interactable = true;
         }
         else if (contenido is Pregunta pregunta)
         {
             tituloText.text = "Pregunta";
-
             contenidoText.text = pregunta.Enunciado;
 
-            respuestaInput.gameObject.SetActive(true);
+            MostrarOpciones(pregunta.Opciones);
 
             siguienteButton.interactable = false;
         }
         else if (contenido is Reto reto)
         {
             tituloText.text = "Reto";
-
             contenidoText.text = reto.Texto;
 
             Sprite img = Resources.Load<Sprite>(reto.Recurso);
             retoImage.sprite = img;
             retoImage.gameObject.SetActive(true);
 
-            // ✔️ puede avanzar
             siguienteButton.interactable = true;
         }
     }
 
-    void ValidarRespuesta()
+    void MostrarOpciones(List<string> opciones)
+    {
+        opcion1Button.gameObject.SetActive(true);
+        opcion2Button.gameObject.SetActive(true);
+        opcion3Button.gameObject.SetActive(true);
+        opcion4Button.gameObject.SetActive(true);
+
+        opcion1Text.text = opciones.Count > 0 ? opciones[0] : "";
+        opcion2Text.text = opciones.Count > 1 ? opciones[1] : "";
+        opcion3Text.text = opciones.Count > 2 ? opciones[2] : "";
+        opcion4Text.text = opciones.Count > 3 ? opciones[3] : "";
+    }
+
+    void SeleccionarRespuesta(string respuestaSeleccionada)
     {
         var contenido = progreso.ObtenerActual();
 
         if (contenido is Pregunta pregunta)
         {
-            bool correcta = pregunta.ValidarRespuesta(respuestaInput.text);
+            bool correcta = pregunta.ValidarRespuesta(respuestaSeleccionada);
 
             if (correcta)
             {
                 progreso.MarcarRespuestaCorrecta();
                 siguienteButton.interactable = true;
 
-                Debug.Log("✅ Respuesta correcta");
+                Debug.Log("Respuesta correcta");
             }
             else
             {
                 siguienteButton.interactable = false;
 
-                Debug.Log("❌ Respuesta incorrecta");
+                Debug.Log("Respuesta incorrecta");
             }
         }
     }
@@ -135,7 +153,17 @@ public class ActivityController : MonoBehaviour
         }
         else
         {
-            Debug.Log("No puedes avanzar aún");
+            Debug.Log("Actividad finalizada o no puedes avanzar");
         }
+    }
+
+    void OcultarTodo()
+    {
+        retoImage.gameObject.SetActive(false);
+
+        opcion1Button.gameObject.SetActive(false);
+        opcion2Button.gameObject.SetActive(false);
+        opcion3Button.gameObject.SetActive(false);
+        opcion4Button.gameObject.SetActive(false);
     }
 }

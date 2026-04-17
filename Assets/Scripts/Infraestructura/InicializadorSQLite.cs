@@ -22,33 +22,36 @@ namespace Infraestructura.SQLite
 
             CREATE TABLE IF NOT EXISTS Actividad (
                 Id INTEGER PRIMARY KEY,
-                Titulo TEXT,
-                NivelId INTEGER
+                Titulo TEXT NOT NULL,
+                NivelId INTEGER NOT NULL
             );
 
             CREATE TABLE IF NOT EXISTS ContenidoActividad (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                ActividadId INTEGER,
-                Tipo TEXT,
-                Orden INTEGER,
+                ActividadId INTEGER NOT NULL,
+                Tipo TEXT NOT NULL,
+                Orden INTEGER NOT NULL,
                 Texto TEXT,
                 Recurso TEXT,
-                RespuestaCorrecta TEXT
+                Opciones TEXT,
+                RespuestaCorrecta TEXT,
+                FOREIGN KEY (ActividadId) REFERENCES Actividad(Id)
             );
 
             CREATE TABLE IF NOT EXISTS Progreso (
                 EstudianteId INTEGER PRIMARY KEY,
                 ActividadId INTEGER,
-                Completada INTEGER,
-                IndiceContenidoActual INTEGER
+                Completada INTEGER NOT NULL,
+                IndiceContenidoActual INTEGER NOT NULL,
+                FOREIGN KEY (ActividadId) REFERENCES Actividad(Id)
             );
 
             CREATE TABLE IF NOT EXISTS Respuestas (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                EstudianteId INTEGER,
-                PreguntaId INTEGER,
-                RespuestaSeleccionada TEXT,
-                EsCorrecta INTEGER
+                EstudianteId INTEGER NOT NULL,
+                PreguntaId INTEGER NOT NULL,
+                RespuestaSeleccionada TEXT NOT NULL,
+                EsCorrecta INTEGER NOT NULL
             );
 
             ";

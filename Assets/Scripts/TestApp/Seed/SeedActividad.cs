@@ -17,20 +17,58 @@ public class SeedActividad
 
         var cmd = conn.CreateCommand();
 
+        // ACTIVIDAD
         cmd.CommandText = @"
-        INSERT INTO Actividad (Id, Titulo, NivelId)
+        INSERT OR IGNORE INTO Actividad (Id, Titulo, NivelId)
         VALUES (1, 'El Sonido', 1);
         ";
         cmd.ExecuteNonQuery();
 
+        // CONTENIDO
         cmd.CommandText = @"
-        INSERT INTO ContenidoActividad (ActividadId, Tipo, Orden, Texto, Recurso, RespuestaCorrecta)
+        INSERT OR IGNORE INTO ContenidoActividad
+        (ActividadId, Tipo, Orden, Texto, Recurso, Opciones, RespuestaCorrecta)
         VALUES 
-        (1, 'Historia', 0, '', 'Audios/historia1', NULL),
-        (1, 'Pregunta', 1, 'Cual fue la causa principal de la tristeza en Pueblo Sonoro al inicio de la historia?', NULL, 'Los instrumentos musicales desaparecieron por completo'),
-        (1, 'Pregunta', 2, 'Segun la profesora Tono-fonia, que es lo que ocurre cuando algo choca o se mueve rapidamente?', NULL, 'Se produce una vibracion'),
-        (1, 'Pregunta', 3, 'Como viaja el sonido por el aire para llegar a nuestros oidos?', NULL, 'Como una ola invisible'),
-        (1, 'Reto', 4, 'Construye una maraca', 'Imagenes/reto1', NULL);
+
+        -- HISTORIA
+        (1, 'Historia', 0, '', 'Audios/historia1', NULL, NULL),
+
+        -- PREGUNTA 1
+        (1, 'Pregunta', 1,
+        'Cual fue la causa principal de la tristeza en Pueblo Sonoro al inicio de la historia?',
+        NULL,
+        'Se prohibió el gran festival de música reciclada
+        |Los pájaros dejaron de silbar sus melodías 
+        |Los instrumentos musicales desaparecieron por completo
+        |Doña vibración decidió que no habrían más fiestas',
+        'Los instrumentos musicales desaparecieron por completo'),
+
+        -- PREGUNTA 2
+        (1, 'Pregunta', 2,
+        'Segun la profesora Tono-fonia, que es lo que ocurre cuando algo choca o se mueve rapidamente?',
+        NULL,
+        'Se produce una vibración
+        |El objeto cambia de color
+        |El sonido desaparece instantáneamente
+        |Se crea un vacío en el aire',
+        'Se produce una vibración'),
+
+        -- PREGUNTA 3
+        (1, 'Pregunta', 3,
+        'Como viaja el sonido por el aire para llegar a nuestros oidos?',
+        NULL,
+        'A través de hilos musicales ocultos
+        |Únicamente a través de tubos de cartón
+        |Como una línea recta de luz
+        |Como una ola invisible',
+        'Como una ola invisible'),
+
+        -- RETO FINAL
+        (1, 'Reto', 4,
+        'Construye una maraca',
+        'Imagenes/reto1',
+        NULL,
+        NULL);
         ";
 
         cmd.ExecuteNonQuery();
