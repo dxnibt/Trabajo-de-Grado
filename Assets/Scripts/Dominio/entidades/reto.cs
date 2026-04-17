@@ -1,15 +1,19 @@
-namespace Dominio.entidades{
-
-public class Reto : ContenidoActividad
+namespace Dominio.entidades
 {
-    public string Instrucciones { get; set; }
-    public string ImagenPath { get; set; }
-
-    public Reto(int orden, string instrucciones, string imagenPath)
+    public class Reto : ContenidoActividad
     {
-        Orden = orden;
-        Instrucciones = instrucciones;
-        ImagenPath = imagenPath;
+        public int Id { get; set; }
+
+        public string Texto { get; set; }
+
+        public string Recurso { get; set; }
+
+        public Reto(int orden, string texto, string recurso)
+        {
+            Id = orden;
+            Orden = orden;
+            Texto = texto;
+            Recurso = recurso;
+        }
     }
-}
 }

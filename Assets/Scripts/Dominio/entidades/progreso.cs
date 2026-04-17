@@ -65,6 +65,13 @@ namespace Dominio.entidades
 
     return ActividadActual.TotalContenidos;
     }
+
+    public void FinalizarActividadActual()
+    {
+    ActividadActual = null;
+    IndiceContenido = 0;
+    PuedeAvanzar = false;
+    }   
 }   
 }
 

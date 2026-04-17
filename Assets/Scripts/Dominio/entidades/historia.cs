@@ -2,12 +2,12 @@ namespace Dominio.entidades{
 
 public class Historia : ContenidoActividad
 {
-    public string AudioPath { get; set; }
+    public string Recurso { get; set; }
 
-    public Historia(int orden, string audioPath)
+    public Historia(int orden, string recurso)
     {
         Orden = orden;
-        AudioPath = audioPath;
+        Recurso = recurso;
     }
 }
 }

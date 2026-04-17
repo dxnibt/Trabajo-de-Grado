@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Dominio.entidades;
+using Infraestructura.SQLite;
 using Infraestructura.SQLite.SQLiteGateway;
 
 public class ActivityController : MonoBehaviour
