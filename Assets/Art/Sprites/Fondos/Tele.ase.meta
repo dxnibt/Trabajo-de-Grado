@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7bdf8ed21cc98084d9f9684570c23a05
+guid: fa2b8c4b47ff1af45aff5c1e7109e448
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: vaso_recogedor
+  - name: tele
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -139,7 +139,7 @@ ScriptedImporter:
       y: 4
       width: 640
       height: 360
-    spriteID: 56e89017415f1084ea76dbba80884e17
+    spriteID: 81f3654f069049a4295f3b0834f662db
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,17 +153,17 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 3362383606
+      value0: 1407338678
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: vaso_recogedor
+    name: tele
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: vaso_recogedor
+    - name: Tele
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -171,7 +171,7 @@ ScriptedImporter:
         y: 0
         width: 640
         height: 360
-      spriteId: 56e89017415f1084ea76dbba80884e17
+      spriteId: 81f3654f069049a4295f3b0834f662db
     linkedCells: []
     tileCells: []
     tileSetIndex: 0

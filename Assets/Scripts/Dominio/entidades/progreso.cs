@@ -58,6 +58,20 @@ namespace Dominio.entidades
     return false;
 }
 
+    public bool Retroceder()
+    {
+        if (ActividadActual == null) return false;
+
+        if (IndiceContenido > 0)
+        {
+            IndiceContenido--;
+            PuedeAvanzar = false;
+            return true;
+        }
+
+        return false;
+    }
+
     public bool EstaFinalizado()
     {
         return ActividadActual != null &&

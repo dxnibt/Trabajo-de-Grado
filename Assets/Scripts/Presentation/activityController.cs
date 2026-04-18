@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System.IO;
 
@@ -15,6 +16,10 @@ public class ActivityController : MonoBehaviour
     public TMP_Text contenidoText;
     public TMP_Text instruccionesText;
     public Button siguienteButton;
+    public Button volverButton;
+    public Button volverHistoriaButton;
+    public Button salirButton;
+    public Button finalizarRetoButton;
 
     [Header("PANELES")]
     public GameObject panelHistoria;
@@ -38,6 +43,9 @@ public class ActivityController : MonoBehaviour
 
     [Header("AUDIO")]
     public AudioSource audioSource;
+
+    [Header("CONFIGURACIÓN")]
+    public string escenaMenuNiveles = "mp_nivel1";
 
     private SQLiteActividadGateway actividadGateway;
     private SQLiteProgresoGateway progresoGateway;
@@ -83,6 +91,10 @@ public class ActivityController : MonoBehaviour
 
         // BOTONES
         siguienteButton.onClick.AddListener(SiguienteContenido);
+        volverButton.onClick.AddListener(VolverAPanelHistoria);
+        volverHistoriaButton.onClick.AddListener(VolverAMenuNiveles);
+        salirButton.onClick.AddListener(VolverAMenuNiveles);
+        finalizarRetoButton.onClick.AddListener(SiguienteContenido);
 
         opcion1Button.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
         opcion2Button.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
@@ -154,6 +166,9 @@ public class ActivityController : MonoBehaviour
             }
 
             siguienteButton.gameObject.SetActive(false);
+            volverButton.gameObject.SetActive(false);
+            volverHistoriaButton.gameObject.SetActive(true);
+            salirButton.gameObject.SetActive(false);
         }
 
         // 🔵 PREGUNTA
@@ -169,6 +184,9 @@ public class ActivityController : MonoBehaviour
             // 🔥 Botón desactivado completamente hasta responder correctamente
             siguienteButton.gameObject.SetActive(true);
             siguienteButton.interactable = false;
+            volverButton.gameObject.SetActive(true);
+            volverHistoriaButton.gameObject.SetActive(false);
+            salirButton.gameObject.SetActive(false);
 
             Debug.Log($"❓ Pregunta mostrada: {pregunta.Enunciado}");
         }
@@ -200,8 +218,11 @@ public class ActivityController : MonoBehaviour
                 Debug.LogWarning("⚠️ Imagen no encontrada: " + reto.Recurso);
             }
 
-            siguienteButton.gameObject.SetActive(true);
-            siguienteButton.interactable = true;
+            siguienteButton.gameObject.SetActive(false);
+            volverButton.gameObject.SetActive(false);
+            volverHistoriaButton.gameObject.SetActive(false);
+            salirButton.gameObject.SetActive(false);
+            finalizarRetoButton.gameObject.SetActive(true);
 
             Debug.Log("🎯 Reto mostrado con instrucciones");
         }
@@ -264,6 +285,7 @@ public class ActivityController : MonoBehaviour
         {
             Debug.Log("❌ No se pudo avanzar. ¿Requería respuesta a pregunta?");
             Debug.Log("🏁 Actividad finalizada");
+            MostrarBotonSalir();
         }
     }
 
@@ -279,5 +301,59 @@ public class ActivityController : MonoBehaviour
         opcion2Button.gameObject.SetActive(false);
         opcion3Button.gameObject.SetActive(false);
         opcion4Button.gameObject.SetActive(false);
+    }
+
+    void VolverAPanelHistoria()
+    {
+        Debug.Log("⬅️ Volviendo al panel de historia");
+        progreso.Retroceder();
+        MostrarContenido();
+    }
+
+    void VolverAMenuNiveles()
+    {
+        Debug.Log("🏠 Volviendo al menú de niveles");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(escenaMenuNiveles);
+    }
+
+    void MostrarBotonSalir()
+    {
+        Debug.Log("✅ Actividad completada - Mostrando botón salir");
+
+        // Ocultar paneles
+        panelHistoria.SetActive(false);
+        panelPreguntas.SetActive(false);
+        panelReto.SetActive(false);
+
+        retoImage.gameObject.SetActive(false);
+
+        // Ocultar botones de opciones
+        opcion1Button.gameObject.SetActive(false);
+        opcion2Button.gameObject.SetActive(false);
+        opcion3Button.gameObject.SetActive(false);
+        opcion4Button.gameObject.SetActive(false);
+
+        // Ocultar otros botones
+        siguienteButton.gameObject.SetActive(false);
+        volverButton.gameObject.SetActive(false);
+        volverHistoriaButton.gameObject.SetActive(false);
+        finalizarRetoButton.gameObject.SetActive(false);
+
+        // Mostrar mensaje de finalización
+        tituloText.gameObject.SetActive(true);
+        contenidoText.gameObject.SetActive(true);
+        tituloText.text = "¡ACTIVIDAD COMPLETADA!";
+        contenidoText.text = "¡Excelente trabajo!\n\nPresiona SALIR para volver al menú de actividades";
+
+        // Mostrar botón de salir
+        if (salirButton != null)
+        {
+            salirButton.gameObject.SetActive(true);
+            Debug.Log("✅ Botón salir activado - gameObject activo");
+        }
+        else
+        {
+            Debug.LogError("❌ ERROR: salirButton no está asignado");
+        }
     }
 }

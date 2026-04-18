@@ -537,7 +537,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: ed95ee8ec0c6f8249b28179d215f3b41, type: 3}
       propertyPath: m_Name
-      value: frente granjera
+      value: Frente Granjera
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: ed95ee8ec0c6f8249b28179d215f3b41, type: 3}
       propertyPath: m_SortingLayer
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 956678202}
   - component: {fileID: 956678201}
   m_Layer: 5
-  m_Name: boton_estudiante
+  m_Name: EstudianteBoton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -746,7 +746,7 @@ GameObject:
   - component: {fileID: 1068521074}
   - component: {fileID: 1068521073}
   m_Layer: 5
-  m_Name: boton_docente
+  m_Name: DocenteBoton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -876,7 +876,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: 74afdce142f96cc419fcc98ec6eabfc7, type: 3}
       propertyPath: m_Name
-      value: frente granjero
+      value: Frente Granjero
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: 74afdce142f96cc419fcc98ec6eabfc7, type: 3}
       propertyPath: m_SortingLayer
@@ -1339,7 +1339,7 @@ GameObject:
   - component: {fileID: 1852218238}
   - component: {fileID: 1852218237}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Fondo Transparente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
