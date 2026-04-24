@@ -129,7 +129,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: 7411154e21e44944f9901ce9d2a3e6cf, type: 3}
       propertyPath: m_Name
-      value: derecha granjera
+      value: Derecha Granjera
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: 7411154e21e44944f9901ce9d2a3e6cf, type: 3}
       propertyPath: m_SortingLayer
@@ -202,7 +202,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -2253911629886400664, guid: bc2f5234d05f9744d99d8aec6d002343, type: 3}
       propertyPath: m_Name
-      value: izquierda granjero
+      value: Izquierda Granjero
       objectReference: {fileID: 0}
     - target: {fileID: 3626916397498700004, guid: bc2f5234d05f9744d99d8aec6d002343, type: 3}
       propertyPath: m_SortingLayer
@@ -379,7 +379,7 @@ GameObject:
   - component: {fileID: 715004313}
   - component: {fileID: 715004312}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: EscenaManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 753506998}
   - component: {fileID: 753506997}
   m_Layer: 5
-  m_Name: boton_volver_est
+  m_Name: VolverBoton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 1837275092}
   - component: {fileID: 1837275091}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Fondo Transparente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -926,5 +926,5 @@ SceneRoots:
   - {fileID: 232454115}
   - {fileID: 1837275092}
   - {fileID: 715004313}
-  - {fileID: 337255651}
   - {fileID: 1668279554}
+  - {fileID: 337255651}

@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 122648569}
   - component: {fileID: 122648568}
   m_Layer: 5
-  m_Name: Atrapala
+  m_Name: AtrapalaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 213864614}
   - component: {fileID: 213864613}
   m_Layer: 5
-  m_Name: La catapulta
+  m_Name: CatapultaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 315303156}
   - component: {fileID: 315303155}
   m_Layer: 5
-  m_Name: La polea
+  m_Name: PoleaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 345111232}
   - component: {fileID: 345111231}
   m_Layer: 5
-  m_Name: boton_n1_a2
+  m_Name: n1a2Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -744,6 +744,18 @@ MonoBehaviour:
           m_StringArgument: n1_a2
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &345111232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -793,7 +805,7 @@ GameObject:
   - component: {fileID: 367553130}
   - component: {fileID: 367553131}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: EscenaManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -837,7 +849,7 @@ GameObject:
   - component: {fileID: 425788008}
   - component: {fileID: 425788007}
   m_Layer: 0
-  m_Name: Square (10)
+  m_Name: n1a9Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -928,7 +940,7 @@ GameObject:
   - component: {fileID: 465003427}
   - component: {fileID: 465003426}
   m_Layer: 0
-  m_Name: Square (9)
+  m_Name: n1a8Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1020,7 +1032,7 @@ GameObject:
   - component: {fileID: 534792019}
   - component: {fileID: 534792018}
   m_Layer: 5
-  m_Name: El equilibrio
+  m_Name: EquilibrioText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1157,7 +1169,7 @@ GameObject:
   - component: {fileID: 541809024}
   - component: {fileID: 541809023}
   m_Layer: 5
-  m_Name: A correr
+  m_Name: CorrerText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1295,7 +1307,7 @@ GameObject:
   - component: {fileID: 661399225}
   - component: {fileID: 661399224}
   m_Layer: 5
-  m_Name: boton_n1_a10
+  m_Name: n1a10Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1415,7 +1427,7 @@ GameObject:
   - component: {fileID: 787044593}
   - component: {fileID: 787044592}
   m_Layer: 5
-  m_Name: boton_n1_a9
+  m_Name: n1a9Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1535,7 +1547,7 @@ GameObject:
   - component: {fileID: 843633556}
   - component: {fileID: 843633555}
   m_Layer: 5
-  m_Name: boton_n1_a7
+  m_Name: n1a7Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1603,7 +1615,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 843633556}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 367553131}
+        m_TargetAssemblyTypeName: menuPrincipalController, Assembly-CSharp
+        m_MethodName: cambiarEscena
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: n1_a7
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &843633556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1624,8 +1660,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -9020813485400290168, guid: 0ded0efcc41d77d439d874d7ab497b80, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1732,7 +1768,7 @@ GameObject:
   - component: {fileID: 899684181}
   - component: {fileID: 899684180}
   m_Layer: 0
-  m_Name: Square (4)
+  m_Name: n1a3Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1823,7 +1859,7 @@ GameObject:
   - component: {fileID: 996862574}
   - component: {fileID: 996862573}
   m_Layer: 0
-  m_Name: Square (3)
+  m_Name: n1a2Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1914,7 +1950,7 @@ GameObject:
   - component: {fileID: 1027365549}
   - component: {fileID: 1027365548}
   m_Layer: 0
-  m_Name: Square (11)
+  m_Name: n1a10Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2005,7 +2041,7 @@ GameObject:
   - component: {fileID: 1032545086}
   - component: {fileID: 1032545085}
   m_Layer: 0
-  m_Name: Square (8)
+  m_Name: n1a7Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2096,7 +2132,7 @@ GameObject:
   - component: {fileID: 1051218255}
   - component: {fileID: 1051218254}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: n1a1Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2188,7 +2224,7 @@ GameObject:
   - component: {fileID: 1076483184}
   - component: {fileID: 1076483183}
   m_Layer: 5
-  m_Name: A recolectar
+  m_Name: RecolectarText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2326,7 +2362,7 @@ GameObject:
   - component: {fileID: 1093272296}
   - component: {fileID: 1093272295}
   m_Layer: 5
-  m_Name: boton_n1_a4
+  m_Name: n1a4Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2407,6 +2443,18 @@ MonoBehaviour:
           m_StringArgument: n1_a4
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1093272296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2445,6 +2493,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093272293}
   m_CullTransparentMesh: 1
+--- !u!1 &1107267698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1107267700}
+  - component: {fileID: 1107267699}
+  m_Layer: 0
+  m_Name: ActivityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1107267699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107267698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fef33f46894f6a4bb6c681e524279e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuNivel1Controller
+--- !u!4 &1107267700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107267698}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1298909746
 GameObject:
   m_ObjectHideFlags: 0
@@ -2456,7 +2548,7 @@ GameObject:
   - component: {fileID: 1298909748}
   - component: {fileID: 1298909747}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Transaparente Fondo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2549,7 +2641,7 @@ GameObject:
   - component: {fileID: 1329757575}
   - component: {fileID: 1329757574}
   m_Layer: 5
-  m_Name: boton_volver_mp_nivel1
+  m_Name: VolverBoton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2679,7 +2771,7 @@ GameObject:
   - component: {fileID: 1398021256}
   - component: {fileID: 1398021255}
   m_Layer: 0
-  m_Name: Square (5)
+  m_Name: n1a4Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2835,7 +2927,7 @@ GameObject:
   - component: {fileID: 1648201510}
   - component: {fileID: 1648201509}
   m_Layer: 0
-  m_Name: Square (7)
+  m_Name: n1a6Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2928,7 +3020,7 @@ GameObject:
   - component: {fileID: 1677179331}
   - component: {fileID: 1677179330}
   m_Layer: 5
-  m_Name: boton_n1_a5
+  m_Name: n1a5Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3009,6 +3101,18 @@ MonoBehaviour:
           m_StringArgument: n1_a5
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1677179331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3060,7 +3164,7 @@ GameObject:
   - component: {fileID: 1688553041}
   - component: {fileID: 1688553040}
   m_Layer: 5
-  m_Name: boton_n1_a8
+  m_Name: n1a8Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3180,7 +3284,7 @@ GameObject:
   - component: {fileID: 1715073078}
   - component: {fileID: 1715073077}
   m_Layer: 5
-  m_Name: boton_n1_a6
+  m_Name: n1a6Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3261,6 +3365,18 @@ MonoBehaviour:
           m_StringArgument: n1_a6
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1715073078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3312,7 +3428,7 @@ GameObject:
   - component: {fileID: 1758458718}
   - component: {fileID: 1758458717}
   m_Layer: 5
-  m_Name: boton_n1_a1
+  m_Name: n1a1Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3391,6 +3507,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: n1_a1
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1758458718
@@ -3579,7 +3707,7 @@ GameObject:
   - component: {fileID: 1943978809}
   - component: {fileID: 1943978808}
   m_Layer: 0
-  m_Name: Square (6)
+  m_Name: n1a5Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3671,7 +3799,7 @@ GameObject:
   - component: {fileID: 2021262116}
   - component: {fileID: 2021262115}
   m_Layer: 5
-  m_Name: El sonido
+  m_Name: SonidoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3809,7 +3937,7 @@ GameObject:
   - component: {fileID: 2026133062}
   - component: {fileID: 2026133061}
   m_Layer: 5
-  m_Name: boton_n1_a3
+  m_Name: n1a3Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3890,6 +4018,18 @@ MonoBehaviour:
           m_StringArgument: n1_a3
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1107267699}
+        m_TargetAssemblyTypeName: MenuNivel1Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2026133062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3934,9 +4074,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1914885305}
   - {fileID: 1548439291}
-  - {fileID: 367553130}
-  - {fileID: 155059949}
-  - {fileID: 887887715}
   - {fileID: 1298909748}
   - {fileID: 1051218255}
   - {fileID: 996862574}
@@ -3948,3 +4085,7 @@ SceneRoots:
   - {fileID: 465003427}
   - {fileID: 425788008}
   - {fileID: 1027365549}
+  - {fileID: 367553130}
+  - {fileID: 887887715}
+  - {fileID: 1107267700}
+  - {fileID: 155059949}

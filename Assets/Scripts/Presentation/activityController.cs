@@ -40,12 +40,15 @@ public class ActivityController : MonoBehaviour
 
     [Header("RETO")]
     public Image retoImage;
+    public RetoPanelController retoPanelController;
+
+    [Header("RETROALIMENTACIÓN DE RESPUESTAS")]
+    public Image imagenCorrecto;
+    public Image imagenIncorrecto;
+    public float tiempoMuestraResultado = 1.5f;
 
     [Header("AUDIO")]
     public AudioSource audioSource;
-
-    [Header("CONFIGURACIÓN")]
-    public string escenaMenuNiveles = "mp_nivel1";
 
     private SQLiteActividadGateway actividadGateway;
     private SQLiteProgresoGateway progresoGateway;
@@ -55,7 +58,7 @@ public class ActivityController : MonoBehaviour
     private Nivel nivel;
 
     private bool esperandoAudio = false;
-    private bool audioYaProcesado = false; // 🔥 evita bucle
+    private bool audioYaProcesado = false; // 
 
     void Start()
     {
@@ -66,7 +69,6 @@ public class ActivityController : MonoBehaviour
         string dbPath = Path.Combine(Application.persistentDataPath, "miBase.db");
         var conexion = new ConexionSQLite(dbPath);
 
-        // ✅ BD + SEED
         var inicializador = new InicializadorBD(conexion);
         inicializador.CrearTablas();
 
@@ -80,7 +82,7 @@ public class ActivityController : MonoBehaviour
 
         if (actividad == null)
         {
-            Debug.LogError("❌ No se encontró la actividad");
+            Debug.LogError("No se encontró la actividad");
             return;
         }
 
@@ -89,7 +91,12 @@ public class ActivityController : MonoBehaviour
         progreso = new Progreso();
         progreso.IniciarActividad(actividad);
 
-        // BOTONES
+        VerificarRaycastTarget(volverButton);
+        VerificarRaycastTarget(volverHistoriaButton);
+        VerificarRaycastTarget(siguienteButton);
+        VerificarRaycastTarget(salirButton);
+        VerificarRaycastTarget(finalizarRetoButton);
+
         siguienteButton.onClick.AddListener(SiguienteContenido);
         volverButton.onClick.AddListener(VolverAPanelHistoria);
         volverHistoriaButton.onClick.AddListener(VolverAMenuNiveles);
@@ -101,12 +108,26 @@ public class ActivityController : MonoBehaviour
         opcion3Button.onClick.AddListener(() => SeleccionarRespuesta(opcion3Text.text));
         opcion4Button.onClick.AddListener(() => SeleccionarRespuesta(opcion4Text.text));
 
+        // Asegurar que las imágenes de resultado estén desactivadas al inicio
+        if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
+        if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
+
         MostrarContenido();
+    }
+
+    void VerificarRaycastTarget(Button boton)
+    {
+        if (boton == null) return;
+        Image img = boton.GetComponent<Image>();
+        if (img != null && !img.raycastTarget)
+        {
+            img.raycastTarget = true;
+            Debug.Log($"Raycast Target habilitado para {boton.name}");
+        }
     }
 
     void Update()
     {
-        // ✅ Detectar fin de audio UNA sola vez
         if (esperandoAudio && !audioSource.isPlaying && !audioYaProcesado)
         {
             audioYaProcesado = true;
@@ -114,7 +135,6 @@ public class ActivityController : MonoBehaviour
 
             Debug.Log("🎵 Audio terminado → avanzando");
 
-            // 🔥 Cancelar cualquier invoke previo antes de programar uno nuevo
             CancelInvoke(nameof(SiguienteContenido));
             Invoke(nameof(SiguienteContenido), 0.2f);
         }
@@ -126,22 +146,19 @@ public class ActivityController : MonoBehaviour
 
         if (contenido == null)
         {
-            Debug.LogError("❌ No hay contenido");
+            Debug.LogError("No hay contenido");
             return;
         }
 
-        // 🔥 Cancelar todos los invokes previos cuando se muestra contenido nuevo
         CancelInvoke(nameof(SiguienteContenido));
 
         OcultarTodo();
 
-        // 🔥 RESET control audio cada contenido nuevo
         esperandoAudio = false;
         audioYaProcesado = false;
 
-        Debug.Log($"📍 Mostrando contenido: {contenido.GetType().Name} en índice {progreso.IndiceContenido}");
+        Debug.Log($"Mostrando contenido: {contenido.GetType().Name} en índice {progreso.IndiceContenido}");
 
-        // 🟣 HISTORIA
         if (contenido is Historia historia)
         {
             panelHistoria.SetActive(true);
@@ -155,23 +172,25 @@ public class ActivityController : MonoBehaviour
             {
                 audioSource.Stop();
                 audioSource.clip = clip;
-                audioSource.loop = false; // 🔥 IMPORTANTE
+                audioSource.loop = false; 
                 audioSource.Play();
 
                 esperandoAudio = true;
             }
             else
             {
-                Debug.LogWarning("⚠️ Audio no encontrado: " + historia.Recurso);
+                Debug.LogWarning("Audio no encontrado: " + historia.Recurso);
             }
 
             siguienteButton.gameObject.SetActive(false);
             volverButton.gameObject.SetActive(false);
             volverHistoriaButton.gameObject.SetActive(true);
+            volverHistoriaButton.interactable = true;
+            Debug.Log($"VolverHistoriaButton - SetActive: {volverHistoriaButton.gameObject.activeSelf}, Interactable: {volverHistoriaButton.interactable}");
+            Debug.Log($"Posición: {volverHistoriaButton.transform.position}, Escala: {volverHistoriaButton.transform.localScale}");
             salirButton.gameObject.SetActive(false);
         }
 
-        // 🔵 PREGUNTA
         else if (contenido is Pregunta pregunta)
         {
             panelPreguntas.SetActive(true);
@@ -181,17 +200,22 @@ public class ActivityController : MonoBehaviour
 
             MostrarOpciones(pregunta.Opciones);
 
-            // 🔥 Botón desactivado completamente hasta responder correctamente
+            opcion1Button.interactable = true;
+            opcion2Button.interactable = true;
+            opcion3Button.interactable = true;
+            opcion4Button.interactable = true;
+
             siguienteButton.gameObject.SetActive(true);
             siguienteButton.interactable = false;
             volverButton.gameObject.SetActive(true);
+            volverButton.interactable = true;
+            Debug.Log($"VolverButton - SetActive: {volverButton.gameObject.activeSelf}, Interactable: {volverButton.interactable}");
             volverHistoriaButton.gameObject.SetActive(false);
             salirButton.gameObject.SetActive(false);
 
-            Debug.Log($"❓ Pregunta mostrada: {pregunta.Enunciado}");
+            Debug.Log($"Pregunta mostrada: {pregunta.Enunciado}");
         }
 
-        // 🟢 RETO
         else if (contenido is Reto reto)
         {
             panelReto.SetActive(true);
@@ -199,23 +223,36 @@ public class ActivityController : MonoBehaviour
             tituloText.text = "Reto Práctico";
             contenidoText.text = reto.Texto;
 
-            // 🔥 Mostrar instrucciones desde la BD
-            if (instruccionesText != null)
-            {
-                instruccionesText.text = reto.Instrucciones;
-                instruccionesText.gameObject.SetActive(!string.IsNullOrEmpty(reto.Instrucciones));
-            }
+            bool tieneInstruccionesConImagenes = reto.InstruccionesPares != null && reto.InstruccionesPares.Count > 0;
 
-            Sprite img = Resources.Load<Sprite>(reto.Recurso);
-
-            if (img != null)
+            if (retoPanelController != null && tieneInstruccionesConImagenes)
             {
-                retoImage.sprite = img;
-                retoImage.gameObject.SetActive(true);
+                retoPanelController.gameObject.SetActive(true);
+                retoPanelController.InicializarConReto(reto);
+                Debug.Log($"RetoPanelController inicializado con {reto.InstruccionesPares.Count} pares de instrucciones");
             }
             else
             {
-                Debug.LogWarning("⚠️ Imagen no encontrada: " + reto.Recurso);
+                if (retoPanelController != null)
+                    retoPanelController.gameObject.SetActive(false);
+
+                if (instruccionesText != null)
+                {
+                    instruccionesText.text = reto.Instrucciones;
+                    instruccionesText.gameObject.SetActive(!string.IsNullOrEmpty(reto.Instrucciones));
+                }
+
+                Sprite img = Resources.Load<Sprite>(reto.Recurso);
+
+                if (img != null)
+                {
+                    retoImage.sprite = img;
+                    retoImage.gameObject.SetActive(true);
+                }
+                else
+                {
+                    Debug.LogWarning("Imagen no encontrada: " + reto.Recurso);
+                }
             }
 
             siguienteButton.gameObject.SetActive(false);
@@ -224,7 +261,7 @@ public class ActivityController : MonoBehaviour
             salirButton.gameObject.SetActive(false);
             finalizarRetoButton.gameObject.SetActive(true);
 
-            Debug.Log("🎯 Reto mostrado con instrucciones");
+            Debug.Log("Reto mostrado");
         }
     }
 
@@ -249,42 +286,92 @@ public class ActivityController : MonoBehaviour
         {
             bool correcta = pregunta.ValidarRespuesta(respuestaSeleccionada);
 
-            Debug.Log($"🔍 Respuesta seleccionada: '{respuestaSeleccionada}'");
-            Debug.Log($"✔️ Respuesta correcta: '{pregunta.RespuestaCorrecta}'");
-            Debug.Log($"🎯 ¿Correcta?: {correcta}");
+            Debug.Log($"Respuesta seleccionada: '{respuestaSeleccionada}'");
+            Debug.Log($"Respuesta correcta: '{pregunta.RespuestaCorrecta}'");
+            Debug.Log($"¿Correcta?: {correcta}");
 
             if (correcta)
             {
                 progreso.MarcarRespuestaCorrecta();
                 siguienteButton.interactable = true;
+                MostrarResultado(true);
 
-                Debug.Log("✅ Respuesta correcta → Botón siguiente habilitado");
+                Debug.Log("Respuesta correcta → Botón siguiente habilitado");
             }
             else
             {
                 siguienteButton.interactable = false;
+                MostrarResultado(false);
 
-                Debug.Log("❌ Respuesta incorrecta → Intenta de nuevo");
+                Debug.Log("Respuesta incorrecta → Intenta de nuevo");
             }
         }
     }
 
+    void MostrarResultado(bool esCorrecta)
+    {
+        Image imagenAMostrar = esCorrecta ? imagenCorrecto : imagenIncorrecto;
+
+        if (imagenAMostrar == null)
+        {
+            Debug.LogWarning("Imagen de resultado no está asignada en el Inspector");
+            return;
+        }
+
+        // Desactivar botones de opciones mientras se muestra resultado
+        opcion1Button.interactable = false;
+        opcion2Button.interactable = false;
+        opcion3Button.interactable = false;
+        opcion4Button.interactable = false;
+
+        imagenAMostrar.gameObject.SetActive(true);
+
+        if (esCorrecta)
+        {
+            Debug.Log("Mostrando imagen: Respuesta Correcta");
+        }
+        else
+        {
+            Debug.Log("Mostrando imagen: Respuesta Incorrecta");
+        }
+
+        CancelInvoke(nameof(OcultarResultado));
+        Invoke(nameof(OcultarResultado), tiempoMuestraResultado);
+    }
+
+    void OcultarResultado()
+    {
+        if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
+        if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
+
+        // Solo reactivar botones si la respuesta fue incorrecta (para reintentar)
+        if (!progreso.PuedeAvanzar)
+        {
+            opcion1Button.interactable = true;
+            opcion2Button.interactable = true;
+            opcion3Button.interactable = true;
+            opcion4Button.interactable = true;
+        }
+
+        Debug.Log("Imágenes de resultado ocultadas");
+    }
+
     void SiguienteContenido()
     {
-        Debug.Log($"➡️ SiguienteContenido llamado. Índice actual: {progreso.IndiceContenido}, PuedeAvanzar: {progreso.PuedeAvanzar}");
+        Debug.Log($"SiguienteContenido llamado. Índice actual: {progreso.IndiceContenido}, PuedeAvanzar: {progreso.PuedeAvanzar}");
 
         bool avanzo = progreso.Avanzar();
 
         if (avanzo)
         {
-            Debug.Log($"✅ Avanzó a índice {progreso.IndiceContenido}");
+            Debug.Log($"Avanzó a índice {progreso.IndiceContenido}");
             progresoGateway.Guardar(progreso);
             MostrarContenido();
         }
         else
         {
-            Debug.Log("❌ No se pudo avanzar. ¿Requería respuesta a pregunta?");
-            Debug.Log("🏁 Actividad finalizada");
+            Debug.Log("No se pudo avanzar. ¿Requería respuesta a pregunta?");
+            Debug.Log("Actividad finalizada");
             MostrarBotonSalir();
         }
     }
@@ -297,6 +384,9 @@ public class ActivityController : MonoBehaviour
 
         retoImage.gameObject.SetActive(false);
 
+        if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
+        if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
+
         opcion1Button.gameObject.SetActive(false);
         opcion2Button.gameObject.SetActive(false);
         opcion3Button.gameObject.SetActive(false);
@@ -305,20 +395,33 @@ public class ActivityController : MonoBehaviour
 
     void VolverAPanelHistoria()
     {
-        Debug.Log("⬅️ Volviendo al panel de historia");
-        progreso.Retroceder();
+        Debug.Log("CLICKEADO: Volviendo al panel de historia");
+
+        // Retroceder hasta encontrar una Historia
+        while (progreso.IndiceContenido > 0)
+        {
+            progreso.Retroceder();
+            var contenido = progreso.ObtenerActual();
+
+            if (contenido is Historia)
+            {
+                Debug.Log("Historia encontrada en índice: " + progreso.IndiceContenido);
+                break;
+            }
+        }
+
         MostrarContenido();
     }
 
     void VolverAMenuNiveles()
     {
-        Debug.Log("🏠 Volviendo al menú de niveles");
-        UnityEngine.SceneManagement.SceneManager.LoadScene(escenaMenuNiveles);
+        Debug.Log("CLICKEADO: Volviendo al menú de niveles");
+        SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
     }
 
     void MostrarBotonSalir()
     {
-        Debug.Log("✅ Actividad completada - Mostrando botón salir");
+        Debug.Log("Actividad completada - Mostrando botón salir");
 
         // Ocultar paneles
         panelHistoria.SetActive(false);
@@ -349,11 +452,11 @@ public class ActivityController : MonoBehaviour
         if (salirButton != null)
         {
             salirButton.gameObject.SetActive(true);
-            Debug.Log("✅ Botón salir activado - gameObject activo");
+            Debug.Log("Botón salir activado - gameObject activo");
         }
         else
         {
-            Debug.LogError("❌ ERROR: salirButton no está asignado");
+            Debug.LogError("ERROR: salirButton no está asignado");
         }
     }
 }

@@ -17,12 +17,14 @@ public class SeedActividad
 
         var cmd = conn.CreateCommand();
 
-        // 🔥 Limpiar datos viejos primero
-        cmd.CommandText = @"
-        DELETE FROM ContenidoActividad WHERE ActividadId = 1;
-        DELETE FROM Actividad WHERE Id = 1;
-        ";
+        cmd.CommandText = @"DELETE FROM ContenidoActividad WHERE ActividadId = 1;";
         cmd.ExecuteNonQuery();
+
+        cmd = conn.CreateCommand();
+        cmd.CommandText = @"DELETE FROM Actividad WHERE Id = 1;";
+        cmd.ExecuteNonQuery();
+
+        cmd = conn.CreateCommand();
 
         // ACTIVIDAD
         cmd.CommandText = @"
@@ -67,10 +69,12 @@ public class SeedActividad
         'Imagenes/reto1',
         NULL,
         NULL,
-        'Paso 1: Consigue una botella de plástico vacía y dos cucharas de palo
-Paso 2: Llena la botella a mitad con arroz o granos de frijol
-Paso 3: Asegura las cucharas a los lados de la botella con cinta adhesiva
-Paso 4: ¡Ahora tienes tu propia maraca! Pruébala haciendo ruido');
+        'Imagenes/nivel1/n1a1/instruccion1||Consigue una botella de plástico vacía||' ||
+        'Imagenes/nivel1/n1a1/instruccion2||Consigue dos cucharas de palo//' ||
+        'Imagenes/nivel1/n1a1/instruccion3||Llena la botella a mitad con arroz||' ||
+        'Imagenes/nivel1/n1a1/instruccion4||Asegura las cucharas con cinta adhesiva//' ||
+        'Imagenes/nivel1/n1a1/instruccion5||¡Tu maraca está lista!||' ||
+        'Imagenes/nivel1/n1a1/instruccion6||Pruébala haciendo ruido');
         ";
 
         cmd.ExecuteNonQuery();

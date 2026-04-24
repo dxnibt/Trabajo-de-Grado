@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 106334143}
   - component: {fileID: 106334142}
   m_Layer: 5
-  m_Name: "Ecolog\xEDa"
+  m_Name: EcologiaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 260116903}
   - component: {fileID: 260116902}
   m_Layer: 5
-  m_Name: Television
+  m_Name: TeleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 290659082}
   - component: {fileID: 290659081}
   m_Layer: 0
-  m_Name: Square (4)
+  m_Name: n2a4Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -712,7 +712,7 @@ GameObject:
   - component: {fileID: 382014175}
   - component: {fileID: 382014174}
   m_Layer: 5
-  m_Name: La seguridad
+  m_Name: SeguridadText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -849,7 +849,7 @@ GameObject:
   - component: {fileID: 393610925}
   - component: {fileID: 393610924}
   m_Layer: 5
-  m_Name: La rueda
+  m_Name: RuedaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 482144232}
   - component: {fileID: 482144231}
   m_Layer: 0
-  m_Name: Square (8)
+  m_Name: n2a8Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1142,7 +1142,7 @@ GameObject:
   - component: {fileID: 526612896}
   - component: {fileID: 526612895}
   m_Layer: 5
-  m_Name: "Telef\xE9rico"
+  m_Name: TelefericoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1280,7 +1280,7 @@ GameObject:
   - component: {fileID: 550768115}
   - component: {fileID: 550768114}
   m_Layer: 5
-  m_Name: boton_n2_a5
+  m_Name: n2a5Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1361,6 +1361,18 @@ MonoBehaviour:
           m_StringArgument: n2_a5
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &550768115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1410,7 +1422,7 @@ GameObject:
   - component: {fileID: 712438086}
   - component: {fileID: 712438085}
   m_Layer: 0
-  m_Name: Square (1)
+  m_Name: n2a1Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1490,6 +1502,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &713066351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 713066353}
+  - component: {fileID: 713066352}
+  m_Layer: 0
+  m_Name: ActivityManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &713066352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713066351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020cdd094a81a0b459aef7cb3cc582f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuNivel2Controller
+--- !u!4 &713066353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 713066351}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &777850491
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,7 +1559,7 @@ GameObject:
   - component: {fileID: 777850494}
   - component: {fileID: 777850493}
   m_Layer: 5
-  m_Name: boton_n2_a2
+  m_Name: n2a2Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1584,6 +1640,18 @@ MonoBehaviour:
           m_StringArgument: n2_a2
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &777850494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1635,7 +1703,7 @@ GameObject:
   - component: {fileID: 786841040}
   - component: {fileID: 786841039}
   m_Layer: 5
-  m_Name: boton_n2_a1
+  m_Name: n2a1Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1716,6 +1784,18 @@ MonoBehaviour:
           m_StringArgument: n2_a1
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &786841040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1767,7 +1847,7 @@ GameObject:
   - component: {fileID: 808007360}
   - component: {fileID: 808007359}
   m_Layer: 5
-  m_Name: boton_n2_a6
+  m_Name: n2a6Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1848,6 +1928,18 @@ MonoBehaviour:
           m_StringArgument: n2_a6
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &808007360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1868,7 +1960,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 77856e656e42dab4898ffe66e89cd2a0, type: 3}
+  m_Sprite: {fileID: 4346532206850411753, guid: fa2b8c4b47ff1af45aff5c1e7109e448, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1899,7 +1991,7 @@ GameObject:
   - component: {fileID: 901108844}
   - component: {fileID: 901108843}
   m_Layer: 5
-  m_Name: boton_volver_mp_nivel2
+  m_Name: VolverBoton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2030,7 +2122,7 @@ GameObject:
   - component: {fileID: 924563618}
   - component: {fileID: 924563617}
   m_Layer: 5
-  m_Name: La bailarina
+  m_Name: BailarinaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2166,7 +2258,7 @@ GameObject:
   - component: {fileID: 1007191358}
   - component: {fileID: 1007191357}
   m_Layer: 0
-  m_Name: Square (10)
+  m_Name: n2a10Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2257,7 +2349,7 @@ GameObject:
   - component: {fileID: 1031710283}
   - component: {fileID: 1031710282}
   m_Layer: 0
-  m_Name: Square (3)
+  m_Name: n2a3Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2350,7 +2442,7 @@ GameObject:
   - component: {fileID: 1106393736}
   - component: {fileID: 1106393735}
   m_Layer: 5
-  m_Name: boton_n2_a8
+  m_Name: n2a8Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2592,7 +2684,7 @@ GameObject:
   - component: {fileID: 1174081450}
   - component: {fileID: 1174081449}
   m_Layer: 5
-  m_Name: El filtro
+  m_Name: FiltroText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2728,7 +2820,7 @@ GameObject:
   - component: {fileID: 1194361317}
   - component: {fileID: 1194361316}
   m_Layer: 0
-  m_Name: Square (2)
+  m_Name: n2a2Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2819,7 +2911,7 @@ GameObject:
   - component: {fileID: 1338913963}
   - component: {fileID: 1338913962}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: EscenaManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2864,7 +2956,7 @@ GameObject:
   - component: {fileID: 1352714760}
   - component: {fileID: 1352714759}
   m_Layer: 5
-  m_Name: La balanza
+  m_Name: BalanzaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3002,7 +3094,7 @@ GameObject:
   - component: {fileID: 1463310082}
   - component: {fileID: 1463310081}
   m_Layer: 5
-  m_Name: boton_n2_a3
+  m_Name: n2a3Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3083,6 +3175,18 @@ MonoBehaviour:
           m_StringArgument: n2_a3
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1463310082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3132,7 +3236,7 @@ GameObject:
   - component: {fileID: 1515457539}
   - component: {fileID: 1515457538}
   m_Layer: 0
-  m_Name: Square (09)
+  m_Name: n2a9Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3225,7 +3329,7 @@ GameObject:
   - component: {fileID: 1526704209}
   - component: {fileID: 1526704208}
   m_Layer: 5
-  m_Name: boton_n2_a7
+  m_Name: n2a7Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3293,7 +3397,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1526704209}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1338913962}
+        m_TargetAssemblyTypeName: menuPrincipalController, Assembly-CSharp
+        m_MethodName: cambiarEscena
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: n2_a7
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 7
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1526704209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3314,8 +3442,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -7685120903168209986, guid: 2162f0ebf25d3834b9246762db355ad7, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3345,7 +3473,7 @@ GameObject:
   - component: {fileID: 1558806667}
   - component: {fileID: 1558806666}
   m_Layer: 5
-  m_Name: boton_n2_a9
+  m_Name: n2a9Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3464,7 +3592,7 @@ GameObject:
   - component: {fileID: 1569498584}
   - component: {fileID: 1569498583}
   m_Layer: 5
-  m_Name: Carrusel
+  m_Name: CarruselText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3601,7 +3729,7 @@ GameObject:
   - component: {fileID: 1584444874}
   - component: {fileID: 1584444873}
   m_Layer: 5
-  m_Name: "La energ\xEDa"
+  m_Name: EnergiaText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3737,7 +3865,7 @@ GameObject:
   - component: {fileID: 1630314938}
   - component: {fileID: 1630314937}
   m_Layer: 0
-  m_Name: Square (6)
+  m_Name: n2a6Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3828,7 +3956,7 @@ GameObject:
   - component: {fileID: 1651662767}
   - component: {fileID: 1651662766}
   m_Layer: 0
-  m_Name: Square (7)
+  m_Name: n2a7Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3919,7 +4047,7 @@ GameObject:
   - component: {fileID: 1762284146}
   - component: {fileID: 1762284145}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Fondo Transparente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4012,7 +4140,7 @@ GameObject:
   - component: {fileID: 1848676760}
   - component: {fileID: 1848676759}
   m_Layer: 5
-  m_Name: boton_n2_a10
+  m_Name: n2a10Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4132,7 +4260,7 @@ GameObject:
   - component: {fileID: 1889676672}
   - component: {fileID: 1889676671}
   m_Layer: 5
-  m_Name: boton_n2_a4
+  m_Name: n2a4Boton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4213,6 +4341,18 @@ MonoBehaviour:
           m_StringArgument: n2_a4
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 713066352}
+        m_TargetAssemblyTypeName: MenuNivel2Controller, Assembly-CSharp
+        m_MethodName: CargarActividad
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1889676672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4262,7 +4402,7 @@ GameObject:
   - component: {fileID: 2085457930}
   - component: {fileID: 2085457929}
   m_Layer: 0
-  m_Name: Square (5)
+  m_Name: n2a5Cuadro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4347,18 +4487,19 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 287148316}
-  - {fileID: 2085457930}
-  - {fileID: 1630314938}
-  - {fileID: 290659082}
+  - {fileID: 488365751}
   - {fileID: 1762284146}
   - {fileID: 712438086}
-  - {fileID: 1651662767}
-  - {fileID: 1007191358}
   - {fileID: 1194361317}
   - {fileID: 1031710283}
-  - {fileID: 61583852}
+  - {fileID: 290659082}
+  - {fileID: 2085457930}
+  - {fileID: 1630314938}
+  - {fileID: 1651662767}
   - {fileID: 482144232}
   - {fileID: 1515457539}
+  - {fileID: 1007191358}
+  - {fileID: 61583852}
   - {fileID: 1338913963}
+  - {fileID: 713066353}
   - {fileID: 1154911520}
-  - {fileID: 488365751}

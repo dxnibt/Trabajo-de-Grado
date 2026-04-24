@@ -10,14 +10,12 @@ public class InicializadorManager : MonoBehaviour
 
         var conexion = new ConexionSQLite(dbPath);
 
-        // ✅ Crear tablas
         var inicializador = new InicializadorBD(conexion);
         inicializador.CrearTablas();
 
-        // ✅ Ejecutar seed
         var seed = new SeedActividad(conexion);
         seed.Ejecutar();
 
-        Debug.Log("✅ Base de datos inicializada con datos");
+        Debug.Log("Base de datos inicializada con datos");
     }
 }

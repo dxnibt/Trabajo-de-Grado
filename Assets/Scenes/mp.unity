@@ -1430,7 +1430,7 @@ GameObject:
   - component: {fileID: 1887326805}
   - component: {fileID: 1887326804}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: EscenaManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1538,12 +1538,12 @@ SceneRoots:
   m_Roots:
   - {fileID: 654465684}
   - {fileID: 521408523}
-  - {fileID: 1654424364}
-  - {fileID: 1618127295}
-  - {fileID: 1887326805}
   - {fileID: 886089219}
   - {fileID: 1127374837}
-  - {fileID: 1852218238}
   - {fileID: 279010064}
   - {fileID: 1893025586}
   - {fileID: 1404591669}
+  - {fileID: 1852218238}
+  - {fileID: 1618127295}
+  - {fileID: 1887326805}
+  - {fileID: 1654424364}

@@ -101,7 +101,9 @@ namespace Infraestructura.SQLite.SQLiteGateway
                         break;
 
                     case "Reto":
-                        contenidos.Add(new Reto(orden, texto, recurso, instrucciones));
+                        var reto = new Reto(orden, texto, recurso, instrucciones);
+                        CargarInstruccionesPares(reto, instrucciones);
+                        contenidos.Add(reto);
                         break;
                 }
             }
@@ -114,6 +116,43 @@ namespace Infraestructura.SQLite.SQLiteGateway
             );
 
             return actividad;
+        }
+
+        private void CargarInstruccionesPares(Reto reto, string instruccionesTexto)
+        {
+            if (string.IsNullOrEmpty(instruccionesTexto) || !instruccionesTexto.Contains("||"))
+            {
+                UnityEngine.Debug.Log("No hay instrucciones en pares para este reto");
+                return;
+            }
+
+            string[] pares = instruccionesTexto.Split(new string[] { "//" }, System.StringSplitOptions.RemoveEmptyEntries);
+            UnityEngine.Debug.Log($"Se encontraron {pares.Length} pares de instrucciones");
+
+            foreach (string par in pares)
+            {
+                string[] elementos = par.Split(new string[] { "||" }, System.StringSplitOptions.RemoveEmptyEntries);
+
+                UnityEngine.Debug.Log($"Procesando par con {elementos.Length} elementos");
+
+                if (elementos.Length >= 2)
+                {
+                    string imagen1 = elementos[0].Trim();
+                    string texto1 = elementos[1].Trim();
+                    string imagen2 = elementos.Length >= 3 ? elementos[2].Trim() : "";
+                    string texto2 = elementos.Length >= 4 ? elementos[3].Trim() : "";
+
+                    UnityEngine.Debug.Log($"Agregando instrucciones: {imagen1} - {texto1} | {imagen2} - {texto2}");
+
+                    reto.AgregarInstrucciones(imagen1, texto1, imagen2, texto2);
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"Elemento con menos de 2 partes: {elementos.Length}");
+                }
+            }
+
+            UnityEngine.Debug.Log($"Total de pares cargados: {reto.InstruccionesPares.Count}");
         }
     }
 }
