@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/mp_nivel2.unity
     guid: fe9f1d1d2e4b64a429a37a891c7cff55
   - enabled: 1
+    path: Assets/Scenes/mp_ttj.unity
+    guid: 84aa339ca8eb7d9449d24c1e3ce6c811
+  - enabled: 1
     path: Assets/Scenes/n1_a1.unity
     guid: 19612bee357dd8748881b919b7a80e99
   - enabled: 1

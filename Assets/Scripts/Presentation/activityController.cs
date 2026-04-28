@@ -64,7 +64,7 @@ public class ActivityController : MonoBehaviour
     {
         Debug.Log("Iniciando ActivityController...");
 
-        nivel = new Nivel(1, "Nivel 1");
+        nivel = new Nivel(ActivityManager.NivelActualId, ActivityManager.NivelNombre);
 
         string dbPath = Path.Combine(Application.persistentDataPath, "miBase.db");
         var conexion = new ConexionSQLite(dbPath);
@@ -78,11 +78,18 @@ public class ActivityController : MonoBehaviour
         actividadGateway = new SQLiteActividadGateway(conexion);
         progresoGateway = new SQLiteProgresoGateway(conexion);
 
-        actividad = actividadGateway.ObtenerPorId(1, nivel);
+        actividad = actividadGateway.ObtenerPorId(ActivityManager.ActividadActualId, nivel);
+
+        // Fallback temporal: si no existe, usar actividad 1
+        if (actividad == null)
+        {
+            Debug.LogWarning($"Actividad {ActivityManager.ActividadActualId} no encontrada. Usando actividad 1 como fallback temporal.");
+            actividad = actividadGateway.ObtenerPorId(1, nivel);
+        }
 
         if (actividad == null)
         {
-            Debug.LogError("No se encontró la actividad");
+            Debug.LogError("No se encontró ni la actividad solicitada ni la actividad 1 de fallback");
             return;
         }
 
@@ -259,7 +266,7 @@ public class ActivityController : MonoBehaviour
             volverButton.gameObject.SetActive(false);
             volverHistoriaButton.gameObject.SetActive(false);
             salirButton.gameObject.SetActive(false);
-            finalizarRetoButton.gameObject.SetActive(true);
+            finalizarRetoButton.gameObject.SetActive(false);
 
             Debug.Log("Reto mostrado");
         }
@@ -416,7 +423,32 @@ public class ActivityController : MonoBehaviour
     void VolverAMenuNiveles()
     {
         Debug.Log("CLICKEADO: Volviendo al menú de niveles");
-        SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
+
+        string escenaDestino = ActivityManager.EscenaMenuNivel;
+
+        // Fallback si EscenaMenuNivel está vacío (ej: abrir escena directamente desde editor)
+        if (string.IsNullOrEmpty(escenaDestino))
+        {
+            Debug.LogWarning("EscenaMenuNivel vacío. Usando fallback basado en NivelActualId");
+
+            switch (ActivityManager.NivelActualId)
+            {
+                case 1:
+                    escenaDestino = "mp_nivel1";
+                    break;
+                case 2:
+                    escenaDestino = "mp_nivel2";
+                    break;
+                case 3:
+                    escenaDestino = "mp_ttj";
+                    break;
+                default:
+                    escenaDestino = "mp_estudiante";
+                    break;
+            }
+        }
+
+        SceneManager.LoadScene(escenaDestino);
     }
 
     void MostrarBotonSalir()
