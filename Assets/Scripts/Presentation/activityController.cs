@@ -64,6 +64,10 @@ public class ActivityController : MonoBehaviour
     {
         Debug.Log("Iniciando ActivityController...");
 
+
+        // Si el ActivityManager no fue inicializado (play directo en editor), derivar desde el nombre de la escena
+        if (ActivityManager.ActividadActualId == 0)
+            InferirContextoDesdEscena(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         nivel = new Nivel(ActivityManager.NivelActualId, ActivityManager.NivelNombre);
 
         string dbPath = Path.Combine(Application.persistentDataPath, "miBase.db");
@@ -80,6 +84,7 @@ public class ActivityController : MonoBehaviour
 
         actividad = actividadGateway.ObtenerPorId(ActivityManager.ActividadActualId, nivel);
 
+<<<<<<< HEAD
         // Fallback temporal: si no existe, usar actividad 1
         if (actividad == null)
         {
@@ -90,6 +95,18 @@ public class ActivityController : MonoBehaviour
         if (actividad == null)
         {
             Debug.LogError("No se encontró ni la actividad solicitada ni la actividad 1 de fallback");
+=======
+        OcultarTodo();
+        siguienteButton?.gameObject.SetActive(false);
+        volverButton?.gameObject.SetActive(false);
+        volverHistoriaButton?.gameObject.SetActive(false);
+        salirButton?.gameObject.SetActive(false);
+        finalizarRetoButton?.gameObject.SetActive(false);
+
+        if (actividad == null)
+        {
+            Debug.LogError($"No se encontró la actividad con ID: {ActivityManager.ActividadActualId}");
+>>>>>>> c0148a5 (Se añade el archivo csv con instrucciones y se hacen correcciones mínimas a la lógica)
             return;
         }
 
@@ -179,17 +196,19 @@ public class ActivityController : MonoBehaviour
             {
                 audioSource.Stop();
                 audioSource.clip = clip;
-                audioSource.loop = false; 
+                audioSource.loop = false;
                 audioSource.Play();
 
                 esperandoAudio = true;
+                siguienteButton.gameObject.SetActive(false);
             }
             else
             {
                 Debug.LogWarning("Audio no encontrado: " + historia.Recurso);
+                // Sin audio el usuario necesita poder avanzar manualmente
+                siguienteButton.gameObject.SetActive(true);
+                siguienteButton.interactable = true;
             }
-
-            siguienteButton.gameObject.SetActive(false);
             volverButton.gameObject.SetActive(false);
             volverHistoriaButton.gameObject.SetActive(true);
             volverHistoriaButton.interactable = true;
@@ -489,6 +508,32 @@ public class ActivityController : MonoBehaviour
         else
         {
             Debug.LogError("ERROR: salirButton no está asignado");
+        }
+    }
+
+    // Deriva nivel y actividad desde el nombre de la escena cuando ActivityManager no fue inicializado
+    // Formato: "n{nivel}_a{localId}" — ej: "n1_a3", "n2_a2"
+    private void InferirContextoDesdEscena(string nombreEscena)
+    {
+        try
+        {
+            int sepGuion = nombreEscena.IndexOf('_');
+            if (sepGuion < 2) return;
+
+            int nivelNum = int.Parse(nombreEscena.Substring(1, sepGuion - 1));
+            int localId  = int.Parse(nombreEscena.Substring(sepGuion + 2));
+
+            ActivityManager.NivelActualId   = nivelNum;
+            ActivityManager.NivelNombre     = $"Nivel {nivelNum}";
+            ActivityManager.EscenaMenuNivel = $"mp_nivel{nivelNum}";
+            // IDs globales: Nivel 1 → 1-10, Nivel 2 → 11-20, etc.
+            ActivityManager.ActividadActualId = localId + (nivelNum - 1) * 10;
+
+            Debug.Log($"[Fallback] Escena '{nombreEscena}' → ActividadId={ActivityManager.ActividadActualId}, NivelId={nivelNum}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[Fallback] No se pudo inferir actividad desde '{nombreEscena}': {e.Message}");
         }
     }
 }

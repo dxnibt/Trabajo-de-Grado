@@ -5,7 +5,7 @@ public class MenuNivel2Controller : MonoBehaviour
 {
     public void CargarActividad(int actividadId)
     {
-        ActivityManager.ActividadActualId = actividadId;
+        ActivityManager.ActividadActualId = actividadId + 10; // IDs globales 11-20 en la BD
         ActivityManager.NivelActualId = 2;
         ActivityManager.NivelNombre = "Nivel 2";
         ActivityManager.EscenaMenuNivel = "mp_nivel2";

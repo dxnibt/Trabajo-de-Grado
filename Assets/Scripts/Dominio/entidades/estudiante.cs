@@ -12,7 +12,7 @@ public class Estudiante
         Id = id;
         Nombre = nombre;
         Nivel = nivel;
-        Progreso = new Progreso(); // ✔ ahora funciona
+        Progreso = new Progreso();
     }
 }
 }

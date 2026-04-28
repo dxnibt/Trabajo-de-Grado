@@ -43,11 +43,9 @@ namespace Dominio.entidades
 
     var actual = ObtenerActual();
 
-    // ✅ Si es pregunta, validar respuesta
     if (actual is Pregunta && !PuedeAvanzar)
         return false;
 
-    // ✅ Historia y Reto avanzan sin restricción
     if (IndiceContenido < ActividadActual.TotalContenidos - 1)
     {
         IndiceContenido++;
