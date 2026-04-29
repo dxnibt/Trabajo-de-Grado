@@ -89,18 +89,16 @@ namespace Dominio.entidades
 
     public int ObtenerTotalActividades()
     {
-    if (ActividadActual == null)
-        return 0;
-
-    return ActividadActual.TotalContenidos;
+        if (ActividadActual == null) return 0;
+        return ActividadActual.TotalContenidos;
     }
 
     public void FinalizarActividadActual()
     {
-    ActividadActual = null;
-    IndiceContenido = 0;
-    PuedeAvanzar = false;
-    }   
-}   
+        ActividadActual = null;
+        IndiceContenido = 0;
+        PuedeAvanzar = false;
+    }
+}
 }
 

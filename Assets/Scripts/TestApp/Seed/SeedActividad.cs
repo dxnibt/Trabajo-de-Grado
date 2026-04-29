@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Mono.Data.Sqlite;
 using Infraestructura.SQLite;
@@ -7,6 +8,15 @@ using Infraestructura.SQLite;
 public class SeedActividad
 {
     private readonly ConexionSQLite conexion;
+
+    // Rutas de audio en Resources/Audios/ para cada actividad
+    private static readonly Dictionary<int, string> AudioPorActividad = new()
+    {
+        { 1,  "Audios/sonido" },
+        { 2,  "Audios/circo" },
+        { 3,  "Audios/catapulta" },
+        { 4,  "Audios/atrapapelota" },
+    };
 
     public SeedActividad(ConexionSQLite conexion)
     {
@@ -19,48 +29,31 @@ public class SeedActividad
 
         if (csvFile == null)
         {
-            Debug.LogError("[SeedActividad] ✗ No se encontró Resources/Data/actividades.csv");
+            Debug.LogError("[SeedActividad] No se encontró Resources/Data/actividades.csv");
             return;
         }
-
-        Debug.Log($"[SeedActividad] CSV cargado. Tamaño: {csvFile.text.Length} caracteres");
 
         using var conn = conexion.CrearConexion();
         conn.Open();
 
-        LimpiarActividades(conn);
-        LimpiarContenidos(conn);
+        LimpiarTablas(conn);
 
-        var lineas = csvFile.text.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
-        Debug.Log($"[SeedActividad] Total de líneas: {lineas.Length}");
-
+        var lineas = csvFile.text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
         bool esEncabezado = true;
-
-        // 🔥 agrupamos por actividad
-        Dictionary<int, List<(string ruta, string instruccion)>> datos = new();
-        int lineasProcesadas = 0;
+        var datos = new Dictionary<int, List<(string ruta, string instruccion)>>();
 
         foreach (string linea in lineas)
         {
             string l = linea.Trim();
             if (string.IsNullOrEmpty(l)) continue;
 
-            if (esEncabezado)
-            {
-                esEncabezado = false;
-                Debug.Log($"[SeedActividad] Encabezado: {l}");
-                continue;
-            }
+            if (esEncabezado) { esEncabezado = false; continue; }
 
             var campos = l.Split(';');
+            if (campos.Length < 3) continue;
 
-            if (campos.Length < 3)
-            {
-                Debug.LogWarning($"[SeedActividad] Línea ignorada (menos de 3 campos): {l.Substring(0, Math.Min(50, l.Length))}");
-                continue;
-            }
+            if (!int.TryParse(campos[0], out int actividadId)) continue;
 
-            int actividadId = int.Parse(campos[0]);
             string ruta = campos[1].Trim();
             string instruccion = campos[2].Trim();
 
@@ -68,87 +61,73 @@ public class SeedActividad
                 datos[actividadId] = new List<(string, string)>();
 
             datos[actividadId].Add((ruta, instruccion));
-            lineasProcesadas++;
         }
 
-        Debug.Log($"[SeedActividad] Líneas procesadas: {lineasProcesadas}");
-        Debug.Log($"[SeedActividad] Total de actividades a procesar: {datos.Count}");
-
-        // 🔥 insertar actividades y retos
         foreach (var kvp in datos)
         {
             int actividadId = kvp.Key;
             var lista = kvp.Value;
 
             InsertarActividad(conn, actividadId);
+            InsertarHistoria(conn, actividadId);
 
-            string instruccionesFormateadas = "";
-
+            var sb = new StringBuilder();
             for (int i = 0; i < lista.Count; i++)
             {
-                var item = lista[i];
-
-                // formato que tu parser espera
-                instruccionesFormateadas += $"{item.ruta}||{item.instruccion}";
-
-                if (i < lista.Count - 1)
-                    instruccionesFormateadas += "//";
+                if (i > 0) sb.Append("//");
+                sb.Append(lista[i].ruta).Append("||").Append(lista[i].instruccion);
             }
 
-            Debug.Log($"[SeedActividad] Instrucciones formateadas para actividad {actividadId}: {instruccionesFormateadas.Length} caracteres");
-            Debug.Log($"[SeedActividad] Preview: {instruccionesFormateadas.Substring(0, Math.Min(100, instruccionesFormateadas.Length))}...");
-
-            InsertarReto(conn, actividadId, instruccionesFormateadas);
-
-            Debug.Log($"[SeedActividad] ✓ Actividad {actividadId} con {lista.Count} instrucciones");
+            InsertarReto(conn, actividadId, sb.ToString());
         }
+
+        Debug.Log($"[SeedActividad] {datos.Count} actividades sembradas");
     }
 
-    private void LimpiarActividades(SqliteConnection conn)
-    {
-        var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM Actividad;";
-        cmd.ExecuteNonQuery();
-    }
-
-    private void LimpiarContenidos(SqliteConnection conn)
+    private void LimpiarTablas(SqliteConnection conn)
     {
         var cmd = conn.CreateCommand();
         cmd.CommandText = "DELETE FROM ContenidoActividad;";
+        cmd.ExecuteNonQuery();
+        cmd.CommandText = "DELETE FROM Actividad;";
         cmd.ExecuteNonQuery();
     }
 
     private void InsertarActividad(SqliteConnection conn, int actividadId)
     {
         int nivelId = actividadId <= 10 ? 1 : 2;
-
         var cmd = conn.CreateCommand();
-
-        cmd.CommandText = @"
-        INSERT INTO Actividad (Id, Titulo, NivelId)
-        VALUES (@id, @titulo, @nivelId);
-        ";
-
+        cmd.CommandText = "INSERT INTO Actividad (Id, Titulo, NivelId) VALUES (@id, @titulo, @nivelId);";
         cmd.Parameters.AddWithValue("@id", actividadId);
         cmd.Parameters.AddWithValue("@titulo", $"Actividad {actividadId}");
         cmd.Parameters.AddWithValue("@nivelId", nivelId);
+        cmd.ExecuteNonQuery();
+    }
 
+    private void InsertarHistoria(SqliteConnection conn, int actividadId)
+    {
+        AudioPorActividad.TryGetValue(actividadId, out string recurso);
+        recurso ??= "";
+
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+        INSERT INTO ContenidoActividad (ActividadId, Tipo, Orden, Recurso)
+        VALUES (@actividadId, 'Historia', 0, @recurso);
+        ";
+        cmd.Parameters.AddWithValue("@actividadId", actividadId);
+        cmd.Parameters.AddWithValue("@recurso", recurso);
         cmd.ExecuteNonQuery();
     }
 
     private void InsertarReto(SqliteConnection conn, int actividadId, string instrucciones)
     {
         var cmd = conn.CreateCommand();
-
         cmd.CommandText = @"
-        INSERT INTO ContenidoActividad
-        (ActividadId, Tipo, Orden, Texto, Recurso, Opciones, RespuestaCorrecta, Instrucciones)
-        VALUES (@actividadId, 'Reto', 1, 'Realiza el reto', NULL, NULL, NULL, @instrucciones);
+        INSERT INTO ContenidoActividad (ActividadId, Tipo, Orden, Texto, Instrucciones)
+        VALUES (@actividadId, 'Reto', 1, 'Realiza el reto', @instrucciones);
         ";
-
         cmd.Parameters.AddWithValue("@actividadId", actividadId);
         cmd.Parameters.AddWithValue("@instrucciones", instrucciones);
-
         cmd.ExecuteNonQuery();
     }
 }

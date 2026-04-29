@@ -19,9 +19,6 @@ public class RetoPanelController : MonoBehaviour
 
     private List<InstruccionPar> instruccionesPares;
     private int indiceActual = 0;
-    
-    // Modo individual para instrucciones impares
-    private bool modoIndividual = false;
 
     void Start()
     {
@@ -36,104 +33,56 @@ public class RetoPanelController : MonoBehaviour
     {
         instruccionesPares = reto.InstruccionesPares;
         indiceActual = 0;
-        modoIndividual = true;
 
         if (instruccionesPares == null || instruccionesPares.Count == 0)
         {
-            Debug.LogError($"[RetoPanelController] El reto no tiene instrucciones configuradas. InstruccionesPares count: {instruccionesPares?.Count ?? 0}");
-            Debug.LogError($"[RetoPanelController] Reto.Instrucciones RAW: '{reto.Instrucciones}'");
-            Debug.LogError($"[RetoPanelController] Reto.Instrucciones length: {reto.Instrucciones?.Length ?? 0}");
+            Debug.LogWarning($"[RetoPanelController] El reto no tiene instrucciones. RAW: '{reto.Instrucciones}'");
             OcultarInstrucciones();
             if (botonFinalizar != null)
                 botonFinalizar.gameObject.SetActive(true);
             return;
         }
 
-        Debug.Log($"[RetoPanelController] ✓ Reto iniciado con {instruccionesPares.Count} instrucciones");
+        Debug.Log($"[RetoPanelController] Reto iniciado con {instruccionesPares.Count} pares de instrucciones");
         MostrarPar(0);
-        ActualizarBotones();
     }
 
     private void MostrarPar(int indice)
     {
-        if (indice < 0 || indice >= instruccionesPares.Count)
-            return;
+        if (indice < 0 || indice >= instruccionesPares.Count) return;
 
         indiceActual = indice;
         var par = instruccionesPares[indice];
 
-        // Ocultar ambos slots inicialmente
-        if (imagen1 != null) imagen1.gameObject.SetActive(false);
-        if (imagen2 != null) imagen2.gameObject.SetActive(false);
-        if (texto1 != null) texto1.gameObject.SetActive(false);
-        if (texto2 != null) texto2.gameObject.SetActive(false);
-
-        if (modoIndividual)
-        {
-            // Modo individual: mostrar solo la primera columna
-            MostrarInstruccionIndividual(par.Imagen1, par.Texto1);
-        }
-        else
-        {
-            // Modo par original
-            MostrarInstruccion(par.Imagen1, par.Texto1, imagen1, texto1);
-            MostrarInstruccion(par.Imagen2, par.Texto2, imagen2, texto2);
-        }
+        MostrarSlot(imagen1, texto1, par.Imagen1, par.Texto1);
+        MostrarSlot(imagen2, texto2, par.Imagen2, par.Texto2);
 
         ActualizarBotones();
     }
 
-    private void MostrarInstruccionIndividual(string rutaImagen, string texto)
+    private void MostrarSlot(Image img, TMP_Text txt, string rutaImagen, string texto)
     {
-        bool tieneImagen = !string.IsNullOrEmpty(rutaImagen);
-        bool tieneTexto = !string.IsNullOrEmpty(texto);
+        if (img != null) img.gameObject.SetActive(false);
+        if (txt != null) txt.gameObject.SetActive(false);
 
-        // Mostrar imagen en el slot 1
-        if (imagen1 != null && tieneImagen)
+        if (img != null && !string.IsNullOrEmpty(rutaImagen))
         {
             Sprite sprite = Resources.Load<Sprite>(rutaImagen);
             if (sprite != null)
             {
-                imagen1.sprite = sprite;
-                imagen1.gameObject.SetActive(true);
+                img.sprite = sprite;
+                img.gameObject.SetActive(true);
             }
             else
             {
-                Debug.LogWarning($"Imagen no encontrada: {rutaImagen}");
+                Debug.LogWarning($"[RetoPanelController] Imagen no encontrada: {rutaImagen}");
             }
         }
 
-        // Mostrar texto en el slot 1
-        if (texto1 != null && tieneTexto)
+        if (txt != null && !string.IsNullOrEmpty(texto))
         {
-            texto1.text = texto;
-            texto1.gameObject.SetActive(true);
-        }
-    }
-
-    private void MostrarInstruccion(string rutaImagen, string texto, Image imagenTarget, TMP_Text textoTarget)
-    {
-        bool tieneImagen = !string.IsNullOrEmpty(rutaImagen);
-        bool tieneTexto = !string.IsNullOrEmpty(texto);
-
-        if (imagenTarget != null && tieneImagen)
-        {
-            Sprite sprite = Resources.Load<Sprite>(rutaImagen);
-            if (sprite != null)
-            {
-                imagenTarget.sprite = sprite;
-                imagenTarget.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogWarning($"Imagen no encontrada: {rutaImagen}");
-            }
-        }
-
-        if (textoTarget != null && tieneTexto)
-        {
-            textoTarget.text = texto;
-            textoTarget.gameObject.SetActive(true);
+            txt.text = texto;
+            txt.gameObject.SetActive(true);
         }
     }
 
@@ -151,9 +100,8 @@ public class RetoPanelController : MonoBehaviour
 
     private void ActualizarBotones()
     {
-        if (instruccionesPares == null || instruccionesPares.Count == 0)
-            return;
-            
+        if (instruccionesPares == null || instruccionesPares.Count == 0) return;
+
         bool esElPrimero = indiceActual == 0;
         bool esElUltimo = indiceActual == instruccionesPares.Count - 1;
 
@@ -172,18 +120,13 @@ public class RetoPanelController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void OcultarInstrucciones()
+    private void OcultarInstrucciones()
     {
         if (imagen1 != null) imagen1.gameObject.SetActive(false);
-        if (imagen2 != null) imagen2.gameObject.SetActive(false);
         if (texto1 != null) texto1.gameObject.SetActive(false);
+        if (imagen2 != null) imagen2.gameObject.SetActive(false);
         if (texto2 != null) texto2.gameObject.SetActive(false);
         if (botonSiguiente != null) botonSiguiente.gameObject.SetActive(false);
         if (botonRetroceder != null) botonRetroceder.gameObject.SetActive(false);
-    }
-
-    public bool TieneInstrucciones()
-    {
-        return instruccionesPares != null && instruccionesPares.Count > 0;
     }
 }

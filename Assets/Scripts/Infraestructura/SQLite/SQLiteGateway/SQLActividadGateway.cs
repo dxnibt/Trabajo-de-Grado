@@ -21,26 +21,14 @@ namespace Infraestructura.SQLite.SQLiteGateway
             conn.Open();
 
             var cmd = conn.CreateCommand();
-            cmd.CommandText = @"
-            SELECT Id, Titulo
-            FROM Actividad
-            WHERE Id = $id;
-            ";
-
+            cmd.CommandText = "SELECT Id, Titulo FROM Actividad WHERE Id = $id;";
             cmd.Parameters.AddWithValue("$id", actividadId);
 
             using var reader = cmd.ExecuteReader();
+            if (!reader.Read()) return null;
 
-            if (!reader.Read())
-                return null;
-
-            var actividad = new Actividad(
-                reader.GetInt32(0),
-                reader.GetString(1),
-                nivel,
-                new List<ContenidoActividad>()
-            );
-
+            int id = reader.GetInt32(0);
+            string titulo = reader.GetString(1);
             reader.Close();
 
             var cmd2 = conn.CreateCommand();
@@ -50,32 +38,20 @@ namespace Infraestructura.SQLite.SQLiteGateway
             WHERE ActividadId = $id
             ORDER BY Orden;
             ";
-
             cmd2.Parameters.AddWithValue("$id", actividadId);
 
             using var reader2 = cmd2.ExecuteReader();
-
             var contenidos = new List<ContenidoActividad>();
 
             while (reader2.Read())
             {
                 string tipo = reader2.GetString(0);
                 int orden = reader2.GetInt32(1);
-                Debug.Log($"[SQLActividadGateway] Cargado: {tipo} con Orden={orden}");
-
                 string texto = reader2.IsDBNull(2) ? "" : reader2.GetString(2);
                 string recurso = reader2.IsDBNull(3) ? "" : reader2.GetString(3);
                 string opcionesTexto = reader2.IsDBNull(4) ? "" : reader2.GetString(4);
                 string respuestaCorrecta = reader2.IsDBNull(5) ? "" : reader2.GetString(5);
                 string instrucciones = reader2.IsDBNull(6) ? "" : reader2.GetString(6);
-
-                if (tipo == "Reto")
-                {
-                    Debug.Log($"[SQLActividadGateway] RETO LEIDO");
-                    Debug.Log($"[DEBUG] Instrucciones RAW >>>{instrucciones}<<<");
-                    Debug.Log($"[DEBUG] Es NULL: {reader2.IsDBNull(6)}");
-                    Debug.Log($"[DEBUG] Longitud: {instrucciones?.Length}");
-                }
 
                 switch (tipo)
                 {
@@ -84,95 +60,64 @@ namespace Infraestructura.SQLite.SQLiteGateway
                         break;
 
                     case "Pregunta":
-                        List<string> opciones = new List<string>();
-
+                        var opciones = new List<string>();
                         if (opcionesTexto != "")
                         {
-                            string[] arreglo = opcionesTexto.Split('|');
-                            foreach (string opcion in arreglo)
-                            {
-                                opciones.Add(opcion.Trim());
-                            }
+                            foreach (string o in opcionesTexto.Split('|'))
+                                opciones.Add(o.Trim());
                         }
-
-                        string respuestaTrim = respuestaCorrecta.Trim();
-                        contenidos.Add(new Pregunta(orden, orden, texto, opciones, respuestaTrim));
+                        contenidos.Add(new Pregunta(orden, orden, texto, opciones, respuestaCorrecta.Trim()));
                         break;
 
                     case "Reto":
                         var reto = new Reto(orden, texto, recurso, instrucciones);
-                        Debug.Log($"[SQLActividadGateway] RETO CARGADO:");
-                        Debug.Log($"  - Orden: {orden}");
-                        Debug.Log($"  - Instrucciones RAW: '{instrucciones}'");
-                        Debug.Log($"  - Longitud: {instrucciones.Length}");
                         CargarInstruccionesPares(reto, instrucciones);
-                        Debug.Log($"[SQLActividadGateway] DESPUÉS CargarInstruccionesPares: {reto.InstruccionesPares.Count} instrucciones");
                         contenidos.Add(reto);
+                        break;
+
+                    default:
+                        Debug.LogWarning($"[SQLiteActividadGateway] Tipo desconocido: {tipo}");
                         break;
                 }
             }
 
-            actividad = new Actividad(
-                actividad.Id,
-                actividad.Titulo,
-                nivel,
-                contenidos
-            );
-
-            Debug.Log($"[SQLActividadGateway] Total contenidos cargados para actividad {actividadId}: {actividad.TotalContenidos}");
-            for (int i = 0; i < actividad.Contenidos.Count; i++)
-            {
-                Debug.Log($"  [{i}] {actividad.Contenidos[i].GetType().Name} - Orden={actividad.Contenidos[i].Orden}");
-            }
-
-            return actividad;
+            Debug.Log($"[SQLiteActividadGateway] Actividad {actividadId}: {contenidos.Count} contenidos cargados");
+            return new Actividad(id, titulo, nivel, contenidos);
         }
 
         private void CargarInstruccionesPares(Reto reto, string instruccionesTexto)
         {
-            Debug.Log($"[CargarInstruccionesPares] INICIO");
-            Debug.Log($"[CargarInstruccionesPares] Texto length: {instruccionesTexto?.Length ?? 0}");
-            Debug.Log($"[CargarInstruccionesPares] Es null: {instruccionesTexto == null}");
-            Debug.Log($"[CargarInstruccionesPares] Texto RAW: '{instruccionesTexto}'");
+            if (string.IsNullOrEmpty(instruccionesTexto)) return;
 
-            if (string.IsNullOrEmpty(instruccionesTexto))
+            string[] pasos = instruccionesTexto.Split(new string[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Agrupa los pasos de a dos: paso i y paso i+1 forman un InstruccionPar
+            for (int i = 0; i < pasos.Length; i += 2)
             {
-                Debug.LogWarning("[CargarInstruccionesPares] Texto vacío, retornando");
-                return;
+                ParsearPaso(pasos[i], out string img1, out string txt1);
+
+                string img2 = "", txt2 = "";
+                if (i + 1 < pasos.Length)
+                    ParsearPaso(pasos[i + 1], out img2, out txt2);
+
+                reto.AgregarParInstruccion(img1, txt1, img2, txt2);
             }
+        }
 
-            // Debug: mostrar caracteres especiales
-            Debug.Log($"[CargarInstruccionesPares] Bytes: {System.BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes(instruccionesTexto))}");
-
-            string[] pasos = instruccionesTexto.Split(new string[] { "//" }, System.StringSplitOptions.RemoveEmptyEntries);
-            Debug.Log($"[CargarInstruccionesPares] Split por //, encontrados {pasos.Length} pasos");
-
-            if (pasos.Length == 0)
+        private void ParsearPaso(string paso, out string imagen, out string texto)
+        {
+            string[] partes = paso.Split(new string[] { "||" }, StringSplitOptions.None);
+            if (partes.Length >= 2)
             {
-                Debug.LogWarning("[CargarInstruccionesPares] No se encontraron pasos después de split por //");
-                return;
+                imagen = partes[0].Trim();
+                texto  = partes[1].Trim();
             }
-
-            foreach (string paso in pasos)
+            else
             {
-                Debug.Log($"[CargarInstruccionesPares] Procesando paso: '{paso}'");
-                string[] partes = paso.Split(new string[] { "||" }, System.StringSplitOptions.None);
-                Debug.Log($"[CargarInstruccionesPares] Paso tiene {partes.Length} partes");
-
-                if (partes.Length >= 2)
-                {
-                    string img = partes[0].Trim();
-                    string txt = partes[1].Trim();
-                    Debug.Log($"[CargarInstruccionesPares] ✓ Agregando: img='{img}', txt='{txt.Substring(0, Math.Min(50, txt.Length))}'...");
-                    reto.AgregarParInstruccion(img, txt, "", "");
-                }
-                else
-                {
-                    Debug.LogWarning($"[CargarInstruccionesPares] ✗ Paso ignorado - esperaba 2+ partes, encontró {partes.Length}");
-                }
+                Debug.LogWarning($"[SQLiteActividadGateway] Paso mal formado: '{paso}'");
+                imagen = "";
+                texto  = paso.Trim();
             }
-
-            Debug.Log($"[CargarInstruccionesPares] FIN - Total: {reto.InstruccionesPares.Count}");
-        }       
+        }
     }
 }

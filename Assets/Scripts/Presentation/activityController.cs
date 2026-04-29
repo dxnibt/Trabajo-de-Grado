@@ -15,7 +15,6 @@ public class ActivityController : MonoBehaviour
     [Header("UI GENERAL")]
     public TMP_Text tituloText;
     public TMP_Text contenidoText;
-    public TMP_Text instruccionesText;
     public Button siguienteButton;
     public Button volverButton;
     public Button volverHistoriaButton;
@@ -38,7 +37,6 @@ public class ActivityController : MonoBehaviour
     public TMP_Text opcion3Text;
 
     [Header("RETO")]
-    public Image retoImage;
     public RetoPanelController retoPanelController;
 
     [Header("RETROALIMENTACIÓN DE RESPUESTAS")]
@@ -63,8 +61,6 @@ public class ActivityController : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Iniciando ActivityController...");
-
         if (ActivityManager.ActividadActualId == 0)
             InferirContextoDesdEscena(SceneManager.GetActiveScene().name);
 
@@ -76,31 +72,15 @@ public class ActivityController : MonoBehaviour
         var inicializador = new InicializadorBD(conexion);
         inicializador.CrearTablas();
 
-        // ✅ Verificar si la BD ya tiene datos ANTES de ejecutar seeds
-        bool necesitaSembrar = false;
         using (var connCheck = conexion.CrearConexion())
         {
             connCheck.Open();
-            necesitaSembrar = BaseDeDatosVacia(connCheck);
-        }
-
-        if (necesitaSembrar)
-        {
-            Debug.Log("========== BD VACÍA → EJECUTANDO SEEDS ==========");
-            Debug.Log("[ActivityController] Iniciando SeedActividad...");
-            var seed = new SeedActividad(conexion);
-            seed.Ejecutar();
-            Debug.Log("[ActivityController] SeedActividad completado ✓");
-
-            Debug.Log("[ActivityController] Iniciando SeedPregunta...");
-            var seedPregunta = new SeedPregunta(conexion);
-            seedPregunta.Ejecutar();
-            Debug.Log("[ActivityController] SeedPregunta completado ✓");
-            Debug.Log("========== SEEDS EJECUTADOS EXITOSAMENTE ==========");
-        }
-        else
-        {
-            Debug.Log("========== BD YA TIENE DATOS → NO SE EJECUTAN SEEDS ==========");
+            if (BaseDeDatosVacia(connCheck))
+            {
+                Debug.Log("[ActivityController] BD sin datos completos → ejecutando seeds");
+                new SeedActividad(conexion).Ejecutar();
+                new SeedPregunta(conexion).Ejecutar();
+            }
         }
 
         actividadGateway = new SQLiteActividadGateway(conexion);
@@ -108,11 +88,16 @@ public class ActivityController : MonoBehaviour
 
         actividad = actividadGateway.ObtenerPorId(ActivityManager.ActividadActualId, nivel);
 
-        // Fallback
         if (actividad == null)
         {
-            Debug.LogWarning($"Actividad {ActivityManager.ActividadActualId} no encontrada. Usando actividad 1.");
+            Debug.LogWarning($"[ActivityController] Actividad {ActivityManager.ActividadActualId} no encontrada. Usando actividad 1.");
             actividad = actividadGateway.ObtenerPorId(1, nivel);
+        }
+
+        if (actividad == null)
+        {
+            Debug.LogError("[ActivityController] No se encontró la actividad");
+            return;
         }
 
         OcultarTodo();
@@ -121,19 +106,6 @@ public class ActivityController : MonoBehaviour
         volverHistoriaButton?.gameObject.SetActive(false);
         salirButton?.gameObject.SetActive(false);
         finalizarRetoButton?.gameObject.SetActive(false);
-
-        if (actividad == null)
-        {
-            Debug.LogError("No se encontró la actividad");
-            return;
-        }
-
-        Debug.Log("Contenidos cargados: " + actividad.Contenidos.Count);
-        for (int i = 0; i < actividad.Contenidos.Count; i++)
-        {
-            var c = actividad.Contenidos[i];
-            Debug.Log($"  [{i}] {c.GetType().Name} (Orden: {c.Orden})");
-        }
 
         progreso = new Progreso();
         progreso.IniciarActividad(actividad);
@@ -160,30 +132,20 @@ public class ActivityController : MonoBehaviour
         MostrarContenido();
     }
 
-    // 🔥 Método mejorado: verifica si la BD está vacía
+    // Re-siembra si no hay registros de Historia (BD vacía o sembrada con versión anterior)
     bool BaseDeDatosVacia(SqliteConnection conn)
     {
         try
         {
-            // Verificar si hay actividades
-            var cmdAct = conn.CreateCommand();
-            cmdAct.CommandText = "SELECT COUNT(*) FROM Actividad";
-            long countAct = (long)cmdAct.ExecuteScalar();
-            
-            // Verificar si hay contenido
-            var cmdCont = conn.CreateCommand();
-            cmdCont.CommandText = "SELECT COUNT(*) FROM ContenidoActividad";
-            long countCont = (long)cmdCont.ExecuteScalar();
-            
-            Debug.Log($"BD actual: Actividad={countAct}, ContenidoActividad={countCont}");
-            
-            // Si no hay actividades O no hay contenido, consideramos vacía
-            return countAct == 0 || countCont == 0;
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM ContenidoActividad WHERE Tipo = 'Historia'";
+            long count = (long)cmd.ExecuteScalar();
+            return count == 0;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Error al verificar BD: {e.Message}");
-            return true; // Si hay error, ejecutar seeds por seguridad
+            Debug.LogError($"[ActivityController] Error al verificar BD: {e.Message}");
+            return true;
         }
     }
 
@@ -192,36 +154,28 @@ public class ActivityController : MonoBehaviour
         if (boton == null) return;
         Image img = boton.GetComponent<Image>();
         if (img != null && !img.raycastTarget)
-        {
             img.raycastTarget = true;
-        }
     }
 
     void Update()
     {
-        if (!esperandoAudio || audioYaProcesado)
-            return;
+        if (!esperandoAudio || audioYaProcesado) return;
 
         if (!audioSource.isPlaying)
         {
-            Debug.Log("[ActivityController] ✓ Audio terminó (isPlaying=false), avanzando");
             ProcesarFinAudio();
             return;
         }
 
         float tiempoTranscurrido = Time.time - tiempoAudioInicio;
         if (tiempoTranscurrido >= duracionAudioActual && duracionAudioActual > 0)
-        {
-            Debug.Log($"[ActivityController] ✓ Audio terminó (tiempo: {tiempoTranscurrido:F2}s >= {duracionAudioActual:F2}s), avanzando");
             ProcesarFinAudio();
-        }
     }
 
     private void ProcesarFinAudio()
     {
         audioYaProcesado = true;
         esperandoAudio = false;
-
         CancelInvoke(nameof(SiguienteContenido));
         Invoke(nameof(SiguienteContenido), 0.2f);
     }
@@ -246,17 +200,13 @@ public class ActivityController : MonoBehaviour
         if (contenido is Historia historia)
         {
             panelHistoria.SetActive(true);
-
             tituloText.text = "Historia";
             contenidoText.text = "Escucha la narración";
 
             AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
 
             if (clip == null && audioSource.clip != null)
-            {
                 clip = audioSource.clip;
-                Debug.Log("[ActivityController] ⚠ AudioClip no encontrado en Resources, usando el asignado en Inspector");
-            }
 
             if (clip != null)
             {
@@ -269,12 +219,12 @@ public class ActivityController : MonoBehaviour
                 esperandoAudio = true;
                 audioYaProcesado = false;
 
-                Debug.Log($"[ActivityController] ▶ Audio iniciado: {clip.name} ({duracionAudioActual:F2}s)");
+                Debug.Log($"[ActivityController] Audio iniciado: {clip.name} ({duracionAudioActual:F2}s)");
                 siguienteButton.gameObject.SetActive(false);
             }
             else
             {
-                Debug.LogError("[ActivityController] ✗ No hay AudioClip disponible");
+                Debug.LogWarning("[ActivityController] No hay AudioClip disponible para esta actividad");
                 siguienteButton.gameObject.SetActive(true);
                 siguienteButton.interactable = true;
             }
@@ -284,7 +234,6 @@ public class ActivityController : MonoBehaviour
         else if (contenido is Pregunta pregunta)
         {
             panelPreguntas.SetActive(true);
-
             tituloText.text = "Pregunta";
             contenidoText.text = pregunta.Enunciado;
 
@@ -297,7 +246,6 @@ public class ActivityController : MonoBehaviour
         else if (contenido is Reto reto)
         {
             panelReto.SetActive(true);
-
             tituloText.text = "Reto";
             contenidoText.text = reto.Texto;
 
@@ -305,9 +253,7 @@ public class ActivityController : MonoBehaviour
             finalizarRetoButton.interactable = true;
 
             if (retoPanelController != null)
-            {
                 retoPanelController.InicializarConReto(reto);
-            }
         }
     }
 
@@ -320,25 +266,20 @@ public class ActivityController : MonoBehaviour
 
     void SeleccionarRespuesta(string respuesta)
     {
-        Debug.Log($"[ActivityController] Respuesta seleccionada: {respuesta}");
         var contenido = progreso.ObtenerActual();
 
         if (contenido is Pregunta pregunta)
         {
             bool correcta = pregunta.ValidarRespuesta(respuesta);
-            Debug.Log($"[ActivityController] ¿Correcta? {(correcta ? "✓ SÍ" : "✗ NO")}");
-            Debug.Log($"[ActivityController] Respuesta esperada: {pregunta.RespuestaCorrecta}");
 
             if (correcta)
             {
                 progreso.MarcarRespuestaCorrecta();
                 siguienteButton.interactable = true;
-                Debug.Log("[ActivityController] ✓ Botón Siguiente activado");
                 MostrarResultado(true);
             }
             else
             {
-                Debug.Log("[ActivityController] ✗ Respuesta incorrecta");
                 MostrarResultado(false);
             }
         }
@@ -348,7 +289,6 @@ public class ActivityController : MonoBehaviour
     {
         Image img = correcto ? imagenCorrecto : imagenIncorrecto;
         if (img == null) return;
-
         img.gameObject.SetActive(true);
         Invoke(nameof(OcultarResultado), tiempoMuestraResultado);
     }
@@ -361,19 +301,13 @@ public class ActivityController : MonoBehaviour
 
     void SiguienteContenido()
     {
-        Debug.Log("[ActivityController] Botón Siguiente presionado");
-        Debug.Log($"[ActivityController] Índice actual: {progreso.IndiceContenido}");
-        Debug.Log($"[ActivityController] Total contenidos: {progreso.ObtenerTotalActividades()}");
-
         if (progreso.Avanzar())
         {
-            Debug.Log("[ActivityController] ✓ Avanzando a siguiente contenido");
             progresoGateway.Guardar(progreso);
             MostrarContenido();
         }
         else
         {
-            Debug.LogWarning("[ActivityController] ✗ No se pudo avanzar - mostrando pantalla de fin");
             MostrarBotonSalir();
         }
     }
@@ -412,11 +346,11 @@ public class ActivityController : MonoBehaviour
         try
         {
             int sep = nombreEscena.IndexOf('_');
-            int nivel = int.Parse(nombreEscena.Substring(1, sep - 1));
+            int nivelNum = int.Parse(nombreEscena.Substring(1, sep - 1));
             int act = int.Parse(nombreEscena.Substring(sep + 2));
 
-            ActivityManager.NivelActualId = nivel;
-            ActivityManager.ActividadActualId = act + (nivel - 1) * 10;
+            ActivityManager.NivelActualId = nivelNum;
+            ActivityManager.ActividadActualId = act + (nivelNum - 1) * 10;
         }
         catch { }
     }
