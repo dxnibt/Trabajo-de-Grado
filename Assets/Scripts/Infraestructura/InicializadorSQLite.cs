@@ -16,7 +16,12 @@ namespace Infraestructura.SQLite
             using var conn = conexion.CrearConexion();
             conn.Open();
 
+            // Asegurar UTF-8 en SQLite
             var cmd = conn.CreateCommand();
+            cmd.CommandText = "PRAGMA encoding = 'UTF-8';";
+            cmd.ExecuteNonQuery();
+
+            cmd = conn.CreateCommand();
 
             cmd.CommandText = @"
 

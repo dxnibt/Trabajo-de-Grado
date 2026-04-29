@@ -1799,7 +1799,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 3c56c64adc29d6a4bbfeb8d0e968b266, type: 3}
+  m_Resource: {fileID: 8300000, guid: be13177f02fe2604da84009aa4e0eaf7, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -3163,7 +3163,6 @@ MonoBehaviour:
   imagenIncorrecto: {fileID: 1113718001}
   tiempoMuestraResultado: 1
   audioSource: {fileID: 995629654}
-  escenaMenuNiveles: mp_nivel1
 --- !u!114 &1400289153
 MonoBehaviour:
   m_ObjectHideFlags: 0

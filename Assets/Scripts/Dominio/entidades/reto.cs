@@ -1,46 +1,38 @@
+using System;
 using System.Collections.Generic;
 
 namespace Dominio.entidades
 {
+    [Serializable]
     public class Reto : ContenidoActividad
     {
-        public int Id { get; set; }
-
         public string Texto { get; set; }
-
-        public string Recurso { get; set; }
-
         public string Instrucciones { get; set; }
+        public string Recurso { get; set; }
+        public List<InstruccionPar> InstruccionesPares { get; set; }
 
-        public List<InstruccionPair> InstruccionesPares { get; set; }
-
-        public Reto(int orden, string texto, string recurso, string instrucciones = "")
+        public Reto()
         {
-            Id = orden;
+            InstruccionesPares = new List<InstruccionPar>();
+        }
+
+        public Reto(int orden, string texto, string recurso, string instrucciones)
+        {
             Orden = orden;
-            Texto = texto;
-            Recurso = recurso;
-            Instrucciones = instrucciones;
-            InstruccionesPares = new List<InstruccionPair>();
+            Texto = texto ?? "";
+            Recurso = recurso ?? "";
+            Instrucciones = instrucciones ?? "";
+            InstruccionesPares = new List<InstruccionPar>();
         }
 
-        public void AgregarInstrucciones(string imagen1, string texto1, string imagen2, string texto2)
+        public void AgregarParInstruccion(string img1, string txt1, string img2, string txt2)
         {
-            InstruccionesPares.Add(new InstruccionPair
-            {
-                Imagen1 = imagen1,
-                Texto1 = texto1,
-                Imagen2 = imagen2,
-                Texto2 = texto2
-            });
+            InstruccionesPares.Add(new InstruccionPar(
+                img1 ?? "",
+                txt1 ?? "",
+                img2 ?? "",
+                txt2 ?? ""
+            ));
         }
-    }
-
-    public class InstruccionPair
-    {
-        public string Imagen1 { get; set; }
-        public string Texto1 { get; set; }
-        public string Imagen2 { get; set; }
-        public string Texto2 { get; set; }
     }
 }

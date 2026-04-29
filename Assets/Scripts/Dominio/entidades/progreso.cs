@@ -39,20 +39,31 @@ namespace Dominio.entidades
 
     public bool Avanzar()
 {
-    if (ActividadActual == null) return false;
+    if (ActividadActual == null)
+    {
+        UnityEngine.Debug.LogWarning("[Progreso] ✗ No hay actividad iniciada");
+        return false;
+    }
 
     var actual = ObtenerActual();
+    UnityEngine.Debug.Log($"[Progreso] Intento de avanzar desde índice {IndiceContenido} ({actual.GetType().Name})");
+    UnityEngine.Debug.Log($"[Progreso] Total contenidos: {ActividadActual.TotalContenidos}");
 
     if (actual is Pregunta && !PuedeAvanzar)
+    {
+        UnityEngine.Debug.Log("[Progreso] ✗ Es pregunta y no ha respondido correctamente");
         return false;
+    }
 
     if (IndiceContenido < ActividadActual.TotalContenidos - 1)
     {
         IndiceContenido++;
         PuedeAvanzar = false;
+        UnityEngine.Debug.Log($"[Progreso] ✓ Avanzó a índice {IndiceContenido}");
         return true;
     }
 
+    UnityEngine.Debug.LogWarning($"[Progreso] ✗ Ya está en el último contenido (índice {IndiceContenido})");
     return false;
 }
 

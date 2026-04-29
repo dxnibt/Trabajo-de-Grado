@@ -8,7 +8,7 @@ public class ConexionSQLite
 
     public ConexionSQLite(string dbPath)
     {
-        connectionString = $"Data Source={dbPath}";
+        connectionString = $"Data Source={dbPath};UTF8Encoding=True";
     }
 
     public SqliteConnection CrearConexion()

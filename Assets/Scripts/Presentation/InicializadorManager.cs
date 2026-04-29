@@ -16,6 +16,9 @@ public class InicializadorManager : MonoBehaviour
         var seed = new SeedActividad(conexion);
         seed.Ejecutar();
 
+        var seedPregunta = new SeedPregunta(conexion);
+        seedPregunta.Ejecutar();
+
         Debug.Log("Base de datos inicializada con datos");
     }
 }
