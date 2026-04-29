@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8535219e341e1c24ea64ef5505dbac4e
+guid: 05807418284c5794db5ecbb0c655ed89
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: filtro
+  - name: aeropuerto
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -139,7 +139,7 @@ ScriptedImporter:
       y: 4
       width: 640
       height: 360
-    spriteID: 43941a0b23fa9744a87aca066352ddd0
+    spriteID: edd88c0822ead214ba45732bb8e370b3
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,17 +153,17 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 1555400112
+      value0: 4002177626
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: filtro
+    name: aeropuerto
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: filtro
+    - name: aeropuerto
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
@@ -171,7 +171,7 @@ ScriptedImporter:
         y: 0
         width: 640
         height: 360
-      spriteId: 43941a0b23fa9744a87aca066352ddd0
+      spriteId: edd88c0822ead214ba45732bb8e370b3
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
