@@ -120,7 +120,6 @@ public class ActivityController : MonoBehaviour
         volverButton.onClick.AddListener(VolverAPanelHistoria);
         volverHistoriaButton.onClick.AddListener(VolverAMenuNiveles);
         salirButton.onClick.AddListener(VolverAMenuNiveles);
-        finalizarRetoButton.onClick.AddListener(SiguienteContenido);
 
         opcion1Button.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
         opcion2Button.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
@@ -249,11 +248,13 @@ public class ActivityController : MonoBehaviour
             tituloText.text = "Reto";
             contenidoText.text = reto.Texto;
 
-            finalizarRetoButton.gameObject.SetActive(true);
-            finalizarRetoButton.interactable = true;
+            finalizarRetoButton.gameObject.SetActive(false);
 
             if (retoPanelController != null)
+            {
                 retoPanelController.InicializarConReto(reto);
+                retoPanelController.OnRetoFinalizado += ManejarRetoFinalizado;
+            }
         }
     }
 
@@ -317,6 +318,23 @@ public class ActivityController : MonoBehaviour
         panelHistoria.SetActive(false);
         panelPreguntas.SetActive(false);
         panelReto.SetActive(false);
+
+        siguienteButton?.gameObject.SetActive(false);
+        volverButton?.gameObject.SetActive(false);
+        volverHistoriaButton?.gameObject.SetActive(false);
+        salirButton?.gameObject.SetActive(false);
+        finalizarRetoButton?.gameObject.SetActive(false);
+    }
+
+    void ManejarRetoFinalizado()
+    {
+        if (retoPanelController != null)
+        {
+            retoPanelController.OnRetoFinalizado -= ManejarRetoFinalizado;
+            retoPanelController.OcultarPanel();
+        }
+
+        VolverAMenuNiveles();
     }
 
     void VolverAPanelHistoria()
@@ -351,6 +369,16 @@ public class ActivityController : MonoBehaviour
 
             ActivityManager.NivelActualId = nivelNum;
             ActivityManager.ActividadActualId = act + (nivelNum - 1) * 10;
+
+            // Establecer la escena del menú según el nivel
+            if (nivelNum == 1)
+                ActivityManager.EscenaMenuNivel = "mp_nivel1";
+            else if (nivelNum == 2)
+                ActivityManager.EscenaMenuNivel = "mp_nivel2";
+            else if (nivelNum == 3)
+                ActivityManager.EscenaMenuNivel = "mp_ttj";
+            else
+                ActivityManager.EscenaMenuNivel = $"mp_nivel{nivelNum}";
         }
         catch { }
     }

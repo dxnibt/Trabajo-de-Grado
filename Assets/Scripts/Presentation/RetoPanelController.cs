@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
 using Dominio.entidades;
 
 public class RetoPanelController : MonoBehaviour
@@ -20,6 +21,8 @@ public class RetoPanelController : MonoBehaviour
     private List<InstruccionPar> instruccionesPares;
     private int indiceActual = 0;
 
+    public event Action OnRetoFinalizado;
+
     void Start()
     {
         if (botonSiguiente != null)
@@ -27,6 +30,9 @@ public class RetoPanelController : MonoBehaviour
 
         if (botonRetroceder != null)
             botonRetroceder.onClick.AddListener(MostrarAnteriorPar);
+
+        if (botonFinalizar != null)
+            botonFinalizar.onClick.AddListener(FinalizarReto);
     }
 
     public void InicializarConReto(Reto reto)
@@ -128,5 +134,11 @@ public class RetoPanelController : MonoBehaviour
         if (texto2 != null) texto2.gameObject.SetActive(false);
         if (botonSiguiente != null) botonSiguiente.gameObject.SetActive(false);
         if (botonRetroceder != null) botonRetroceder.gameObject.SetActive(false);
+    }
+
+    private void FinalizarReto()
+    {
+        Debug.Log("[RetoPanelController] Reto finalizado");
+        OnRetoFinalizado?.Invoke();
     }
 }
