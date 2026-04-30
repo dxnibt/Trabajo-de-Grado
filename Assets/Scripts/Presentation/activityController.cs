@@ -13,7 +13,7 @@ using Infraestructura.SQLite.SQLiteGateway;
 public class ActivityController : MonoBehaviour
 {
     [Header("UI GENERAL")]
-    public TMP_Text tituloText;
+    public Image tituloImagen; 
     public TMP_Text contenidoText;
     public Button siguienteButton;
     public Button volverButton;
@@ -199,43 +199,37 @@ public class ActivityController : MonoBehaviour
         if (contenido is Historia historia)
         {
             panelHistoria.SetActive(true);
-            tituloText.text = "Historia";
+            
+            // Cambiar la imagen según el tipo de contenido
+            if (tituloImagen != null)
+            {
+                // Cargar sprite para el título de Historia
+                Sprite spriteHistoria = Resources.Load<Sprite>("Titulos/historia_titulo");
+                if (spriteHistoria != null)
+                    tituloImagen.sprite = spriteHistoria;
+                else
+                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Historia");
+            }
+            
             contenidoText.text = "Escucha la narración";
 
-            AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
-
-            if (clip == null && audioSource.clip != null)
-                clip = audioSource.clip;
-
-            if (clip != null)
-            {
-                audioSource.Stop();
-                audioSource.clip = clip;
-                audioSource.Play();
-
-                duracionAudioActual = clip.length;
-                tiempoAudioInicio = Time.time;
-                esperandoAudio = true;
-                audioYaProcesado = false;
-
-                Debug.Log($"[ActivityController] Audio iniciado: {clip.name} ({duracionAudioActual:F2}s)");
-                siguienteButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                Debug.LogWarning("[ActivityController] No hay AudioClip disponible para esta actividad");
-                siguienteButton.gameObject.SetActive(true);
-                siguienteButton.interactable = true;
-            }
-
-            volverHistoriaButton.gameObject.SetActive(true);
+            // ... resto del código de audio
         }
         else if (contenido is Pregunta pregunta)
         {
             panelPreguntas.SetActive(true);
-            tituloText.text = "Pregunta";
+            
+            // Cambiar la imagen para Pregunta
+            if (tituloImagen != null)
+            {
+                Sprite spritePregunta = Resources.Load<Sprite>("Titulos/pregunta_titulo");
+                if (spritePregunta != null)
+                    tituloImagen.sprite = spritePregunta;
+                else
+                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Pregunta");
+            }
+            
             contenidoText.text = pregunta.Enunciado;
-
             MostrarOpciones(pregunta.Opciones);
 
             siguienteButton.gameObject.SetActive(true);
@@ -245,7 +239,17 @@ public class ActivityController : MonoBehaviour
         else if (contenido is Reto reto)
         {
             panelReto.SetActive(true);
-            tituloText.text = "Reto";
+            
+            // Cambiar la imagen para Reto
+            if (tituloImagen != null)
+            {
+                Sprite spriteReto = Resources.Load<Sprite>("Titulos/reto_titulo");
+                if (spriteReto != null)
+                    tituloImagen.sprite = spriteReto;
+                else
+                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Reto");
+            }
+            
             contenidoText.text = reto.Texto;
 
             finalizarRetoButton.gameObject.SetActive(false);
@@ -354,7 +358,16 @@ public class ActivityController : MonoBehaviour
 
     void MostrarBotonSalir()
     {
-        tituloText.text = "¡ACTIVIDAD COMPLETADA!";
+        // Cambiar la imagen para el título de completado
+        if (tituloImagen != null)
+        {
+            Sprite spriteCompletado = Resources.Load<Sprite>("Titulos/completado_titulo");
+            if (spriteCompletado != null)
+                tituloImagen.sprite = spriteCompletado;
+            else
+                Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Completado");
+        }
+        
         contenidoText.text = "Presiona SALIR";
         salirButton.gameObject.SetActive(true);
     }

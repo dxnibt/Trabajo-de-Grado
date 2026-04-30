@@ -63,7 +63,7 @@ EditorBuildSettings:
     path: Assets/Scenes/n2_a6.unity
     guid: b36a7d2c7f5a6bd448135d37aaa23011
   - enabled: 1
-    path: Assets/Scenes/n2_a7.unity
+    path: Assets/Scenes/n2_a8.unity
     guid: 9e22057368be98b4d817e4de14bc8c70
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
