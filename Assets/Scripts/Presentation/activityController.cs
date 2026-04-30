@@ -13,7 +13,9 @@ using Infraestructura.SQLite.SQLiteGateway;
 public class ActivityController : MonoBehaviour
 {
     [Header("UI GENERAL")]
-    public Image tituloImagen; 
+    public Image tituloImage;
+    public Image preguntaImage;
+    public Image retoImage;
     public TMP_Text contenidoText;
     public Button siguienteButton;
     public Button volverButton;
@@ -58,6 +60,8 @@ public class ActivityController : MonoBehaviour
     private bool audioYaProcesado = false;
     private float tiempoAudioInicio = 0f;
     private float duracionAudioActual = 0f;
+    private bool ultimaRespuestaCorrecta = false;
+    private bool mostrandoResultado = false;
 
     void Start()
     {
@@ -116,14 +120,14 @@ public class ActivityController : MonoBehaviour
         VerificarRaycastTarget(salirButton);
         VerificarRaycastTarget(finalizarRetoButton);
 
-        siguienteButton.onClick.AddListener(SiguienteContenido);
-        volverButton.onClick.AddListener(VolverAPanelHistoria);
-        volverHistoriaButton.onClick.AddListener(VolverAMenuNiveles);
-        salirButton.onClick.AddListener(VolverAMenuNiveles);
+        siguienteButton?.onClick.AddListener(SiguienteContenido);
+        volverButton?.onClick.AddListener(VolverAPanelHistoria);
+        volverHistoriaButton?.onClick.AddListener(VolverAMenuNiveles);
+        salirButton?.onClick.AddListener(VolverAMenuNiveles);
 
-        opcion1Button.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
-        opcion2Button.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
-        opcion3Button.onClick.AddListener(() => SeleccionarRespuesta(opcion3Text.text));
+        opcion1Button?.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
+        opcion2Button?.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
+        opcion3Button?.onClick.AddListener(() => SeleccionarRespuesta(opcion3Text.text));
 
         if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
         if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
@@ -199,60 +203,86 @@ public class ActivityController : MonoBehaviour
         if (contenido is Historia historia)
         {
             panelHistoria.SetActive(true);
-            
-            // Cambiar la imagen según el tipo de contenido
-            if (tituloImagen != null)
+
+            if (tituloImage != null)
             {
-                // Cargar sprite para el título de Historia
                 Sprite spriteHistoria = Resources.Load<Sprite>("Titulos/historia_titulo");
                 if (spriteHistoria != null)
-                    tituloImagen.sprite = spriteHistoria;
+                    tituloImage.sprite = spriteHistoria;
                 else
-                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Historia");
+                    tituloImage.sprite = null;
             }
-            
-            contenidoText.text = "Escucha la narración";
 
-            // ... resto del código de audio
+            if (contenidoText != null) contenidoText.text = "Escucha la narración";
+
+            AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
+
+            if (clip == null && audioSource.clip != null)
+                clip = audioSource.clip;
+
+            if (clip != null)
+            {
+                audioSource.Stop();
+                audioSource.clip = clip;
+                audioSource.Play();
+
+                duracionAudioActual = clip.length;
+                tiempoAudioInicio = Time.time;
+                esperandoAudio = true;
+                audioYaProcesado = false;
+
+                Debug.Log($"[ActivityController] Audio iniciado: {clip.name} ({duracionAudioActual:F2}s)");
+                siguienteButton?.gameObject.SetActive(false);
+            }
+            else
+            {
+                Debug.LogWarning("[ActivityController] No hay AudioClip disponible para esta actividad");
+                siguienteButton?.gameObject.SetActive(true);
+                if (siguienteButton != null) siguienteButton.interactable = true;
+            }
+
+            volverHistoriaButton.gameObject.SetActive(true);
         }
         else if (contenido is Pregunta pregunta)
         {
             panelPreguntas.SetActive(true);
-            
-            // Cambiar la imagen para Pregunta
-            if (tituloImagen != null)
+            preguntaImage?.gameObject.SetActive(true);
+
+            if (tituloImage != null)
             {
                 Sprite spritePregunta = Resources.Load<Sprite>("Titulos/pregunta_titulo");
                 if (spritePregunta != null)
-                    tituloImagen.sprite = spritePregunta;
+                    tituloImage.sprite = spritePregunta;
                 else
-                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Pregunta");
+                    tituloImage.sprite = null;
             }
-            
-            contenidoText.text = pregunta.Enunciado;
-            MostrarOpciones(pregunta.Opciones);
 
-            siguienteButton.gameObject.SetActive(true);
-            siguienteButton.interactable = false;
-            volverButton.gameObject.SetActive(true);
+            if (contenidoText != null) contenidoText.text = pregunta.Enunciado;
+
+            MostrarOpciones(pregunta.Opciones);
+            HabilitarBotonesOpciones(true);
+
+            volverButton?.gameObject.SetActive(true);
+            mostrandoResultado = false;
         }
         else if (contenido is Reto reto)
         {
             panelReto.SetActive(true);
-            
-            // Cambiar la imagen para Reto
-            if (tituloImagen != null)
+            retoImage?.gameObject.SetActive(true);
+
+            if (tituloImage != null)
             {
                 Sprite spriteReto = Resources.Load<Sprite>("Titulos/reto_titulo");
                 if (spriteReto != null)
-                    tituloImagen.sprite = spriteReto;
+                    tituloImage.sprite = spriteReto;
                 else
-                    Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Reto");
+                    tituloImage.sprite = null;
             }
-            
-            contenidoText.text = reto.Texto;
 
-            finalizarRetoButton.gameObject.SetActive(false);
+            if (contenidoText != null) contenidoText.text = reto.Texto;
+
+            finalizarRetoButton?.gameObject.SetActive(false);
+            volverHistoriaButton?.gameObject.SetActive(true);
 
             if (retoPanelController != null)
             {
@@ -269,24 +299,33 @@ public class ActivityController : MonoBehaviour
         opcion3Text.text = opciones.Count > 2 ? opciones[2] : "";
     }
 
+    void HabilitarBotonesOpciones(bool habilitar)
+    {
+        if (opcion1Button != null) opcion1Button.interactable = habilitar;
+        if (opcion2Button != null) opcion2Button.interactable = habilitar;
+        if (opcion3Button != null) opcion3Button.interactable = habilitar;
+    }
+
     void SeleccionarRespuesta(string respuesta)
     {
+        if (mostrandoResultado) return;
+
         var contenido = progreso.ObtenerActual();
 
         if (contenido is Pregunta pregunta)
         {
             bool correcta = pregunta.ValidarRespuesta(respuesta);
+            ultimaRespuestaCorrecta = correcta;
+            mostrandoResultado = true;
+
+            HabilitarBotonesOpciones(false);
 
             if (correcta)
             {
                 progreso.MarcarRespuestaCorrecta();
-                siguienteButton.interactable = true;
-                MostrarResultado(true);
             }
-            else
-            {
-                MostrarResultado(false);
-            }
+
+            MostrarResultado(correcta);
         }
     }
 
@@ -295,13 +334,24 @@ public class ActivityController : MonoBehaviour
         Image img = correcto ? imagenCorrecto : imagenIncorrecto;
         if (img == null) return;
         img.gameObject.SetActive(true);
-        Invoke(nameof(OcultarResultado), tiempoMuestraResultado);
+        Invoke(nameof(OcultarResultado), 1f);
     }
 
     void OcultarResultado()
     {
         if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
         if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
+
+        mostrandoResultado = false;
+
+        if (ultimaRespuestaCorrecta)
+        {
+            SiguienteContenido();
+        }
+        else
+        {
+            HabilitarBotonesOpciones(true);
+        }
     }
 
     void SiguienteContenido()
@@ -322,6 +372,9 @@ public class ActivityController : MonoBehaviour
         panelHistoria.SetActive(false);
         panelPreguntas.SetActive(false);
         panelReto.SetActive(false);
+
+        preguntaImage?.gameObject.SetActive(false);
+        retoImage?.gameObject.SetActive(false);
 
         siguienteButton?.gameObject.SetActive(false);
         volverButton?.gameObject.SetActive(false);
@@ -358,18 +411,8 @@ public class ActivityController : MonoBehaviour
 
     void MostrarBotonSalir()
     {
-        // Cambiar la imagen para el título de completado
-        if (tituloImagen != null)
-        {
-            Sprite spriteCompletado = Resources.Load<Sprite>("Titulos/completado_titulo");
-            if (spriteCompletado != null)
-                tituloImagen.sprite = spriteCompletado;
-            else
-                Debug.LogWarning("[ActivityController] No se encontró el sprite para título de Completado");
-        }
-        
         contenidoText.text = "Presiona SALIR";
-        salirButton.gameObject.SetActive(true);
+        salirButton?.gameObject.SetActive(true);
     }
 
     private void InferirContextoDesdEscena(string nombreEscena)
