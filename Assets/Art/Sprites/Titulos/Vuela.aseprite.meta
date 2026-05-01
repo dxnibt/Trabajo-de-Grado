@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5ac92bf8440c0974f96070143b000149
+guid: 1d67fd61c3c4b7a4c8c5f59eed9bd97b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Atrapala
+  - name: Vuela
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 153
-      height: 33
-    spriteID: 4baa1ecfdb6788842a9fdefb85395ccb
+      width: 109
+      height: 32
+    spriteID: 4ac52be306344eb43b3d139982f4d321
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 884565306
+      value0: 1931224003
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Atrapala
+    name: Vuela
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Atrapala
+    - name: Vuela
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
-        width: 153
-        height: 33
-      spriteId: 4baa1ecfdb6788842a9fdefb85395ccb
+        width: 109
+        height: 32
+      spriteId: 4ac52be306344eb43b3d139982f4d321
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -181,5 +181,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 153, y: 33}
-  previousTextureSize: {x: 256, y: 64}
+  canvasSize: {x: 109, y: 32}
+  previousTextureSize: {x: 128, y: 64}

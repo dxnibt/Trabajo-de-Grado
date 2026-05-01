@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5ac92bf8440c0974f96070143b000149
+guid: 6050f75c5ff4562438fd76965d02e174
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Atrapala
+  - name: Caminante
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 153
-      height: 33
-    spriteID: 4baa1ecfdb6788842a9fdefb85395ccb
+      width: 219
+      height: 28
+    spriteID: 64e99bfaccaa9aa44849da5537c21fbd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 884565306
+      value0: 3710025030
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Atrapala
+    name: Caminante
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Atrapala
+    - name: Caminante
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
-        width: 153
-        height: 33
-      spriteId: 4baa1ecfdb6788842a9fdefb85395ccb
+        width: 219
+        height: 28
+      spriteId: 64e99bfaccaa9aa44849da5537c21fbd
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -181,5 +181,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 153, y: 33}
+  canvasSize: {x: 219, y: 28}
   previousTextureSize: {x: 256, y: 64}
