@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c217d4e2de01ed14185e75d4588fc1bd
+guid: d14f8d5975c066d479874dfa85f05efd
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Equilibrio
+  - name: Catapulta
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -137,9 +137,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 209
-      height: 29
-    spriteID: dc995a311e28090438344e1d813d98c0
+      width: 229
+      height: 28
+    spriteID: 3a5ee69f0739d3e409fece524ad2338b
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 3105485183
+      value0: 3565819203
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Equilibrio
+    name: Catapulta
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Equilibrio
+    - name: Catapulta
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
-        width: 209
-        height: 29
-      spriteId: dc995a311e28090438344e1d813d98c0
+        width: 229
+        height: 28
+      spriteId: 3a5ee69f0739d3e409fece524ad2338b
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -181,5 +181,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 209, y: 29}
+  canvasSize: {x: 229, y: 28}
   previousTextureSize: {x: 256, y: 64}
