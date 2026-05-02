@@ -1,17 +1,17 @@
 ﻿ActividadId;RutaImagen;Instruccion
 1;Imagenes/nivel1/n1a1/instruccion1;Tus Materiales: Botella de plástico, maíz (o granos), tubo de cartón, cinta, pegante, tijeras y listón decorativo.
 1;Imagenes/nivel1/n1a1/instruccion2;Recorta la botella para quedarte solo con la parte de arriba y la base (descarta el centro).
-1;Imagenes/nivel1/n1a1/instruccion3;Echa los granos en la base, encaja la parte de arriba y asegura la unión con mucha cinta.
-1;Imagenes/nivel1/n1a1/instruccion4;Corta el tubo de cartón a lo largo, enróllalo para que sea más delgado y ponle cinta.
+1;Imagenes/nivel1/n1a1/instruccion3;Corta el tubo de cartón a lo largo, enróllalo para que sea más delgado y ponle cinta.
+1;Imagenes/nivel1/n1a1/instruccion4;Echa los granos en la base, encaja la parte de arriba y asegura la unión con mucha cinta.
 1;Imagenes/nivel1/n1a1/instruccion5;Mete el tubo en la parte inferior de la botella y asegúralo bien con cinta.
 1;Imagenes/nivel1/n1a1/instruccion6;¡Dale estilo! Enrolla el listón y pega tus decoraciones favoritas.
 2;Imagenes/nivel1/n1a2/instruccion1;Tus Materiales: un octavo de cartulina, tres hojas iris, tijeras, colbón y colores o marcadores
 2;Imagenes/nivel1/n1a2/instruccion2;Recorta una tira de cartulina de 12 cm de ancho x 36 cm de alto, un rectángulo de 22 cm de ancho x 36 cm de alto, una tira de papel iris de 14 cm de ancho x 36 cm de alto, y por último dos de 25 cm de ancho x 12 cm de alto 
 2;Imagenes/nivel1/n1a2/instruccion3;En forma de cilindro envuelve las tiras de 25 cm x 12 cm 
-2;Imagenes/nivel1/n1a2/instruccion4;Pega la tira de 12 cm x 36 cm al rectángulo de 22 cm x 36 cm, hazlo a modo de curva
-2;Imagenes/nivel1/n1a2/instruccion5;Luego de esto, pega uno de los cilindros sobre la tira (con la abertura hacia el frente )
-2;Imagenes/nivel1/n1a2/instruccion6;Sobre este cilindro, pega la tira de 14 cm x 36 cm ¡Estos serán los brazos!
-2;Imagenes/nivel1/n1a2/instruccion7;Añade una carita expresiva al cilindro restante
+2;Imagenes/nivel1/n1a2/instruccion4;Añade una carita expresiva al cilindro restante
+2;Imagenes/nivel1/n1a2/instruccion5;Pega la tira de 12 cm x 36 cm al rectángulo de 22 cm x 36 cm, hazlo a modo de curva
+2;Imagenes/nivel1/n1a2/instruccion6;Luego de esto, pega uno de los cilindros sobre la tira (con la abertura hacia el frente )
+2;Imagenes/nivel1/n1a2/instruccion7;Sobre este cilindro, pega la tira de 14 cm x 36 cm ¡Estos serán los brazos!
 2;Imagenes/nivel1/n1a2/instruccion8;Pega este cilindro sobre los brazos de nuestro equilibrista y ¡Estás listo para cruzar la cuerda floja!
 3;Imagenes/nivel1/n1a3/instruccion1;Tus Materiales: Cartón, gancho de ropa, 2 palitos de helado, tapa de gaseosa, pelota de ping-pong, silicona y tijeras.
 3;Imagenes/nivel1/n1a3/instruccion2;Pega un palito sobre el otro para que el brazo de tu catapulta sea súper fuerte.
@@ -29,23 +29,20 @@
 5;Imagenes/nivel1/n1a5/instruccion1;Tus materiales: Dos vasitos de cartón o de yogurt vacío, un pitillo, tijeras, pegante o cinta, témperas y marcadores
 5;Imagenes/nivel1/n1a5/instruccion2;Con ayuda de una regla marca ocho puntos en el vaso distribuidos equitativamente
 5;Imagenes/nivel1/n1a5/instruccion3;Luego corta de manera recta por sobre cada uno de los puntos y deja tan solo cuatro a manera de pinza 
-5;Imagenes/nivel1/n1a5/instruccion4;Con un lápiz o esfero haz un hueco en el centro de la pinza que acabas de cortar
-5;Imagenes/nivel1/n1a5/instruccion5;Dobla las puntas de la pinza 
-5;Imagenes/nivel1/n1a5/instruccion6;Corta el pitillo en cuatro trozos
+5;Imagenes/nivel1/n1a5/instruccion4;Con un lápiz o esfero haz un hueco en el centro de la pinza que acabas de cortar y dobla las puntas de la pinza 
+5;Imagenes/nivel1/n1a5/instruccion5;Toma el otro vaso, y con el lápiz abre un hueco en el centro del mismo
+5;Imagenes/nivel1/n1a5/instruccion6;Corta la punta del pitillo en cuatro trozos
 5;Imagenes/nivel1/n1a5/instruccion7;Introduce el pitillo en el hueco que hiciste con el lápiz, estira las cuatro puntas del pitillo y pegalo
-5;Imagenes/nivel1/n1a5/instruccion8;Toma el otro vaso, y con el lápiz abre un hueco en el centro del mismo
-5;Imagenes/nivel1/n1a5/instruccion9;Ahora introduce el pitillo con la pinza en ese vaso
-5;Imagenes/nivel1/n1a5/instruccion10;Decora a tu gusto ¡Y a cuidar el planeta!
+5;Imagenes/nivel1/n1a5/instruccion8;Ahora introduce el pitillo con la pinza en ese vaso
+5;Imagenes/nivel1/n1a5/instruccion9;Decora a tu gusto ¡Y a cuidar el planeta!
 6;Imagenes/nivel1/n1a6/instruccion1;Tus materiales: Tijeras, témperas, un palito de pincho, una tapa de gaseosa, una caja de jugo vacía con su pitillo, dos palitos de paleta, pincel, marcadores, silicona fría, un trozo pequeño de hilaza
 6;Imagenes/nivel1/n1a6/instruccion2;Toma la caja de jugo, traza dos líneas más o menos como las de la imagen y cortala con cuidado
 6;Imagenes/nivel1/n1a6/instruccion3;A los palitos de paleta hazle un hueco con ayuda de tu profe o un adulto responsable 
 6;Imagenes/nivel1/n1a6/instruccion4;Pega las dos partes del jugo en caja con los palitos, la más grande será nuestro pozo y la más pequeña el techo. Nota: Asegúrate de que al pegar no cubras los dos huequitos de los palitos de paleta
 6;Imagenes/nivel1/n1a6/instruccion5;En los huequitos de los palitos de paleta atraviesa un trozo de aproximadamente 6 cm del palito de pincho 
 6;Imagenes/nivel1/n1a6/instruccion6;Recorta el pitillo conservando la parte arrugada
-6;Imagenes/nivel1/n1a6/instruccion7;Adhiere el trozo de pitillo al palito de pincho
-6;Imagenes/nivel1/n1a6/instruccion8;Luego toma la tapita y pega los dos extremos del trozo pequeño de hilaza
-6;Imagenes/nivel1/n1a6/instruccion9;Amarra la hilaza al palito de pincho 
-6;Imagenes/nivel1/n1a6/instruccion10;Decora a tu gusto ¡Y devuelve el agua a tu comunidad!
+6;Imagenes/nivel1/n1a6/instruccion7;Luego toma la tapita y pega los dos extremos del trozo pequeño de hilaza
+6;Imagenes/nivel1/n1a6/instruccion8;Amarra la hilaza al palito de pincho y pega el pitillo al palito de pincho. Decora a tu gusto ¡Y devuelve el agua a tu comunidad!
 7;Imagenes/nivel1/n1a7/instruccion1;Tus Materiales: Vaso de cartón, cartulina, 2 tapas de gaseosa, 1 caucho (banda elástica), silicona, cinta y tijeras.
 7;Imagenes/nivel1/n1a7/instruccion2;Dibuja las orejitas de tu animal favorito en la cartulina dejando un pequeño espacio abajo.
 7;Imagenes/nivel1/n1a7/instruccion3;Recorta las orejas dejando un pequeño espacio en la base para poder pegarlas.
@@ -58,8 +55,8 @@
 8;Imagenes/nivel1/n1a8/instruccion1;Tus materiales: Una caja de jugo vacía, un trocito de cartulina, una hoja de papel iris, tijeras, cinta o pegante, un clip, marcadores y témperas
 8;Imagenes/nivel1/n1a8/instruccion2;Con ayuda de una regla traza una línea con la forma que ves en la imagen en ambas caras de la caja
 8;Imagenes/nivel1/n1a8/instruccion3;Recorta la caja 
-8;Imagenes/nivel1/n1a8/instruccion4;Estira el clip hasta que quede una línea recta 
-8;Imagenes/nivel1/n1a8/instruccion5;Con ayuda de un adulto responsable abre dos huecos en los extremos circulares que acabas de cortar 
+8;Imagenes/nivel1/n1a8/instruccion4;Con ayuda de un adulto responsable abre dos huecos en los extremos circulares que acabas de cortar 
+8;Imagenes/nivel1/n1a8/instruccion5;Estira el clip hasta que quede una línea recta 
 8;Imagenes/nivel1/n1a8/instruccion6;Dobla el clip con la forma que ves en la imagen, si necesitas ayuda no dudes en solicitarla a un adulto 
 8;Imagenes/nivel1/n1a8/instruccion7;Introduce las puntas del clip en los huecos que le hiciste a la caja de jugo
 8;Imagenes/nivel1/n1a8/instruccion8;En la hoja iris dibuja tu caminante, personalizalo y recortalo
@@ -69,11 +66,11 @@
 9;Imagenes/nivel1/n1a9/instruccion1;Tus Materiales: Vaso de cartón, cartulina, cartón rígido, palillo, lana, marcadores, pegante y tijeras.
 9;Imagenes/nivel1/n1a9/instruccion2;Crea la figura de un pájaro en el cartón y píntalo con tus colores favoritos.
 9;Imagenes/nivel1/n1a9/instruccion3;Usa las tijeras con cuidado para sacar la silueta de tu pájaro.
-9;Imagenes/nivel1/n1a9/instruccion4;"Corta la punta de un palillo, píntala y prepárala; ¡este será el pico!"
+9;Imagenes/nivel1/n1a9/instruccion4;Corta la punta de un palillo, píntala y prepárala, ¡este será el pico!
 9;Imagenes/nivel1/n1a9/instruccion5;Pega el pico firmemente a la cabeza de tu pájaro.
 9;Imagenes/nivel1/n1a9/instruccion6;Recorta dos tiras largas de cartulina (de 1 cm de ancho aproximadamente).
 9;Imagenes/nivel1/n1a9/instruccion7;Pega las puntas de las tiras y empieza a pasar una encima de otra (como un tejido).
-9;Imagenes/nivel1/n1a9/instruccion8;"Al terminar, pega el extremo; debe quedarte un resorte de papel tipo acordeón."
+9;Imagenes/nivel1/n1a9/instruccion8;Al terminar, pega el extremo, debe quedarte un resorte de papel tipo acordeón.
 9;Imagenes/nivel1/n1a9/instruccion9;Pega un extremo del acordeón en la parte lateral del vaso de cartón.
 9;Imagenes/nivel1/n1a9/instruccion10;Pega un trozo de lana en la parte de adelante de tu pájaro.
 9;Imagenes/nivel1/n1a9/instruccion11;Abre un pequeño agujero en el vaso y pasa la lana por ahí hacia adentro.
@@ -89,9 +86,8 @@
 10;Imagenes/nivel1/n1a10/instruccion9;Pinta los copitos a tu gusto 
 10;Imagenes/nivel1/n1a10/instruccion10;Rellena la tapa de gaseosa con la plastilina hasta que quede firme 
 10;Imagenes/nivel1/n1a10/instruccion11;Corta un pequeño trozo de pitillo, un pequeño trozo del palito del copito y reune los dos copitos que conservaste 
-10;Imagenes/nivel1/n1a10/instruccion12;En el hueco del centro de los círculos introduce y pega el pitillo, dentro del pitillo introduce el pequeño trozo de palito del paso anterior
-10;Imagenes/nivel1/n1a10/instruccion13;Pega los dos copitos al pequeño trozo de palito, uno a cada lado 
-10;Imagenes/nivel1/n1a10/instruccion14;Introduce los copitos en la tapa con plastilina ¡Y a girar la rueda!
+10;Imagenes/nivel1/n1a10/instruccion12;En el hueco introduce y pega el pitillo, dentro del pitillo introduce el pequeño trozo de palito del paso anterior y pega los dos copitos, uno a cada lado 
+10;Imagenes/nivel1/n1a10/instruccion13;Introduce los copitos en la tapa con plastilina ¡Y a girar la rueda!
 11;Imagenes/nivel2/n2a1/instruccion1;Antes de empezar: Sal a la naturaleza y recolecta piedras de diferentes tamaños (unas muy pequeñas y otras más grandes).
 11;Imagenes/nivel2/n2a1/instruccion2;Tus Materiales: Botella de plástico con tapa, algodón, tijeras y tus piedras recolectadas.
 11;Imagenes/nivel2/n2a1/instruccion3;Dibuja una línea alrededor de la botella como se ve en la imagen para saber por dónde cortar.
@@ -99,7 +95,7 @@
 11;Imagenes/nivel2/n2a1/instruccion5;Con ayuda de un adulto, abre varios huequitos pequeños en la tapa de la botella.
 11;Imagenes/nivel2/n2a1/instruccion6;Ponle la tapa con los huequitos de nuevo a la botella.
 11;Imagenes/nivel2/n2a1/instruccion7;Echa el algodón dentro de la botella, empujándolo hasta que quede cerca del pico.
-11;Imagenes/nivel2/n2a1/instruccion8;"Pon la parte del pico boca abajo dentro de la base de la botella; así, el agua filtrada caerá abajo."
+11;Imagenes/nivel2/n2a1/instruccion8;Pon la parte del pico boca abajo dentro de la base de la botella, así, el agua filtrada caerá abajo.
 11;Imagenes/nivel2/n2a1/instruccion9;Echa las piedras más chiquitas sobre el algodón.
 11;Imagenes/nivel2/n2a1/instruccion10;Echa las piedras más grandes encima de las pequeñas.
 11;Imagenes/nivel2/n2a1/instruccion11;Echa agua sucia en tu filtro y espera con paciencia.
@@ -127,7 +123,7 @@
 13;Imagenes/nivel2/n2a3/instruccion13;Luego con ayuda de silicona pegalas a la tapa
 13;Imagenes/nivel2/n2a3/instruccion14;En el huequito de la tapa introduce el palito de pincho de la estructura que ya teníamos 
 13;Imagenes/nivel2/n2a3/instruccion15;Con la regla mide un trozo de cartón de 20cm x 15cm, dibuja un pequeño triángulo y recortalo 
-13;Imagenes/nivel2/n2a3/instruccion16;Pega la turbina al cartón de 20 cm x 15cm y pega el triángulo tanto a la base como a la estructura, esto nos servirá para sostenerlo 
+13;Imagenes/nivel2/n2a3/instruccion16;Pega la turbina al cartón de 20 cm x 15cm y pega el triángulo tanto a la base como a la estructura, esto nos servirá para sostenerlo
 13;Imagenes/nivel2/n2a3/instruccion17;Usa los cauchos para posicionarlos en la forma que ves en la imagen, gira la turbina ¡Y ahora generamos energía limpia!
 14;Imagenes/nivel2/n2a4/instruccion1;Tus materiales: Dos botellas pequeñas de plástico, seis tapas de gaseosa, un palito de pincho, tijeras, silicona, témperas, un cauchito 
 14;Imagenes/nivel2/n2a4/instruccion2;Con ayuda de un adulto abre cuatro orificios a la altura que ves en la imagen 
@@ -136,16 +132,14 @@
 14;Imagenes/nivel2/n2a4/instruccion5;Ahora con cuidado corta el cuello de la botella y corta en forma de aspa 
 14;Imagenes/nivel2/n2a4/instruccion6;Pasa el caucho por el huequito de una de las tapas y atraviesa un trozo de palito para que no se salga 
 14;Imagenes/nivel2/n2a4/instruccion7;Abre otro huequito en la parte trasera de la botella 
-14;Imagenes/nivel2/n2a4/instruccion8; Ahora pasa el caucho por el huequito de la parte trasera de la botella estiralo hasta la boca de la botella y con ayuda de la tapa prensalo 
-14;Imagenes/nivel2/n2a4/instruccion9;Decora a tu gusto, gira el aspa ¡Y a competir!
+14;Imagenes/nivel2/n2a4/instruccion8; Ahora pasa el caucho por el huequito de la parte trasera de la botella estiralo hasta la boca de la botella y con ayuda de la tapa prensalo. Decora a tu gusto, gira el aspa ¡Y a competir!
 15;Imagenes/nivel2/n2a5/instruccion1;Tus materiales: hilaza, plastilina, dos palitos de paleta, un copito, dos tapas de gaseosa, un vasito de café o de yogurt vacío
-15;Imagenes/nivel2/n2a5/instruccion2;Toma los dos palitos de paleta y marca  tres huequitos como los de la imagen 
-15;Imagenes/nivel2/n2a5/instruccion3;Con ayuda de un adulto responsable abre los huequitos que marcaste
-15;Imagenes/nivel2/n2a5/instruccion4;Corta el vasito a la mitad y rellenalo con la plastilina
-15;Imagenes/nivel2/n2a5/instruccion5;Giralo y en la mitad, con ayuda de las tijeras abre un huequito como el de la foto 
-15;Imagenes/nivel2/n2a5/instruccion6;Parte el copito a la mitad, junta los palitos de paleta como se ve en la imagen y pon esa estructura en en el vasito con plastilina 
-15;Imagenes/nivel2/n2a5/instruccion7;Corta dos trozos de hilo de aproximadamente 5 cm y ponlos en los orificios laterales 
-15;Imagenes/nivel2/n2a5/instruccion8;Con silicona, pega las tapas al hilo ¡Y a medir!
+15;Imagenes/nivel2/n2a5/instruccion2;Toma los dos palitos de paleta, marca  tres huequitos como los de la imagen y abrelos con ayuda de un adulto
+15;Imagenes/nivel2/n2a5/instruccion3;Corta el vasito a la mitad y rellenalo con la plastilina
+15;Imagenes/nivel2/n2a5/instruccion4;Giralo y en la mitad, con ayuda de las tijeras abre un huequito como el de la foto 
+15;Imagenes/nivel2/n2a5/instruccion5;Parte el copito a la mitad, junta los palitos de paleta como se ve en la imagen y pon esa estructura en en el vasito con plastilina 
+15;Imagenes/nivel2/n2a5/instruccion6;Corta dos trozos de hilo de aproximadamente 5 cm y ponlos en los orificios laterales 
+15;Imagenes/nivel2/n2a5/instruccion7;Con silicona, pega las tapas al hilo ¡Y a medir!
 16;Imagenes/nivel2/n2a6/instruccion1;Tus materiales: Hojas, cartón, silicona, colores, palitos de pincho, colbón, temperas 
 16;Imagenes/nivel2/n2a6/instruccion2;Toma un trozo de cartón y cortalo con una medida de 20cm x 15cm 
 16;Imagenes/nivel2/n2a6/instruccion3;Luego dibuja un cuadrado como se ve en la imagen y recortalo
@@ -154,16 +148,14 @@
 16;Imagenes/nivel2/n2a6/instruccion6;En hojas de papel dibuja todo lo que tu quieras, pega todos los dibujos y luego enrrolla a los palitos de pincho tal y como se ve en la imagen 
 16;Imagenes/nivel2/n2a6/instruccion7;Introduce los palitos con el dibujo ya pegado en los orificios que hiciste a los lados del tele 
 16;Imagenes/nivel2/n2a6/instruccion8;Con un lápiz dibuja las siguientes figuras en el cartón y recortalas 
-16;Imagenes/nivel2/n2a6/instruccion9;Pegalas al televisor con la forma en que se ve en la imagen
-16;Imagenes/nivel2/n2a6/instruccion10;Decora a tu gusto ¡Y ya tienes tu propio televisor reciclado!
+16;Imagenes/nivel2/n2a6/instruccion9;Pegalas al televisor con la forma en que se ve en la imagen. Decora a tu gusto ¡Y ya tienes tu propio televisor reciclado!
 17;Imagenes/nivel2/n2a7/instruccion1;Tus materiales: Dos trozos de palo de balso grueso de 14 y 16 cm, hoja de papel, un par de imanes, hilaza, un palito de paleta, colores y silicona
 17;Imagenes/nivel2/n2a7/instruccion2;Toma los dos palos de balso y pegalos con ayuda de un adulto en la forma que se ve en la imagen 
 17;Imagenes/nivel2/n2a7/instruccion3;Toma el palito de paleta y pegalo al palito de 16 cm 
 17;Imagenes/nivel2/n2a7/instruccion4;Al palito de paleta pegale uno de los imanes. Nota: Ten en cuenta el lado por el cual se imanta, este debe ir hacia abajo 
 17;Imagenes/nivel2/n2a7/instruccion5;Corta un trozo de hilaza de aproximadamente 10 cm 
 17;Imagenes/nivel2/n2a7/instruccion6;Toma la hoja y arma tu mejor avión de papel 
-17;Imagenes/nivel2/n2a7/instruccion7;Al avión de papel pega el iman y el trozo de hilaza tanto al avión como al palo de balso. Nota: Trata de que los imanes queden más o menos a un dedo de distancia para que el avión permanezca flotando
-17;Imagenes/nivel2/n2a7/instruccion8;Decora tu plataforma y avión ¡Y a volar!
+17;Imagenes/nivel2/n2a7/instruccion7;Al avión de papel pega el iman y el trozo de hilaza tanto al avión como al palo de balso. Nota: Que los imanes queden más o menos a un dedo de distancia. Decora tu plataforma y avión ¡Y a volar!
 18;Imagenes/nivel2/n2a8/instruccion1;Tus materiales: Una hoja de papel, colores,lápiz, 15 cm de alambre de cobre, tijeras, una pila AA, 4 imanes de neodimio 
 18;Imagenes/nivel2/n2a8/instruccion2;Toma tu alambre de cobre y con ayuda de unas pinzas y un adulto doblalo como se ve en la imagen 
 18;Imagenes/nivel2/n2a8/instruccion3;En un trozo de papel dibuja tu bailarina o bailarín, dale color y recortalo
@@ -195,4 +187,4 @@
 20;Imagenes/nivel2/n2a10/instruccion7;Toma la jeringa y ponla en el primer palito de la estructura atravesando por el orificio que hicimos en el paso anterior
 20;Imagenes/nivel2/n2a10/instruccion8;Crea una plataforma pegando palitos de paleta
 20;Imagenes/nivel2/n2a10/instruccion9;Pega la plataforma a la estructura, la estructura y la jeringa  al trozo de cartón 
-20;Imagenes/nivel2/n2a10/instruccion10;Toma el kit de goteo, corta un trozo de maguera y pon un extremo en la jeringa y otro extremo en válvula de la bomba de vacío. Así mismo, conecta un extremo de la bomba a un extremo del conector de la batería, el otro extremo a un pin del interruptor y el otro extremo del portabaterías al pin restante del interruptor. Decora, enciende ¡Y eleva tu creatividad!
+20;Imagenes/nivel2/n2a10/instruccion10;Conecta la manguera entre la jeringa y la bomba de vacío. Luego, conecta la bomba al interruptor y al portabaterías. Decora, enciende y eleva tu creatividad
