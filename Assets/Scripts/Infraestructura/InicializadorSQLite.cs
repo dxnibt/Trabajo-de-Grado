@@ -45,11 +45,11 @@ namespace Infraestructura.SQLite
             );
 
             CREATE TABLE IF NOT EXISTS Progreso (
-                EstudianteId INTEGER PRIMARY KEY,
-                ActividadId INTEGER,
+                EstudianteId INTEGER NOT NULL,
+                ActividadId INTEGER NOT NULL,
                 Completada INTEGER NOT NULL,
                 IndiceContenidoActual INTEGER NOT NULL,
-                FOREIGN KEY (ActividadId) REFERENCES Actividad(Id)
+                PRIMARY KEY (EstudianteId, ActividadId)
             );
 
             CREATE TABLE IF NOT EXISTS Respuestas (
@@ -78,19 +78,46 @@ namespace Infraestructura.SQLite
 
             cmd.ExecuteNonQuery();
 
-            // 🔥 Agregar columna Instrucciones si no existe (migración)
+            // Migración: columna Instrucciones en ContenidoActividad
             try
             {
-                cmd.CommandText = @"
-                ALTER TABLE ContenidoActividad
-                ADD COLUMN Instrucciones TEXT;
-                ";
+                cmd.CommandText = "ALTER TABLE ContenidoActividad ADD COLUMN Instrucciones TEXT;";
                 cmd.ExecuteNonQuery();
             }
-            catch
+            catch { }
+
+            // Migración: Progreso pasa de PK simple (EstudianteId) a PK compuesta (EstudianteId, ActividadId)
+            try
             {
-                // La columna ya existe, ignorar el error
+                cmd.CommandText = "SELECT sql FROM sqlite_master WHERE type='table' AND name='Progreso' LIMIT 1;";
+                var tableSql = cmd.ExecuteScalar() as string;
+
+                if (tableSql != null && !tableSql.Contains("PRIMARY KEY (EstudianteId"))
+                {
+                    cmd.CommandText = "ALTER TABLE Progreso RENAME TO Progreso_v1;";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"
+                        CREATE TABLE Progreso (
+                            EstudianteId INTEGER NOT NULL,
+                            ActividadId INTEGER NOT NULL,
+                            Completada INTEGER NOT NULL,
+                            IndiceContenidoActual INTEGER NOT NULL,
+                            PRIMARY KEY (EstudianteId, ActividadId)
+                        );";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = @"
+                        INSERT OR IGNORE INTO Progreso
+                        SELECT EstudianteId, ActividadId, Completada, IndiceContenidoActual
+                        FROM Progreso_v1 WHERE ActividadId IS NOT NULL AND ActividadId != 0;";
+                    cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "DROP TABLE Progreso_v1;";
+                    cmd.ExecuteNonQuery();
+                }
             }
+            catch { }
         }
     }
 }

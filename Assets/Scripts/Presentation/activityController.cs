@@ -12,6 +12,16 @@ using Infraestructura.SQLite.SQLiteGateway;
 
 public class ActivityController : MonoBehaviour
 {
+    [Header("SESIÓN")]
+    public GameObject panelSesionSeleccion;
+    public Button botonIndividualSesion;
+    public Button botonGrupoSesion;
+    public GameObject panelNombreSesion;
+    public TMP_Text labelNombreSesion;
+    public TMP_InputField campoNombreSesion;
+    public Button botonContinuarSesion;
+    public TMP_Text textoErrorSesion;
+
     [Header("UI GENERAL")]
     public Slider barraProgreso;
     public Image tituloImage;
@@ -53,11 +63,14 @@ public class ActivityController : MonoBehaviour
     private SQLiteActividadGateway actividadGateway;
     private SQLiteProgresoGateway progresoGateway;
     private SQLiteActividadCompletadaGateway completadaGateway;
+    private SQLiteRespuestaGateway respuestaGateway;
+    private SQLiteEstudianteGateway estudianteGateway;
 
     private Actividad actividad;
     private Progreso progreso;
     private Nivel nivel;
 
+    private bool esGrupoSesion = false;
     private bool esperandoAudio = false;
     private bool audioYaProcesado = false;
     private float tiempoAudioInicio = 0f;
@@ -74,16 +87,14 @@ public class ActivityController : MonoBehaviour
 
         string dbPath = Path.Combine(Application.persistentDataPath, "miBase.db");
         var conexion = new ConexionSQLite(dbPath);
-
-        var inicializador = new InicializadorBD(conexion);
-        inicializador.CrearTablas();
+        new InicializadorBD(conexion).CrearTablas();
 
         using (var connCheck = conexion.CrearConexion())
         {
             connCheck.Open();
             if (BaseDeDatosVacia(connCheck))
             {
-                Debug.Log("[ActivityController] BD sin datos completos → ejecutando seeds");
+                Debug.Log("[ActivityController] BD sin datos → seeds");
                 new SeedActividad(conexion).Ejecutar();
                 new SeedPregunta(conexion).Ejecutar();
             }
@@ -92,15 +103,15 @@ public class ActivityController : MonoBehaviour
         actividadGateway = new SQLiteActividadGateway(conexion);
         progresoGateway = new SQLiteProgresoGateway(conexion);
         completadaGateway = new SQLiteActividadCompletadaGateway(conexion);
+        respuestaGateway = new SQLiteRespuestaGateway(conexion);
+        estudianteGateway = new SQLiteEstudianteGateway(conexion);
 
         actividad = actividadGateway.ObtenerPorId(ActivityManager.ActividadActualId, nivel);
-
         if (actividad == null)
         {
-            Debug.LogWarning($"[ActivityController] Actividad {ActivityManager.ActividadActualId} no encontrada. Usando actividad 1.");
+            Debug.LogWarning($"[ActivityController] Actividad {ActivityManager.ActividadActualId} no encontrada. Usando 1.");
             actividad = actividadGateway.ObtenerPorId(1, nivel);
         }
-
         if (actividad == null)
         {
             Debug.LogError("[ActivityController] No se encontró la actividad");
@@ -108,15 +119,117 @@ public class ActivityController : MonoBehaviour
         }
 
         OcultarTodo();
-        siguienteButton?.gameObject.SetActive(false);
-        volverButton?.gameObject.SetActive(false);
-        volverHistoriaButton?.gameObject.SetActive(false);
-        salirButton?.gameObject.SetActive(false);
-        finalizarRetoButton?.gameObject.SetActive(false);
+        ConfigurarListeners();
 
         progreso = new Progreso();
+
+        // Restaurar nombre del estudiante desde PlayerPrefs si la sesión se reinició
+        if (ActivityManager.EstudianteId == 0)
+        {
+            string nombreGuardado = PlayerPrefs.GetString("UltimoEstudiante", "");
+            if (!string.IsNullOrEmpty(nombreGuardado))
+            {
+                var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, false);
+                ActivityManager.EstudianteId = est.Id;
+                ActivityManager.EstudianteNombre = est.Nombre;
+                // TipoConfirmado queda en false → el panel de selección se mostrará igual
+            }
+        }
+
+        // El tipo (individual/grupo) debe confirmarse antes de cada actividad
+        if (!ActivityManager.TipoConfirmado)
+        {
+            MostrarPanelSesion();
+            return;
+        }
+
+        IniciarContenidoActividad();
+    }
+
+    // ── Sesión ──────────────────────────────────────────────
+
+    void MostrarPanelSesion()
+    {
+        if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(true);
+        if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
+        if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
+
+        botonIndividualSesion?.onClick.RemoveAllListeners();
+        botonGrupoSesion?.onClick.RemoveAllListeners();
+        botonContinuarSesion?.onClick.RemoveAllListeners();
+
+        botonIndividualSesion?.onClick.AddListener(() => AbrirNombreInput(false));
+        botonGrupoSesion?.onClick.AddListener(() => AbrirNombreInput(true));
+        botonContinuarSesion?.onClick.AddListener(ConfirmarSesion);
+    }
+
+    void AbrirNombreInput(bool grupo)
+    {
+        esGrupoSesion = grupo;
+
+        // Si el estudiante ya está identificado, solo confirmar tipo y comenzar
+        if (ActivityManager.EstudianteId > 0)
+        {
+            ActivityManager.EsGrupo = grupo;
+            ActivityManager.TipoConfirmado = true;
+            if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
+            IniciarContenidoActividad();
+            return;
+        }
+
+        // Primera vez: pedir nombre
+        if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
+        if (panelNombreSesion != null) panelNombreSesion.SetActive(true);
+        if (campoNombreSesion != null) campoNombreSesion.text = "";
+        if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
+        if (labelNombreSesion != null)
+            labelNombreSesion.text = grupo ? "Nombre del grupo:" : "Tu nombre:";
+    }
+
+    void ConfirmarSesion()
+    {
+        string nombre = campoNombreSesion != null ? campoNombreSesion.text.Trim() : "";
+        if (string.IsNullOrEmpty(nombre))
+        {
+            if (textoErrorSesion != null)
+            {
+                textoErrorSesion.text = "Por favor ingresa un nombre.";
+                textoErrorSesion.gameObject.SetActive(true);
+            }
+            return;
+        }
+
+        var est = estudianteGateway.ObtenerOCrearPorNombre(nombre, esGrupoSesion);
+        ActivityManager.EstudianteId = est.Id;
+        ActivityManager.EstudianteNombre = est.Nombre;
+        ActivityManager.EsGrupo = esGrupoSesion;
+
+        PlayerPrefs.SetString("UltimoEstudiante", nombre);
+        PlayerPrefs.Save(); // El tipo NO se guarda: debe re-confirmarse en cada actividad
+
+        ActivityManager.EsGrupo = esGrupoSesion;
+        ActivityManager.TipoConfirmado = true;
+
+        if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
+        if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
+
+        IniciarContenidoActividad();
+    }
+
+    // ── Inicio de actividad con restauración de progreso ────
+
+    void IniciarContenidoActividad()
+    {
         progreso.EstudianteId = ActivityManager.EstudianteId;
         progreso.IniciarActividad(actividad);
+
+        if (ActivityManager.EstudianteId > 0)
+        {
+            int? indice = progresoGateway.ObtenerIndiceGuardado(
+                ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
+            if (indice.HasValue && indice.Value > 0)
+                progreso.RestaurarIndice(indice.Value);
+        }
 
         if (barraProgreso != null)
         {
@@ -126,6 +239,14 @@ public class ActivityController : MonoBehaviour
             barraProgreso.interactable = false;
         }
 
+        ActualizarBarraProgreso();
+        MostrarContenido();
+    }
+
+    // ── Setup ────────────────────────────────────────────────
+
+    void ConfigurarListeners()
+    {
         VerificarRaycastTarget(volverButton);
         VerificarRaycastTarget(volverHistoriaButton);
         VerificarRaycastTarget(siguienteButton);
@@ -143,11 +264,8 @@ public class ActivityController : MonoBehaviour
 
         if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
         if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
-
-        MostrarContenido();
     }
 
-    // Re-siembra si no hay registros de Historia (BD vacía o sembrada con versión anterior)
     bool BaseDeDatosVacia(SqliteConnection conn)
     {
         try
@@ -172,6 +290,15 @@ public class ActivityController : MonoBehaviour
             img.raycastTarget = true;
     }
 
+    void ActualizarBarraProgreso()
+    {
+        if (barraProgreso == null || actividad == null) return;
+        int total = actividad.TotalContenidos;
+        barraProgreso.value = total > 1 ? (float)progreso.IndiceContenido / (total - 1) : 1f;
+    }
+
+    // ── Loop de audio ────────────────────────────────────────
+
     void Update()
     {
         if (!esperandoAudio || audioYaProcesado) return;
@@ -195,16 +322,12 @@ public class ActivityController : MonoBehaviour
         Invoke(nameof(SiguienteContenido), 0.2f);
     }
 
-    void ActualizarBarraProgreso()
-    {
-        if (barraProgreso == null || actividad == null) return;
-        int total = actividad.TotalContenidos;
-        barraProgreso.value = total > 1 ? (float)progreso.IndiceContenido / (total - 1) : 1f;
-    }
+    // ── Mostrar contenido ────────────────────────────────────
 
     void MostrarContenido()
     {
         ActualizarBarraProgreso();
+
         var contenido = progreso.ObtenerActual();
         if (contenido == null)
         {
@@ -226,37 +349,30 @@ public class ActivityController : MonoBehaviour
 
             if (tituloImage != null)
             {
-                Sprite spriteHistoria = Resources.Load<Sprite>("Titulos/historia_titulo");
-                if (spriteHistoria != null)
-                    tituloImage.sprite = spriteHistoria;
-                else
-                    tituloImage.sprite = null;
+                Sprite s = Resources.Load<Sprite>("Titulos/historia_titulo");
+                tituloImage.sprite = s != null ? s : null;
             }
 
             if (contenidoText != null) contenidoText.text = "Escucha la narración";
 
             AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
-
-            if (clip == null && audioSource.clip != null)
-                clip = audioSource.clip;
+            if (clip == null && audioSource.clip != null) clip = audioSource.clip;
 
             if (clip != null)
             {
                 audioSource.Stop();
                 audioSource.clip = clip;
                 audioSource.Play();
-
                 duracionAudioActual = clip.length;
                 tiempoAudioInicio = Time.time;
                 esperandoAudio = true;
                 audioYaProcesado = false;
-
-                Debug.Log($"[ActivityController] Audio iniciado: {clip.name} ({duracionAudioActual:F2}s)");
+                Debug.Log($"[ActivityController] Audio: {clip.name} ({clip.length:F2}s)");
                 siguienteButton?.gameObject.SetActive(false);
             }
             else
             {
-                Debug.LogWarning("[ActivityController] No hay AudioClip disponible para esta actividad");
+                Debug.LogWarning("[ActivityController] Sin AudioClip para esta actividad");
                 siguienteButton?.gameObject.SetActive(true);
                 if (siguienteButton != null) siguienteButton.interactable = true;
             }
@@ -270,18 +386,14 @@ public class ActivityController : MonoBehaviour
 
             if (tituloImage != null)
             {
-                Sprite spritePregunta = Resources.Load<Sprite>("Titulos/pregunta_titulo");
-                if (spritePregunta != null)
-                    tituloImage.sprite = spritePregunta;
-                else
-                    tituloImage.sprite = null;
+                Sprite s = Resources.Load<Sprite>("Titulos/pregunta_titulo");
+                tituloImage.sprite = s != null ? s : null;
             }
 
             if (contenidoText != null) contenidoText.text = pregunta.Enunciado;
 
             MostrarOpciones(pregunta.Opciones);
             HabilitarBotonesOpciones(true);
-
             volverButton?.gameObject.SetActive(true);
             mostrandoResultado = false;
         }
@@ -292,11 +404,8 @@ public class ActivityController : MonoBehaviour
 
             if (tituloImage != null)
             {
-                Sprite spriteReto = Resources.Load<Sprite>("Titulos/reto_titulo");
-                if (spriteReto != null)
-                    tituloImage.sprite = spriteReto;
-                else
-                    tituloImage.sprite = null;
+                Sprite s = Resources.Load<Sprite>("Titulos/reto_titulo");
+                tituloImage.sprite = s != null ? s : null;
             }
 
             if (contenidoText != null) contenidoText.text = reto.Texto;
@@ -311,6 +420,8 @@ public class ActivityController : MonoBehaviour
             }
         }
     }
+
+    // ── Opciones de respuesta ─────────────────────────────────
 
     void MostrarOpciones(List<string> opciones)
     {
@@ -331,20 +442,21 @@ public class ActivityController : MonoBehaviour
         if (mostrandoResultado) return;
 
         var contenido = progreso.ObtenerActual();
-
         if (contenido is Pregunta pregunta)
         {
             bool correcta = pregunta.ValidarRespuesta(respuesta);
             ultimaRespuestaCorrecta = correcta;
             mostrandoResultado = true;
-
             HabilitarBotonesOpciones(false);
 
-            if (correcta)
+            // Guardar intento en BD
+            if (ActivityManager.EstudianteId > 0 && respuestaGateway != null)
             {
-                progreso.MarcarRespuestaCorrecta();
+                var resp = new Respuesta(ActivityManager.EstudianteId, pregunta, respuesta);
+                respuestaGateway.Guardar(resp);
             }
 
+            if (correcta) progreso.MarcarRespuestaCorrecta();
             MostrarResultado(correcta);
         }
     }
@@ -361,17 +473,12 @@ public class ActivityController : MonoBehaviour
     {
         if (imagenCorrecto != null) imagenCorrecto.gameObject.SetActive(false);
         if (imagenIncorrecto != null) imagenIncorrecto.gameObject.SetActive(false);
-
         mostrandoResultado = false;
 
         if (ultimaRespuestaCorrecta)
-        {
             SiguienteContenido();
-        }
         else
-        {
             HabilitarBotonesOpciones(true);
-        }
     }
 
     void SiguienteContenido()
@@ -386,6 +493,8 @@ public class ActivityController : MonoBehaviour
             MostrarBotonSalir();
         }
     }
+
+    // ── Utilidades UI ─────────────────────────────────────────
 
     void OcultarTodo()
     {
@@ -403,6 +512,14 @@ public class ActivityController : MonoBehaviour
         finalizarRetoButton?.gameObject.SetActive(false);
     }
 
+    void MostrarBotonSalir()
+    {
+        contenidoText.text = "Presiona SALIR";
+        salirButton?.gameObject.SetActive(true);
+    }
+
+    // ── Eventos del Reto ──────────────────────────────────────
+
     void ManejarRetoFinalizado()
     {
         if (retoPanelController != null)
@@ -413,11 +530,16 @@ public class ActivityController : MonoBehaviour
 
         if (barraProgreso != null) barraProgreso.value = 1f;
 
+        // Resetear tipo para que la próxima actividad vuelva a preguntar
+        ActivityManager.TipoConfirmado = false;
+
         if (ActivityManager.EstudianteId > 0)
             completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
 
         VolverAMenuNiveles();
     }
+
+    // ── Navegación ────────────────────────────────────────────
 
     void VolverAPanelHistoria()
     {
@@ -434,11 +556,7 @@ public class ActivityController : MonoBehaviour
         SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
     }
 
-    void MostrarBotonSalir()
-    {
-        contenidoText.text = "Presiona SALIR";
-        salirButton?.gameObject.SetActive(true);
-    }
+    // ── Inferir contexto desde nombre de escena ───────────────
 
     private void InferirContextoDesdEscena(string nombreEscena)
     {
@@ -451,15 +569,10 @@ public class ActivityController : MonoBehaviour
             ActivityManager.NivelActualId = nivelNum;
             ActivityManager.ActividadActualId = act + (nivelNum - 1) * 10;
 
-            // Establecer la escena del menú según el nivel
-            if (nivelNum == 1)
-                ActivityManager.EscenaMenuNivel = "mp_nivel1";
-            else if (nivelNum == 2)
-                ActivityManager.EscenaMenuNivel = "mp_nivel2";
-            else if (nivelNum == 3)
-                ActivityManager.EscenaMenuNivel = "mp_ttj";
-            else
-                ActivityManager.EscenaMenuNivel = $"mp_nivel{nivelNum}";
+            if (nivelNum == 1) ActivityManager.EscenaMenuNivel = "mp_nivel1";
+            else if (nivelNum == 2) ActivityManager.EscenaMenuNivel = "mp_nivel2";
+            else if (nivelNum == 3) ActivityManager.EscenaMenuNivel = "mp_ttj";
+            else ActivityManager.EscenaMenuNivel = $"mp_nivel{nivelNum}";
         }
         catch { }
     }

@@ -93,6 +93,13 @@ namespace Dominio.entidades
         return ActividadActual.TotalContenidos;
     }
 
+    public void RestaurarIndice(int indice)
+    {
+        if (ActividadActual == null) return;
+        IndiceContenido = System.Math.Min(indice, ActividadActual.TotalContenidos - 1);
+        PuedeAvanzar = false;
+    }
+
     public void FinalizarActividadActual()
     {
         ActividadActual = null;

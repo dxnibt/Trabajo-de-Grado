@@ -10,11 +10,19 @@ public class MenuNivel1Controller : MonoBehaviour
         ActivityManager.NivelNombre = "Nivel 1";
         ActivityManager.EscenaMenuNivel = "mp_nivel1";
 
+        if (ActivityManager.ModoDocente)
+        {
+            ActivityManager.AbrirPDF(actividadId);
+            return;
+        }
+
         SceneManager.LoadScene($"n1_a{actividadId}");
     }
 
     public void VolverAlMenu()
     {
-        SceneManager.LoadScene("mp_estudiante");
+        string destino = ActivityManager.ModoDocente ? "mp_docente" : "mp_estudiante";
+        ActivityManager.ModoDocente = false;
+        SceneManager.LoadScene(destino);
     }
 }

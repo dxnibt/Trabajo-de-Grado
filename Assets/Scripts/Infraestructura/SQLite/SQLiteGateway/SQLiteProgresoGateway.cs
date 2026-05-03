@@ -26,8 +26,7 @@ public class SQLiteProgresoGateway : ProgresoGateway
         cmd.CommandText = @"
         INSERT INTO Progreso (EstudianteId, ActividadId, Completada, IndiceContenidoActual)
         VALUES ($e,$a,$c,$i)
-        ON CONFLICT(EstudianteId) DO UPDATE SET
-            ActividadId=$a,
+        ON CONFLICT(EstudianteId, ActividadId) DO UPDATE SET
             Completada=$c,
             IndiceContenidoActual=$i;
         ";
@@ -38,6 +37,25 @@ public class SQLiteProgresoGateway : ProgresoGateway
         cmd.Parameters.AddWithValue("$i", data.IndiceContenidoActual);
 
         cmd.ExecuteNonQuery();
+    }
+
+    public int? ObtenerIndiceGuardado(int estudianteId, int actividadId)
+    {
+        using var conn = conexion.CrearConexion();
+        conn.Open();
+
+        var cmd = conn.CreateCommand();
+        cmd.CommandText = @"
+            SELECT IndiceContenidoActual FROM Progreso
+            WHERE EstudianteId=$e AND ActividadId=$a AND Completada=0
+            LIMIT 1;
+        ";
+        cmd.Parameters.AddWithValue("$e", estudianteId);
+        cmd.Parameters.AddWithValue("$a", actividadId);
+
+        using var reader = cmd.ExecuteReader();
+        if (reader.Read()) return reader.GetInt32(0);
+        return null;
     }
 
     public Progreso ObtenerPorEstudiante(int id)

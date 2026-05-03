@@ -10,7 +10,6 @@ public class DocenteController : MonoBehaviour
 {
     private const string USUARIO_DOCENTE = "docente";
     private const string CONTRASENA_DOCENTE = "1234";
-    private const int TOTAL_ACTIVIDADES = 20;
 
     [Header("Panel: Login")]
     public GameObject panelLogin;
@@ -19,15 +18,27 @@ public class DocenteController : MonoBehaviour
     public Button botonIngresar;
     public TMP_Text textoErrorLogin;
 
-    [Header("Panel: Dashboard")]
-    public GameObject panelDashboard;
+    [Header("Panel: Principal (post-login)")]
+    public GameObject panelPrincipal;
+    public Button botonVerProgreso;
+    public Button botonVerRecursos;
+    public Button botonCerrarSesion;
+
+    [Header("Panel: Progreso estudiantes")]
+    public GameObject panelProgreso;
     public Transform contenedorLista;
     public GameObject prefabEntradaEstudiante;
-    public Button botonCerrarSesion;
-    public Button botonVolver;
+    public Button botonVolverDesdeProgreso;
+
+    [Header("Panel: Recursos (selección de nivel)")]
+    public GameObject panelRecursos;
+    public Button botonNivel1Recursos;
+    public Button botonNivel2Recursos;
+    public Button botonTTJRecursos;
+    public Button botonVolverDesdeRecursos;
 
     private SQLiteEstudianteGateway estudianteGateway;
-    private SQLiteActividadCompletadaGateway completadaGateway;
+    private SQLiteRespuestaGateway respuestaGateway;
 
     void Start()
     {
@@ -36,16 +47,25 @@ public class DocenteController : MonoBehaviour
         new InicializadorBD(conexion).CrearTablas();
 
         estudianteGateway = new SQLiteEstudianteGateway(conexion);
-        completadaGateway = new SQLiteActividadCompletadaGateway(conexion);
+        respuestaGateway = new SQLiteRespuestaGateway(conexion);
 
-        panelDashboard.SetActive(false);
-        panelLogin.SetActive(true);
+        MostrarSoloPanel(panelLogin);
         if (textoErrorLogin != null) textoErrorLogin.gameObject.SetActive(false);
 
         botonIngresar.onClick.AddListener(Ingresar);
         botonCerrarSesion?.onClick.AddListener(CerrarSesion);
-        botonVolver?.onClick.AddListener(() => SceneManager.LoadScene("mp"));
+
+        botonVerProgreso?.onClick.AddListener(AbrirProgreso);
+        botonVerRecursos?.onClick.AddListener(AbrirRecursos);
+        botonVolverDesdeProgreso?.onClick.AddListener(() => MostrarSoloPanel(panelPrincipal));
+        botonVolverDesdeRecursos?.onClick.AddListener(() => MostrarSoloPanel(panelPrincipal));
+
+        botonNivel1Recursos?.onClick.AddListener(() => IrANivelRecursos("mp_nivel1"));
+        botonNivel2Recursos?.onClick.AddListener(() => IrANivelRecursos("mp_nivel2"));
+        botonTTJRecursos?.onClick.AddListener(() => IrANivelRecursos("mp_ttj"));
     }
+
+    // ── Login ────────────────────────────────────────────────
 
     void Ingresar()
     {
@@ -54,9 +74,7 @@ public class DocenteController : MonoBehaviour
 
         if (usuario == USUARIO_DOCENTE && contrasena == CONTRASENA_DOCENTE)
         {
-            panelLogin.SetActive(false);
-            panelDashboard.SetActive(true);
-            CargarDashboard();
+            MostrarSoloPanel(panelPrincipal);
         }
         else
         {
@@ -68,7 +86,23 @@ public class DocenteController : MonoBehaviour
         }
     }
 
-    void CargarDashboard()
+    void CerrarSesion()
+    {
+        if (campoUsuario != null) campoUsuario.text = "";
+        if (campoContrasena != null) campoContrasena.text = "";
+        if (textoErrorLogin != null) textoErrorLogin.gameObject.SetActive(false);
+        MostrarSoloPanel(panelLogin);
+    }
+
+    // ── Progreso de estudiantes ──────────────────────────────
+
+    void AbrirProgreso()
+    {
+        MostrarSoloPanel(panelProgreso);
+        CargarListaEstudiantes();
+    }
+
+    void CargarListaEstudiantes()
     {
         foreach (Transform hijo in contenedorLista)
             Destroy(hijo.gameObject);
@@ -77,22 +111,35 @@ public class DocenteController : MonoBehaviour
 
         foreach (var est in estudiantes)
         {
-            int completadas = completadaGateway.ContarPorEstudiante(est.Id);
-            float porcentaje = TOTAL_ACTIVIDADES > 0 ? (float)completadas / TOTAL_ACTIVIDADES : 0f;
+            var resumen = respuestaGateway.ObtenerResumenPorEstudiante(est.Id);
 
             var entrada = Instantiate(prefabEntradaEstudiante, contenedorLista);
             var ui = entrada.GetComponent<EntradaEstudianteUI>();
             if (ui != null)
-                ui.Configurar(est.Nombre, est.EsGrupo, completadas, TOTAL_ACTIVIDADES, porcentaje);
+                ui.Configurar(est.Nombre, est.EsGrupo, resumen.Total, resumen.Incorrectos);
         }
     }
 
-    void CerrarSesion()
+    // ── Recursos / PDFs ──────────────────────────────────────
+
+    void AbrirRecursos()
     {
-        panelDashboard.SetActive(false);
-        panelLogin.SetActive(true);
-        if (campoUsuario != null) campoUsuario.text = "";
-        if (campoContrasena != null) campoContrasena.text = "";
-        if (textoErrorLogin != null) textoErrorLogin.gameObject.SetActive(false);
+        MostrarSoloPanel(panelRecursos);
+    }
+
+    void IrANivelRecursos(string escenaMenu)
+    {
+        ActivityManager.ModoDocente = true;
+        SceneManager.LoadScene(escenaMenu);
+    }
+
+    // ── Utilidad ─────────────────────────────────────────────
+
+    void MostrarSoloPanel(GameObject panelActivo)
+    {
+        if (panelLogin != null) panelLogin.SetActive(panelActivo == panelLogin);
+        if (panelPrincipal != null) panelPrincipal.SetActive(panelActivo == panelPrincipal);
+        if (panelProgreso != null) panelProgreso.SetActive(panelActivo == panelProgreso);
+        if (panelRecursos != null) panelRecursos.SetActive(panelActivo == panelRecursos);
     }
 }

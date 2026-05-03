@@ -4,14 +4,13 @@ using System.Collections.Generic;
 
 public class MenuNivelTTJController : MonoBehaviour
 {
-    // Mapeo de actividades TTJ a sus escenas reales (nivel + id)
     private readonly Dictionary<int, (int nivel, int actividadId)> actividadesTTJ = new Dictionary<int, (int, int)>
     {
-        { 1, (2, 1) },    // TTJ actividad 1 → Nivel 2, actividad 1
-        { 2, (2, 7) },    // TTJ actividad 2 → Nivel 2, actividad 7
-        { 3, (2, 2) },    // TTJ actividad 3 → Nivel 2, actividad 2
-        { 4, (1, 9) },    // TTJ actividad 4 → Nivel 1, actividad 9
-        { 5, (2, 5) }     // TTJ actividad 5 → Nivel 2, actividad 5
+        { 1, (2, 1) },
+        { 2, (2, 7) },
+        { 3, (2, 2) },
+        { 4, (1, 9) },
+        { 5, (2, 5) }
     };
 
     public void CargarActividad(int ttjActividadId)
@@ -23,11 +22,18 @@ public class MenuNivelTTJController : MonoBehaviour
         }
 
         var (nivel, actividadId) = actividadesTTJ[ttjActividadId];
+        int globalId = nivel == 1 ? actividadId : actividadId + 10;
 
-        ActivityManager.ActividadActualId = nivel == 1 ? actividadId : actividadId + 10;
+        ActivityManager.ActividadActualId = globalId;
         ActivityManager.NivelActualId = nivel;
         ActivityManager.NivelNombre = "Trabajemos Todos Juntos";
         ActivityManager.EscenaMenuNivel = "mp_ttj";
+
+        if (ActivityManager.ModoDocente)
+        {
+            ActivityManager.AbrirPDF(globalId);
+            return;
+        }
 
         string escenaName = nivel == 1 ? $"n1_a{actividadId}" : $"n2_a{actividadId}";
         SceneManager.LoadScene(escenaName);
@@ -35,6 +41,8 @@ public class MenuNivelTTJController : MonoBehaviour
 
     public void VolverAlMenu()
     {
-        SceneManager.LoadScene("mp_estudiante");
+        string destino = ActivityManager.ModoDocente ? "mp_docente" : "mp_estudiante";
+        ActivityManager.ModoDocente = false;
+        SceneManager.LoadScene(destino);
     }
 }
