@@ -123,20 +123,27 @@ public class ActivityController : MonoBehaviour
 
         progreso = new Progreso();
 
-        // Restaurar nombre del estudiante desde PlayerPrefs si la sesión se reinició
+        // Restaurar sesión completa (nombre + tipo) desde PlayerPrefs si la app se reinició
         if (ActivityManager.EstudianteId == 0)
         {
             string nombreGuardado = PlayerPrefs.GetString("UltimoEstudiante", "");
             if (!string.IsNullOrEmpty(nombreGuardado))
             {
-                var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, false);
+                bool esGrupoGuardado = PlayerPrefs.GetInt("UltimoEsGrupo", 0) == 1;
+                var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, esGrupoGuardado);
                 ActivityManager.EstudianteId = est.Id;
                 ActivityManager.EstudianteNombre = est.Nombre;
-                // TipoConfirmado queda en false → el panel de selección se mostrará igual
+                ActivityManager.EsGrupo = esGrupoGuardado;
             }
         }
 
-        // El tipo (individual/grupo) debe confirmarse antes de cada actividad
+        // Restaurar TipoConfirmado desde PlayerPrefs si el proceso reinició pero no se completó actividad
+        if (!ActivityManager.TipoConfirmado && PlayerPrefs.GetInt("TipoConfirmado", 0) == 1
+            && ActivityManager.EstudianteId > 0)
+        {
+            ActivityManager.TipoConfirmado = true;
+        }
+
         if (!ActivityManager.TipoConfirmado)
         {
             MostrarPanelSesion();
@@ -172,6 +179,9 @@ public class ActivityController : MonoBehaviour
         {
             ActivityManager.EsGrupo = grupo;
             ActivityManager.TipoConfirmado = true;
+            PlayerPrefs.SetInt("UltimoEsGrupo", grupo ? 1 : 0);
+            PlayerPrefs.SetInt("TipoConfirmado", 1);
+            PlayerPrefs.Save();
             if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
             IniciarContenidoActividad();
             return;
@@ -204,11 +214,13 @@ public class ActivityController : MonoBehaviour
         ActivityManager.EstudianteNombre = est.Nombre;
         ActivityManager.EsGrupo = esGrupoSesion;
 
-        PlayerPrefs.SetString("UltimoEstudiante", nombre);
-        PlayerPrefs.Save(); // El tipo NO se guarda: debe re-confirmarse en cada actividad
-
         ActivityManager.EsGrupo = esGrupoSesion;
         ActivityManager.TipoConfirmado = true;
+
+        PlayerPrefs.SetString("UltimoEstudiante", nombre);
+        PlayerPrefs.SetInt("UltimoEsGrupo", esGrupoSesion ? 1 : 0);
+        PlayerPrefs.SetInt("TipoConfirmado", 1);
+        PlayerPrefs.Save();
 
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
@@ -530,8 +542,11 @@ public class ActivityController : MonoBehaviour
 
         if (barraProgreso != null) barraProgreso.value = 1f;
 
-        // Resetear tipo para que la próxima actividad vuelva a preguntar
+        // Actividad completada: borrar tipo para que la próxima actividad vuelva a preguntar
         ActivityManager.TipoConfirmado = false;
+        PlayerPrefs.DeleteKey("TipoConfirmado");
+        PlayerPrefs.DeleteKey("UltimoEsGrupo");
+        PlayerPrefs.Save();
 
         if (ActivityManager.EstudianteId > 0)
             completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
