@@ -13,6 +13,7 @@ using Infraestructura.SQLite.SQLiteGateway;
 public class ActivityController : MonoBehaviour
 {
     [Header("UI GENERAL")]
+    public Slider barraProgreso;
     public Image tituloImage;
     public Image preguntaImage;
     public Image retoImage;
@@ -51,6 +52,7 @@ public class ActivityController : MonoBehaviour
 
     private SQLiteActividadGateway actividadGateway;
     private SQLiteProgresoGateway progresoGateway;
+    private SQLiteActividadCompletadaGateway completadaGateway;
 
     private Actividad actividad;
     private Progreso progreso;
@@ -89,6 +91,7 @@ public class ActivityController : MonoBehaviour
 
         actividadGateway = new SQLiteActividadGateway(conexion);
         progresoGateway = new SQLiteProgresoGateway(conexion);
+        completadaGateway = new SQLiteActividadCompletadaGateway(conexion);
 
         actividad = actividadGateway.ObtenerPorId(ActivityManager.ActividadActualId, nivel);
 
@@ -112,7 +115,16 @@ public class ActivityController : MonoBehaviour
         finalizarRetoButton?.gameObject.SetActive(false);
 
         progreso = new Progreso();
+        progreso.EstudianteId = ActivityManager.EstudianteId;
         progreso.IniciarActividad(actividad);
+
+        if (barraProgreso != null)
+        {
+            barraProgreso.minValue = 0f;
+            barraProgreso.maxValue = 1f;
+            barraProgreso.value = 0f;
+            barraProgreso.interactable = false;
+        }
 
         VerificarRaycastTarget(volverButton);
         VerificarRaycastTarget(volverHistoriaButton);
@@ -183,8 +195,16 @@ public class ActivityController : MonoBehaviour
         Invoke(nameof(SiguienteContenido), 0.2f);
     }
 
+    void ActualizarBarraProgreso()
+    {
+        if (barraProgreso == null || actividad == null) return;
+        int total = actividad.TotalContenidos;
+        barraProgreso.value = total > 1 ? (float)progreso.IndiceContenido / (total - 1) : 1f;
+    }
+
     void MostrarContenido()
     {
+        ActualizarBarraProgreso();
         var contenido = progreso.ObtenerActual();
         if (contenido == null)
         {
@@ -390,6 +410,11 @@ public class ActivityController : MonoBehaviour
             retoPanelController.OnRetoFinalizado -= ManejarRetoFinalizado;
             retoPanelController.OcultarPanel();
         }
+
+        if (barraProgreso != null) barraProgreso.value = 1f;
+
+        if (ActivityManager.EstudianteId > 0)
+            completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
 
         VolverAMenuNiveles();
     }

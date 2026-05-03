@@ -60,6 +60,20 @@ namespace Infraestructura.SQLite
                 EsCorrecta INTEGER NOT NULL
             );
 
+            CREATE TABLE IF NOT EXISTS Estudiante (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Nombre TEXT NOT NULL UNIQUE,
+                EsGrupo INTEGER NOT NULL DEFAULT 0
+            );
+
+            CREATE TABLE IF NOT EXISTS ActividadCompletada (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                EstudianteId INTEGER NOT NULL,
+                ActividadId INTEGER NOT NULL,
+                Fecha TEXT,
+                UNIQUE(EstudianteId, ActividadId)
+            );
+
             ";
 
             cmd.ExecuteNonQuery();
