@@ -31,7 +31,6 @@ public class ActivityController : MonoBehaviour
     public Button siguienteButton;
     public Button volverButton;
     public Button volverHistoriaButton;
-    public Button salirButton;
     public Button finalizarRetoButton;
 
     [Header("PANELES")]
@@ -80,6 +79,10 @@ public class ActivityController : MonoBehaviour
 
     void Start()
     {
+        Debug.Log($"[ActivityController] === INICIO ===");
+        Debug.Log($"[ActivityController] ActivityManager - EstudianteId: {ActivityManager.EstudianteId}, TipoConfirmado: {ActivityManager.TipoConfirmado}");
+        Debug.Log($"[ActivityController] PlayerPrefs - UltimoEstudiante: '{PlayerPrefs.GetString("UltimoEstudiante", "")}', TipoConfirmado: {PlayerPrefs.GetInt("TipoConfirmado", 0)}");
+
         if (ActivityManager.ActividadActualId == 0)
             InferirContextoDesdEscena(SceneManager.GetActiveScene().name);
 
@@ -123,40 +126,49 @@ public class ActivityController : MonoBehaviour
 
         progreso = new Progreso();
 
-        // Restaurar sesión completa (nombre + tipo) desde PlayerPrefs si la app se reinició
+        // ================================================
+        // LÓGICA DE RESTAURACIÓN DE SESIÓN
+        // ================================================
+        
+        // Si no hay estudiante en memoria, intentar restaurar desde PlayerPrefs
         if (ActivityManager.EstudianteId == 0)
         {
             string nombreGuardado = PlayerPrefs.GetString("UltimoEstudiante", "");
-            if (!string.IsNullOrEmpty(nombreGuardado))
+            bool tieneSesionGuardada = !string.IsNullOrEmpty(nombreGuardado);
+            bool tipoConfirmadoGuardado = PlayerPrefs.GetInt("TipoConfirmado", 0) == 1;
+            
+            if (tieneSesionGuardada && tipoConfirmadoGuardado)
             {
+                Debug.Log($"[ActivityController] Restaurando sesión guardada: {nombreGuardado}");
                 bool esGrupoGuardado = PlayerPrefs.GetInt("UltimoEsGrupo", 0) == 1;
                 var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, esGrupoGuardado);
+                
                 ActivityManager.EstudianteId = est.Id;
                 ActivityManager.EstudianteNombre = est.Nombre;
                 ActivityManager.EsGrupo = esGrupoGuardado;
+                ActivityManager.TipoConfirmado = true;
             }
         }
-
-        // Restaurar TipoConfirmado desde PlayerPrefs si el proceso reinició pero no se completó actividad
-        if (!ActivityManager.TipoConfirmado && PlayerPrefs.GetInt("TipoConfirmado", 0) == 1
-            && ActivityManager.EstudianteId > 0)
+        
+        // Verificar si tenemos sesión activa
+        if (ActivityManager.EstudianteId > 0 && ActivityManager.TipoConfirmado)
         {
-            ActivityManager.TipoConfirmado = true;
-        }
-
-        if (!ActivityManager.TipoConfirmado)
-        {
-            MostrarPanelSesion();
+            Debug.Log($"[ActivityController] Sesión activa encontrada: {ActivityManager.EstudianteNombre} (ID: {ActivityManager.EstudianteId})");
+            IniciarContenidoActividad();
             return;
         }
-
-        IniciarContenidoActividad();
+        
+        // No hay sesión, mostrar panel por primera vez
+        Debug.Log("[ActivityController] No hay sesión activa - mostrando panel de selección");
+        MostrarPanelSesion();
     }
 
     // ── Sesión ──────────────────────────────────────────────
 
     void MostrarPanelSesion()
     {
+        Debug.Log("[ActivityController] Mostrando panel de selección de sesión");
+        
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(true);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
@@ -177,7 +189,7 @@ public class ActivityController : MonoBehaviour
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(true);
         if (campoNombreSesion != null)
-            campoNombreSesion.text = ActivityManager.EstudianteNombre ?? "";
+            campoNombreSesion.text = "";
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
         if (labelNombreSesion != null)
             labelNombreSesion.text = grupo ? "Nombre del grupo:" : "Tu nombre:";
@@ -195,6 +207,8 @@ public class ActivityController : MonoBehaviour
             }
             return;
         }
+
+        Debug.Log($"[ActivityController] Confirmando sesión - Nombre: {nombre}, EsGrupo: {esGrupoSesion}");
 
         var est = estudianteGateway.ObtenerOCrearPorNombre(nombre, esGrupoSesion);
         ActivityManager.EstudianteId = est.Id;
@@ -217,6 +231,8 @@ public class ActivityController : MonoBehaviour
 
     void IniciarContenidoActividad()
     {
+        Debug.Log($"[ActivityController] Iniciando actividad para estudiante ID: {ActivityManager.EstudianteId}");
+        
         progreso.EstudianteId = ActivityManager.EstudianteId;
         progreso.IniciarActividad(actividad);
 
@@ -225,7 +241,10 @@ public class ActivityController : MonoBehaviour
             int? indice = progresoGateway.ObtenerIndiceGuardado(
                 ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
             if (indice.HasValue && indice.Value > 0)
+            {
+                Debug.Log($"[ActivityController] Restaurando progreso en índice: {indice.Value}");
                 progreso.RestaurarIndice(indice.Value);
+            }
         }
 
         if (barraProgreso != null)
@@ -247,13 +266,11 @@ public class ActivityController : MonoBehaviour
         VerificarRaycastTarget(volverButton);
         VerificarRaycastTarget(volverHistoriaButton);
         VerificarRaycastTarget(siguienteButton);
-        VerificarRaycastTarget(salirButton);
         VerificarRaycastTarget(finalizarRetoButton);
 
         siguienteButton?.onClick.AddListener(SiguienteContenido);
         volverButton?.onClick.AddListener(VolverAPanelHistoria);
         volverHistoriaButton?.onClick.AddListener(VolverAMenuNiveles);
-        salirButton?.onClick.AddListener(VolverAMenuNiveles);
 
         opcion1Button?.onClick.AddListener(() => SeleccionarRespuesta(opcion1Text.text));
         opcion2Button?.onClick.AddListener(() => SeleccionarRespuesta(opcion2Text.text));
@@ -487,8 +504,67 @@ public class ActivityController : MonoBehaviour
         }
         else
         {
-            MostrarBotonSalir();
+            // Cuando se completa la actividad
+            if (retoPanelController != null && retoPanelController.gameObject.activeSelf)
+            {
+                // El reto ya está mostrándose, no hacer nada
+            }
+            else
+            {
+                // Si no hay reto, completar directamente
+                CompletarActividad();
+            }
         }
+    }
+
+    // ── Completar actividad ───────────────────────────────────
+
+    void CompletarActividad()
+    {
+        Debug.Log($"[ActivityController] Actividad completada para estudiante ID: {ActivityManager.EstudianteId}");
+        
+        // Guardar progreso completado
+        if (ActivityManager.EstudianteId > 0)
+            completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
+
+        // Limpiar la sesión para la próxima actividad
+        ActivityManager.TipoConfirmado = false;
+        // NOTA: NO borramos EstudianteId ni EstudianteNombre para mantener los datos
+        // Solo se borrarán cuando el usuario explícitamente cierre sesión o la app se cierre
+
+        VolverAMenuNiveles();
+    }
+
+    // ── Eventos del Reto ──────────────────────────────────────
+
+    void ManejarRetoFinalizado()
+    {
+        if (retoPanelController != null)
+        {
+            retoPanelController.OnRetoFinalizado -= ManejarRetoFinalizado;
+            retoPanelController.OcultarPanel();
+        }
+
+        if (barraProgreso != null) barraProgreso.value = 1f;
+
+        CompletarActividad();
+    }
+
+    // ── Navegación ────────────────────────────────────────────
+
+    void VolverAPanelHistoria()
+    {
+        while (progreso.IndiceContenido > 0)
+        {
+            progreso.Retroceder();
+            if (progreso.ObtenerActual() is Historia) break;
+        }
+        MostrarContenido();
+    }
+
+    void VolverAMenuNiveles()
+    {
+        SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
     }
 
     // ── Utilidades UI ─────────────────────────────────────────
@@ -508,55 +584,27 @@ public class ActivityController : MonoBehaviour
         siguienteButton?.gameObject.SetActive(false);
         volverButton?.gameObject.SetActive(false);
         volverHistoriaButton?.gameObject.SetActive(false);
-        salirButton?.gameObject.SetActive(false);
         finalizarRetoButton?.gameObject.SetActive(false);
     }
 
-    void MostrarBotonSalir()
+    // ── Método público para cerrar sesión ─────────────────────
+
+    public void CerrarSesion()
     {
-        contenidoText.text = "Presiona SALIR";
-        salirButton?.gameObject.SetActive(true);
-    }
-
-    // ── Eventos del Reto ──────────────────────────────────────
-
-    void ManejarRetoFinalizado()
-    {
-        if (retoPanelController != null)
-        {
-            retoPanelController.OnRetoFinalizado -= ManejarRetoFinalizado;
-            retoPanelController.OcultarPanel();
-        }
-
-        if (barraProgreso != null) barraProgreso.value = 1f;
-
-        // Actividad completada: borrar tipo para que la próxima actividad vuelva a preguntar
+        Debug.Log("[ActivityController] Cerrando sesión manualmente");
+        
+        ActivityManager.EstudianteId = 0;
+        ActivityManager.EstudianteNombre = "";
+        ActivityManager.EsGrupo = false;
         ActivityManager.TipoConfirmado = false;
-        PlayerPrefs.DeleteKey("TipoConfirmado");
+        
+        PlayerPrefs.DeleteKey("UltimoEstudiante");
         PlayerPrefs.DeleteKey("UltimoEsGrupo");
+        PlayerPrefs.DeleteKey("TipoConfirmado");
         PlayerPrefs.Save();
-
-        if (ActivityManager.EstudianteId > 0)
-            completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
-
-        VolverAMenuNiveles();
-    }
-
-    // ── Navegación ────────────────────────────────────────────
-
-    void VolverAPanelHistoria()
-    {
-        while (progreso.IndiceContenido > 0)
-        {
-            progreso.Retroceder();
-            if (progreso.ObtenerActual() is Historia) break;
-        }
-        MostrarContenido();
-    }
-
-    void VolverAMenuNiveles()
-    {
-        SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
+        
+        // Recargar la escena para mostrar el panel de selección
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     // ── Inferir contexto desde nombre de escena ───────────────
