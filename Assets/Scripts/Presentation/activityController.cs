@@ -131,18 +131,21 @@ public class ActivityController : MonoBehaviour
         // ================================================
         
         // Si no hay estudiante en memoria, intentar restaurar desde PlayerPrefs
+        // Solo restaura si la sesión guardada corresponde exactamente a esta misma actividad
         if (ActivityManager.EstudianteId == 0)
         {
             string nombreGuardado = PlayerPrefs.GetString("UltimoEstudiante", "");
             bool tieneSesionGuardada = !string.IsNullOrEmpty(nombreGuardado);
             bool tipoConfirmadoGuardado = PlayerPrefs.GetInt("TipoConfirmado", 0) == 1;
-            
-            if (tieneSesionGuardada && tipoConfirmadoGuardado)
+            int actividadConfirmada = PlayerPrefs.GetInt("UltimaActividadConfirmada", 0);
+            bool mismaActividad = actividadConfirmada == ActivityManager.ActividadActualId;
+
+            if (tieneSesionGuardada && tipoConfirmadoGuardado && mismaActividad)
             {
                 Debug.Log($"[ActivityController] Restaurando sesión guardada: {nombreGuardado}");
                 bool esGrupoGuardado = PlayerPrefs.GetInt("UltimoEsGrupo", 0) == 1;
                 var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, esGrupoGuardado);
-                
+
                 ActivityManager.EstudianteId = est.Id;
                 ActivityManager.EstudianteNombre = est.Nombre;
                 ActivityManager.EsGrupo = esGrupoGuardado;
@@ -219,6 +222,7 @@ public class ActivityController : MonoBehaviour
         PlayerPrefs.SetString("UltimoEstudiante", nombre);
         PlayerPrefs.SetInt("UltimoEsGrupo", esGrupoSesion ? 1 : 0);
         PlayerPrefs.SetInt("TipoConfirmado", 1);
+        PlayerPrefs.SetInt("UltimaActividadConfirmada", ActivityManager.ActividadActualId);
         PlayerPrefs.Save();
 
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
@@ -527,10 +531,11 @@ public class ActivityController : MonoBehaviour
         if (ActivityManager.EstudianteId > 0)
             completadaGateway.Guardar(ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
 
-        // Limpiar la sesión para la próxima actividad
         ActivityManager.TipoConfirmado = false;
-        // NOTA: NO borramos EstudianteId ni EstudianteNombre para mantener los datos
-        // Solo se borrarán cuando el usuario explícitamente cierre sesión o la app se cierre
+        PlayerPrefs.DeleteKey("TipoConfirmado");
+        PlayerPrefs.DeleteKey("UltimoEsGrupo");
+        PlayerPrefs.DeleteKey("UltimaActividadConfirmada");
+        PlayerPrefs.Save();
 
         VolverAMenuNiveles();
     }
