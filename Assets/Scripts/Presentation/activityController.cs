@@ -174,23 +174,10 @@ public class ActivityController : MonoBehaviour
     {
         esGrupoSesion = grupo;
 
-        // Si el estudiante ya está identificado, solo confirmar tipo y comenzar
-        if (ActivityManager.EstudianteId > 0)
-        {
-            ActivityManager.EsGrupo = grupo;
-            ActivityManager.TipoConfirmado = true;
-            PlayerPrefs.SetInt("UltimoEsGrupo", grupo ? 1 : 0);
-            PlayerPrefs.SetInt("TipoConfirmado", 1);
-            PlayerPrefs.Save();
-            if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
-            IniciarContenidoActividad();
-            return;
-        }
-
-        // Primera vez: pedir nombre
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(true);
-        if (campoNombreSesion != null) campoNombreSesion.text = "";
+        if (campoNombreSesion != null)
+            campoNombreSesion.text = ActivityManager.EstudianteNombre ?? "";
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
         if (labelNombreSesion != null)
             labelNombreSesion.text = grupo ? "Nombre del grupo:" : "Tu nombre:";
@@ -212,8 +199,6 @@ public class ActivityController : MonoBehaviour
         var est = estudianteGateway.ObtenerOCrearPorNombre(nombre, esGrupoSesion);
         ActivityManager.EstudianteId = est.Id;
         ActivityManager.EstudianteNombre = est.Nombre;
-        ActivityManager.EsGrupo = esGrupoSesion;
-
         ActivityManager.EsGrupo = esGrupoSesion;
         ActivityManager.TipoConfirmado = true;
 
@@ -510,6 +495,9 @@ public class ActivityController : MonoBehaviour
 
     void OcultarTodo()
     {
+        if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
+        if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
+
         panelHistoria.SetActive(false);
         panelPreguntas.SetActive(false);
         panelReto.SetActive(false);

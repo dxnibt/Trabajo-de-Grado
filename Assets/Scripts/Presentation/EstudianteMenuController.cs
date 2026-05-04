@@ -29,6 +29,14 @@ public class EstudianteMenuController : MonoBehaviour
         new InicializadorBD(conexion).CrearTablas();
         estudianteGateway = new SQLiteEstudianteGateway(conexion);
 
+        // Si hay un ActivityController en la escena, él gestiona la sesión completa
+        if (FindObjectOfType<ActivityController>() != null)
+        {
+            if (panelSeleccion != null) panelSeleccion.SetActive(false);
+            if (panelNombre != null) panelNombre.SetActive(false);
+            return;
+        }
+
         // Si ya hay sesión activa en esta ejecución, ocultar overlay directamente
         if (ActivityManager.EstudianteId > 0)
         {
@@ -69,6 +77,12 @@ public class EstudianteMenuController : MonoBehaviour
         ActivityManager.EstudianteId = estudiante.Id;
         ActivityManager.EstudianteNombre = estudiante.Nombre;
         ActivityManager.EsGrupo = esGrupo;
+        ActivityManager.TipoConfirmado = true;
+
+        PlayerPrefs.SetString("UltimoEstudiante", nombre);
+        PlayerPrefs.SetInt("UltimoEsGrupo", esGrupo ? 1 : 0);
+        PlayerPrefs.SetInt("TipoConfirmado", 1);
+        PlayerPrefs.Save();
 
         panelNombre.SetActive(false);
     }
