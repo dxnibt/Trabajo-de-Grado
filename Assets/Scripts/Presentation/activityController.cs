@@ -17,7 +17,8 @@ public class ActivityController : MonoBehaviour
     public Button botonIndividualSesion;
     public Button botonGrupoSesion;
     public GameObject panelNombreSesion;
-    public TMP_Text labelNombreSesion;
+    public Image labelIndividualSesion;
+    public Image labelGrupoSesion;
     public TMP_InputField campoNombreSesion;
     public Button botonContinuarSesion;
     public TMP_Text textoErrorSesion;
@@ -194,8 +195,8 @@ public class ActivityController : MonoBehaviour
         if (campoNombreSesion != null)
             campoNombreSesion.text = "";
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
-        if (labelNombreSesion != null)
-            labelNombreSesion.text = grupo ? "Nombre del grupo:" : "Tu nombre:";
+        if (labelIndividualSesion != null) labelIndividualSesion.gameObject.SetActive(!grupo);
+        if (labelGrupoSesion != null) labelGrupoSesion.gameObject.SetActive(grupo);
     }
 
     void ConfirmarSesion()
