@@ -114,19 +114,41 @@ public class DocenteController : MonoBehaviour
 
     void CargarListaEstudiantes()
     {
+        if (contenedorLista == null)
+        {
+            Debug.LogError("[Docente] contenedorLista NO está asignado en el Inspector.");
+            return;
+        }
+        if (prefabEntradaEstudiante == null)
+        {
+            Debug.LogError("[Docente] prefabEntradaEstudiante NO está asignado en el Inspector.");
+            return;
+        }
+
         foreach (Transform hijo in contenedorLista)
             Destroy(hijo.gameObject);
 
         var estudiantes = estudianteGateway.ObtenerTodos();
+        Debug.Log($"[Docente] Estudiantes encontrados en BD: {estudiantes.Count}");
 
         foreach (var est in estudiantes)
         {
-            var resumen = respuestaGateway.ObtenerResumenPorEstudiante(est.Id);
+            try
+            {
+                var resumen = respuestaGateway.ObtenerResumenPorEstudiante(est.Id);
+                Debug.Log($"[Docente] Estudiante '{est.Nombre}' — total:{resumen.Total} incorrectos:{resumen.Incorrectos}");
 
-            var entrada = Instantiate(prefabEntradaEstudiante, contenedorLista);
-            var ui = entrada.GetComponent<EntradaEstudianteUI>();
-            if (ui != null)
-                ui.Configurar(est.Nombre, est.EsGrupo, resumen.Total, resumen.Incorrectos);
+                var entrada = Instantiate(prefabEntradaEstudiante, contenedorLista);
+                var ui = entrada.GetComponent<EntradaEstudianteUI>();
+                if (ui != null)
+                    ui.Configurar(est.Nombre, est.EsGrupo, resumen.Total, resumen.Incorrectos);
+                else
+                    Debug.LogError($"[Docente] El prefab '{prefabEntradaEstudiante.name}' no tiene el componente EntradaEstudianteUI.");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[Docente] Error procesando estudiante '{est.Nombre}': {ex.Message}");
+            }
         }
     }
 

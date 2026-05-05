@@ -46,7 +46,7 @@ public ResumenIntentos ObtenerResumenPorEstudiante(int estudianteId)
     cmd.CommandText = @"
         SELECT
             COUNT(*) as total,
-            SUM(CASE WHEN EsCorrecta = 0 THEN 1 ELSE 0 END) as incorrectos
+            COALESCE(SUM(CASE WHEN EsCorrecta = 0 THEN 1 ELSE 0 END), 0) as incorrectos
         FROM Respuestas WHERE EstudianteId = $e;
     ";
     cmd.Parameters.AddWithValue("$e", estudianteId);

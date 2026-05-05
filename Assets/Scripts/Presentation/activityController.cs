@@ -122,12 +122,12 @@ public class ActivityController : MonoBehaviour
             return;
         }
 
-                // Modo docente: abrir PDF directamente
+        // Modo docente: escena cargada accidentalmente por listener secundario — volver al menú
         if (ActivityManager.ModoDocente)
         {
-            ActivityManager.AbrirPDF(ActivityManager.ActividadActualId);
+            if (audioSource != null) { audioSource.playOnAwake = false; audioSource.Stop(); }
             ActivityManager.ModoDocente = false;
-            Invoke(nameof(VolverAModoDocente), 0.5f);
+            SceneManager.LoadScene("mp_docente");
             return;
         }
 
