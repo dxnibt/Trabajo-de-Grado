@@ -42,6 +42,8 @@ public class DocenteController : MonoBehaviour
 
     void Start()
     {
+        ActivityManager.ModoDocente = false; // Limpiar flag al entrar a la escena docente
+
         string dbPath = Path.Combine(Application.persistentDataPath, "miBase.db");
         var conexion = new ConexionSQLite(dbPath);
         new InicializadorBD(conexion).CrearTablas();
@@ -150,6 +152,11 @@ public class DocenteController : MonoBehaviour
                 Debug.LogError($"[Docente] Error procesando estudiante '{est.Nombre}': {ex.Message}");
             }
         }
+
+        // Forzar recálculo del layout para que los items sean visibles en el ScrollView
+        Canvas.ForceUpdateCanvases();
+        var rt = contenedorLista.GetComponent<RectTransform>();
+        if (rt != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
     }
 
     void AbrirRecursos()

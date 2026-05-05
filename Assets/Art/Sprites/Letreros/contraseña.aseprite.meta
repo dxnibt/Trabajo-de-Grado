@@ -163,7 +163,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: "Contrase\xF1a"
+    - name: "contrase\xF1a"
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
