@@ -1,4 +1,4 @@
-namespace Infraestructura.SQLite.SQLiteGateway
+﻿namespace Infraestructura.SQLite.SQLiteGateway
 {
     public class SQLiteActividadCompletadaGateway
     {
@@ -22,6 +22,7 @@ namespace Infraestructura.SQLite.SQLiteGateway
             cmd.Parameters.AddWithValue("$e", estudianteId);
             cmd.Parameters.AddWithValue("$a", actividadId);
             cmd.ExecuteNonQuery();
+            conn.Close();
         }
 
         public int ContarPorEstudiante(int estudianteId)
@@ -37,3 +38,4 @@ namespace Infraestructura.SQLite.SQLiteGateway
         }
     }
 }
+

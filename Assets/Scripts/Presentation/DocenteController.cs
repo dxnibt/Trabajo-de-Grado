@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -30,7 +30,7 @@ public class DocenteController : MonoBehaviour
     public GameObject prefabEntradaEstudiante;
     public Button botonVolverDesdeProgreso;
 
-    [Header("Panel: Recursos (selección de nivel)")]
+    [Header("Panel: Recursos (seleccion de nivel)")]
     public GameObject panelRecursos;
     public Button botonNivel1Recursos;
     public Button botonNivel2Recursos;
@@ -49,7 +49,17 @@ public class DocenteController : MonoBehaviour
         estudianteGateway = new SQLiteEstudianteGateway(conexion);
         respuestaGateway = new SQLiteRespuestaGateway(conexion);
 
-        MostrarSoloPanel(panelLogin);
+        // Verificar si hay sesion previa de docente
+        bool sesionDocente = PlayerPrefs.GetInt("SesionDocente", 0) == 1;
+        if (sesionDocente)
+        {
+            MostrarSoloPanel(panelPrincipal);
+        }
+        else
+        {
+            MostrarSoloPanel(panelLogin);
+        }
+
         if (textoErrorLogin != null) textoErrorLogin.gameObject.SetActive(false);
 
         botonIngresar.onClick.AddListener(Ingresar);
@@ -65,8 +75,6 @@ public class DocenteController : MonoBehaviour
         botonTTJRecursos?.onClick.AddListener(() => IrANivelRecursos("mp_ttj"));
     }
 
-    // ── Login ────────────────────────────────────────────────
-
     void Ingresar()
     {
         string usuario = campoUsuario != null ? campoUsuario.text.Trim() : "";
@@ -74,6 +82,8 @@ public class DocenteController : MonoBehaviour
 
         if (usuario == USUARIO_DOCENTE && contrasena == CONTRASENA_DOCENTE)
         {
+            PlayerPrefs.SetInt("SesionDocente", 1);
+            PlayerPrefs.Save();
             MostrarSoloPanel(panelPrincipal);
         }
         else
@@ -88,13 +98,13 @@ public class DocenteController : MonoBehaviour
 
     void CerrarSesion()
     {
+        PlayerPrefs.SetInt("SesionDocente", 0);
+        PlayerPrefs.Save();
         if (campoUsuario != null) campoUsuario.text = "";
         if (campoContrasena != null) campoContrasena.text = "";
         if (textoErrorLogin != null) textoErrorLogin.gameObject.SetActive(false);
         MostrarSoloPanel(panelLogin);
     }
-
-    // ── Progreso de estudiantes ──────────────────────────────
 
     void AbrirProgreso()
     {
@@ -120,8 +130,6 @@ public class DocenteController : MonoBehaviour
         }
     }
 
-    // ── Recursos / PDFs ──────────────────────────────────────
-
     void AbrirRecursos()
     {
         MostrarSoloPanel(panelRecursos);
@@ -132,8 +140,6 @@ public class DocenteController : MonoBehaviour
         ActivityManager.ModoDocente = true;
         SceneManager.LoadScene(escenaMenu);
     }
-
-    // ── Utilidad ─────────────────────────────────────────────
 
     void MostrarSoloPanel(GameObject panelActivo)
     {

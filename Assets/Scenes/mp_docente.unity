@@ -236,19 +236,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 109291592}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: menuPrincipalController, Assembly-CSharp
-        m_MethodName: cambiarEscena
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: mp_nivel1
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &109291592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2797,19 +2785,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1161058537}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: menuPrincipalController, Assembly-CSharp
-        m_MethodName: cambiarEscena
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: mp_ttj
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1161058537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4369,19 +4345,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2095611359}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: menuPrincipalController, Assembly-CSharp
-        m_MethodName: cambiarEscena
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: mp_nivel2
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2095611359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4633,7 +4597,7 @@ MonoBehaviour:
   botonCerrarSesion: {fileID: 1254651207}
   panelProgreso: {fileID: 935067335}
   contenedorLista: {fileID: 931861241}
-  prefabEntradaEstudiante: {fileID: 0}
+  prefabEntradaEstudiante: {fileID: 6952185894631291847, guid: b98ef2bcc9b2f17489c89b1a3f5eedc2, type: 3}
   botonVolverDesdeProgreso: {fileID: 230382424}
   panelRecursos: {fileID: 2019983676}
   botonNivel1Recursos: {fileID: 109291591}

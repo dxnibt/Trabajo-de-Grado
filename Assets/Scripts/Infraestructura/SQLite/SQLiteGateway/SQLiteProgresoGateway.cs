@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Dominio.entidades;
 using Dominio.gateway;
 using Infraestructura.SQLite.Mappers;
@@ -37,6 +37,7 @@ public class SQLiteProgresoGateway : ProgresoGateway
         cmd.Parameters.AddWithValue("$i", data.IndiceContenidoActual);
 
         cmd.ExecuteNonQuery();
+        conn.Close();
     }
 
     public int? ObtenerIndiceGuardado(int estudianteId, int actividadId)

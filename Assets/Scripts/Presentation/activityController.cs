@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -12,7 +12,7 @@ using Infraestructura.SQLite.SQLiteGateway;
 
 public class ActivityController : MonoBehaviour
 {
-    [Header("SESIÓN")]
+    [Header("SESIÃ“N")]
     public GameObject panelSesionSeleccion;
     public Button botonIndividualSesion;
     public Button botonGrupoSesion;
@@ -52,7 +52,7 @@ public class ActivityController : MonoBehaviour
     [Header("RETO")]
     public RetoPanelController retoPanelController;
 
-    [Header("RETROALIMENTACIÓN DE RESPUESTAS")]
+    [Header("RETROALIMENTACIÃ“N DE RESPUESTAS")]
     public Image imagenCorrecto;
     public Image imagenIncorrecto;
     public float tiempoMuestraResultado = 1.5f;
@@ -98,7 +98,7 @@ public class ActivityController : MonoBehaviour
             connCheck.Open();
             if (BaseDeDatosVacia(connCheck))
             {
-                Debug.Log("[ActivityController] BD sin datos → seeds");
+                Debug.Log("[ActivityController] BD sin datos â†’ seeds");
                 new SeedActividad(conexion).Ejecutar();
                 new SeedPregunta(conexion).Ejecutar();
             }
@@ -118,7 +118,16 @@ public class ActivityController : MonoBehaviour
         }
         if (actividad == null)
         {
-            Debug.LogError("[ActivityController] No se encontró la actividad");
+            Debug.LogError("[ActivityController] No se encontrÃ³ la actividad");
+            return;
+        }
+
+                // Modo docente: abrir PDF directamente
+        if (ActivityManager.ModoDocente)
+        {
+            ActivityManager.AbrirPDF(ActivityManager.ActividadActualId);
+            ActivityManager.ModoDocente = false;
+            Invoke(nameof(VolverAModoDocente), 0.5f);
             return;
         }
 
@@ -128,11 +137,11 @@ public class ActivityController : MonoBehaviour
         progreso = new Progreso();
 
         // ================================================
-        // LÓGICA DE RESTAURACIÓN DE SESIÓN
+        // LÃ“GICA DE RESTAURACIÃ“N DE SESIÃ“N
         // ================================================
         
         // Si no hay estudiante en memoria, intentar restaurar desde PlayerPrefs
-        // Solo restaura si la sesión guardada corresponde exactamente a esta misma actividad
+        // Solo restaura si la sesiÃ³n guardada corresponde exactamente a esta misma actividad
         if (ActivityManager.EstudianteId == 0)
         {
             string nombreGuardado = PlayerPrefs.GetString("UltimoEstudiante", "");
@@ -143,7 +152,7 @@ public class ActivityController : MonoBehaviour
 
             if (tieneSesionGuardada && tipoConfirmadoGuardado && mismaActividad)
             {
-                Debug.Log($"[ActivityController] Restaurando sesión guardada: {nombreGuardado}");
+                Debug.Log($"[ActivityController] Restaurando sesiÃ³n guardada: {nombreGuardado}");
                 bool esGrupoGuardado = PlayerPrefs.GetInt("UltimoEsGrupo", 0) == 1;
                 var est = estudianteGateway.ObtenerOCrearPorNombre(nombreGuardado, esGrupoGuardado);
 
@@ -154,24 +163,24 @@ public class ActivityController : MonoBehaviour
             }
         }
         
-        // Verificar si tenemos sesión activa
+        // Verificar si tenemos sesiÃ³n activa
         if (ActivityManager.EstudianteId > 0 && ActivityManager.TipoConfirmado)
         {
-            Debug.Log($"[ActivityController] Sesión activa encontrada: {ActivityManager.EstudianteNombre} (ID: {ActivityManager.EstudianteId})");
+            Debug.Log($"[ActivityController] SesiÃ³n activa encontrada: {ActivityManager.EstudianteNombre} (ID: {ActivityManager.EstudianteId})");
             IniciarContenidoActividad();
             return;
         }
         
-        // No hay sesión, mostrar panel por primera vez
-        Debug.Log("[ActivityController] No hay sesión activa - mostrando panel de selección");
+        // No hay sesiÃ³n, mostrar panel por primera vez
+        Debug.Log("[ActivityController] No hay sesiÃ³n activa - mostrando panel de selecciÃ³n");
         MostrarPanelSesion();
     }
 
-    // ── Sesión ──────────────────────────────────────────────
+    // â”€â”€ SesiÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void MostrarPanelSesion()
     {
-        Debug.Log("[ActivityController] Mostrando panel de selección de sesión");
+        Debug.Log("[ActivityController] Mostrando panel de selecciÃ³n de sesiÃ³n");
         
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(true);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(false);
@@ -212,7 +221,7 @@ public class ActivityController : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[ActivityController] Confirmando sesión - Nombre: {nombre}, EsGrupo: {esGrupoSesion}");
+        Debug.Log($"[ActivityController] Confirmando sesiÃ³n - Nombre: {nombre}, EsGrupo: {esGrupoSesion}");
 
         var est = estudianteGateway.ObtenerOCrearPorNombre(nombre, esGrupoSesion);
         ActivityManager.EstudianteId = est.Id;
@@ -232,7 +241,7 @@ public class ActivityController : MonoBehaviour
         IniciarContenidoActividad();
     }
 
-    // ── Inicio de actividad con restauración de progreso ────
+    // â”€â”€ Inicio de actividad con restauraciÃ³n de progreso â”€â”€â”€â”€
 
     void IniciarContenidoActividad()
     {
@@ -247,7 +256,7 @@ public class ActivityController : MonoBehaviour
                 ActivityManager.EstudianteId, ActivityManager.ActividadActualId);
             if (indice.HasValue && indice.Value > 0)
             {
-                Debug.Log($"[ActivityController] Restaurando progreso en índice: {indice.Value}");
+                Debug.Log($"[ActivityController] Restaurando progreso en Ã­ndice: {indice.Value}");
                 progreso.RestaurarIndice(indice.Value);
             }
         }
@@ -264,7 +273,7 @@ public class ActivityController : MonoBehaviour
         MostrarContenido();
     }
 
-    // ── Setup ────────────────────────────────────────────────
+    // â”€â”€ Setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void ConfigurarListeners()
     {
@@ -316,7 +325,7 @@ public class ActivityController : MonoBehaviour
         barraProgreso.value = total > 1 ? (float)progreso.IndiceContenido / (total - 1) : 1f;
     }
 
-    // ── Loop de audio ────────────────────────────────────────
+    // â”€â”€ Loop de audio â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void Update()
     {
@@ -341,7 +350,7 @@ public class ActivityController : MonoBehaviour
         Invoke(nameof(SiguienteContenido), 0.2f);
     }
 
-    // ── Mostrar contenido ────────────────────────────────────
+    // â”€â”€ Mostrar contenido â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void MostrarContenido()
     {
@@ -350,7 +359,7 @@ public class ActivityController : MonoBehaviour
         var contenido = progreso.ObtenerActual();
         if (contenido == null)
         {
-            Debug.LogWarning("[ActivityController] No hay más contenidos");
+            Debug.LogWarning("[ActivityController] No hay mÃ¡s contenidos");
             return;
         }
 
@@ -372,7 +381,7 @@ public class ActivityController : MonoBehaviour
                 tituloImage.sprite = s != null ? s : null;
             }
 
-            if (contenidoText != null) contenidoText.text = "Escucha la narración";
+            if (contenidoText != null) contenidoText.text = "Escucha la narraciÃ³n";
 
             AudioClip clip = Resources.Load<AudioClip>(historia.Recurso);
             if (clip == null && audioSource.clip != null) clip = audioSource.clip;
@@ -440,7 +449,7 @@ public class ActivityController : MonoBehaviour
         }
     }
 
-    // ── Opciones de respuesta ─────────────────────────────────
+    // â”€â”€ Opciones de respuesta â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void MostrarOpciones(List<string> opciones)
     {
@@ -512,7 +521,7 @@ public class ActivityController : MonoBehaviour
             // Cuando se completa la actividad
             if (retoPanelController != null && retoPanelController.gameObject.activeSelf)
             {
-                // El reto ya está mostrándose, no hacer nada
+                // El reto ya estÃ¡ mostrÃ¡ndose, no hacer nada
             }
             else
             {
@@ -522,7 +531,7 @@ public class ActivityController : MonoBehaviour
         }
     }
 
-    // ── Completar actividad ───────────────────────────────────
+    // â”€â”€ Completar actividad â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void CompletarActividad()
     {
@@ -541,7 +550,7 @@ public class ActivityController : MonoBehaviour
         VolverAMenuNiveles();
     }
 
-    // ── Eventos del Reto ──────────────────────────────────────
+    // â”€â”€ Eventos del Reto â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void ManejarRetoFinalizado()
     {
@@ -556,7 +565,7 @@ public class ActivityController : MonoBehaviour
         CompletarActividad();
     }
 
-    // ── Navegación ────────────────────────────────────────────
+    // â”€â”€ NavegaciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void VolverAPanelHistoria()
     {
@@ -568,12 +577,17 @@ public class ActivityController : MonoBehaviour
         MostrarContenido();
     }
 
+        void VolverAModoDocente()
+    {
+        SceneManager.LoadScene("mp_docente");
+    }
+
     void VolverAMenuNiveles()
     {
         SceneManager.LoadScene(ActivityManager.EscenaMenuNivel);
     }
 
-    // ── Utilidades UI ─────────────────────────────────────────
+    // â”€â”€ Utilidades UI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     void OcultarTodo()
     {
@@ -593,11 +607,11 @@ public class ActivityController : MonoBehaviour
         finalizarRetoButton?.gameObject.SetActive(false);
     }
 
-    // ── Método público para cerrar sesión ─────────────────────
+    // â”€â”€ MÃ©todo pÃºblico para cerrar sesiÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     public void CerrarSesion()
     {
-        Debug.Log("[ActivityController] Cerrando sesión manualmente");
+        Debug.Log("[ActivityController] Cerrando sesiÃ³n manualmente");
         
         ActivityManager.EstudianteId = 0;
         ActivityManager.EstudianteNombre = "";
@@ -609,11 +623,11 @@ public class ActivityController : MonoBehaviour
         PlayerPrefs.DeleteKey("TipoConfirmado");
         PlayerPrefs.Save();
         
-        // Recargar la escena para mostrar el panel de selección
+        // Recargar la escena para mostrar el panel de selecciÃ³n
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // ── Inferir contexto desde nombre de escena ───────────────
+    // â”€â”€ Inferir contexto desde nombre de escena â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void InferirContextoDesdEscena(string nombreEscena)
     {
@@ -634,3 +648,7 @@ public class ActivityController : MonoBehaviour
         catch { }
     }
 }
+
+
+
+

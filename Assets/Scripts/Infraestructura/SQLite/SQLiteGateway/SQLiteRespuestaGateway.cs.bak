@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Dominio.entidades;
 using Dominio.gateway;
 using Infraestructura.SQLite.Mappers;
@@ -35,7 +35,6 @@ public void Guardar(Respuesta respuesta)
     cmd.Parameters.AddWithValue("$correcta", data.EsCorrecta ? 1 : 0);
 
     cmd.ExecuteNonQuery();
-    conn.Close();
 }
 public ResumenIntentos ObtenerResumenPorEstudiante(int estudianteId)
 {
