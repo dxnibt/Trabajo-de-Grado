@@ -129,7 +129,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: atras granjera
     originalName: 
-    pivot: {x: 0.47619045, y: -0.095238104}
+    pivot: {x: 0.47619045, y: -0.045454547}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -138,7 +138,7 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 21
-      height: 42
+      height: 44
     spriteID: 66bdf2c80a8566e4bbbfdc28c944c72c
     spriteBone: []
     spriteOutline: []
@@ -163,14 +163,14 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: atras granjera
+    - name: Atras Granjera
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 5
-        y: 4
+        y: 2
         width: 21
-        height: 42
+        height: 44
       spriteId: 66bdf2c80a8566e4bbbfdc28c944c72c
     linkedCells: []
     tileCells: []
