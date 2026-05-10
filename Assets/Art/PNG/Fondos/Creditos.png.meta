@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7b202f8cee767d947836348bfa612838
+guid: 5014821704cd34e46a1f2561e5d15a2c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4128506966496204013
-    second: Frente Adulto2_0
+      213: 7175261627662145010
+    second: Creditos_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Frente Adulto2_0
+      name: Creditos_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 1
-        width: 21
-        height: 45
+        x: 0
+        y: 0
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 31ba449a9c894b6c0800000000000000
-      internalID: -4128506966496204013
+      spriteID: 2f51b472f66a39360800000000000000
+      internalID: 7175261627662145010
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Frente Adulto2_0: -4128506966496204013
+      Creditos_0: 7175261627662145010
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

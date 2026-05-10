@@ -202,7 +202,10 @@ public class ActivityController : MonoBehaviour
         if (panelSesionSeleccion != null) panelSesionSeleccion.SetActive(false);
         if (panelNombreSesion != null) panelNombreSesion.SetActive(true);
         if (campoNombreSesion != null)
+        {
             campoNombreSesion.text = "";
+            campoNombreSesion.characterLimit = grupo ? 20 : -1;
+        }
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
         if (labelIndividualSesion != null) labelIndividualSesion.gameObject.SetActive(!grupo);
         if (labelGrupoSesion != null) labelGrupoSesion.gameObject.SetActive(grupo);
@@ -605,6 +608,12 @@ public class ActivityController : MonoBehaviour
         volverButton?.gameObject.SetActive(false);
         volverHistoriaButton?.gameObject.SetActive(false);
         finalizarRetoButton?.gameObject.SetActive(false);
+    }
+
+    public void VolverAlPanelSesion()
+    {
+        OcultarTodo();
+        MostrarPanelSesion();
     }
 
     // â”€â”€ MÃ©todo pÃºblico para cerrar sesiÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

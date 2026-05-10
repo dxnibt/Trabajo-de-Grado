@@ -8,8 +8,8 @@ using Infraestructura.SQLite.SQLiteGateway;
 
 public class DocenteController : MonoBehaviour
 {
-    private const string USUARIO_DOCENTE = "docente";
-    private const string CONTRASENA_DOCENTE = "1234";
+    private const string USUARIO_DOCENTE = "DocenteSTEAM";
+    private const string CONTRASENA_DOCENTE = "M28D02PA24";
 
     [Header("Panel: Login")]
     public GameObject panelLogin;
