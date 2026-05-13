@@ -204,7 +204,7 @@ public class ActivityController : MonoBehaviour
         if (campoNombreSesion != null)
         {
             campoNombreSesion.text = "";
-            campoNombreSesion.characterLimit = grupo ? 20 : -1;
+            campoNombreSesion.characterLimit = 30;
         }
         if (textoErrorSesion != null) textoErrorSesion.gameObject.SetActive(false);
         if (labelIndividualSesion != null) labelIndividualSesion.gameObject.SetActive(!grupo);
@@ -219,6 +219,16 @@ public class ActivityController : MonoBehaviour
             if (textoErrorSesion != null)
             {
                 textoErrorSesion.text = "Por favor ingresa un nombre.";
+                textoErrorSesion.gameObject.SetActive(true);
+            }
+            return;
+        }
+
+        if (ContienNumeros(nombre))
+        {
+            if (textoErrorSesion != null)
+            {
+                textoErrorSesion.text = "El nombre no puede contener números.";
                 textoErrorSesion.gameObject.SetActive(true);
             }
             return;
@@ -655,6 +665,16 @@ public class ActivityController : MonoBehaviour
             else ActivityManager.EscenaMenuNivel = $"mp_nivel{nivelNum}";
         }
         catch { }
+    }
+
+    bool ContienNumeros(string texto)
+    {
+        foreach (char c in texto)
+        {
+            if (char.IsDigit(c))
+                return true;
+        }
+        return false;
     }
 }
 

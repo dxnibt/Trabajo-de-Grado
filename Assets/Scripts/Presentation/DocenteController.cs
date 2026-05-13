@@ -130,6 +130,8 @@ public class DocenteController : MonoBehaviour
         foreach (Transform hijo in contenedorLista)
             Destroy(hijo.gameObject);
 
+        CrearEncabezado();
+
         var estudiantes = estudianteGateway.ObtenerTodos();
         Debug.Log($"[Docente] Estudiantes encontrados en BD: {estudiantes.Count}");
 
@@ -176,5 +178,52 @@ public class DocenteController : MonoBehaviour
         if (panelPrincipal != null) panelPrincipal.SetActive(panelActivo == panelPrincipal);
         if (panelProgreso != null) panelProgreso.SetActive(panelActivo == panelProgreso);
         if (panelRecursos != null) panelRecursos.SetActive(panelActivo == panelRecursos);
+    }
+
+    void CrearEncabezado()
+    {
+        GameObject encabezado = new GameObject("EncabezadoColumnas");
+        encabezado.transform.SetParent(contenedorLista, false);
+
+        RectTransform rectTransform = encabezado.AddComponent<RectTransform>();
+        rectTransform.anchorMin = new Vector2(0, 0);
+        rectTransform.anchorMax = new Vector2(1, 0);
+        rectTransform.offsetMin = Vector2.zero;
+        rectTransform.offsetMax = Vector2.zero;
+        rectTransform.sizeDelta = new Vector2(0, 80);
+
+        LayoutElement layout = encabezado.AddComponent<LayoutElement>();
+        layout.preferredHeight = 80;
+
+        CrearTextosEncabezado(encabezado, rectTransform);
+    }
+
+    void CrearTextosEncabezado(GameObject padre, RectTransform padreRect)
+    {
+        string[] textos = { "Nombre", "Modo de trabajo", "Respuestas" };
+        float[] anchorMinX = { 0f, 0.45f, 0.65f };
+        float[] anchorMaxX = { 0.45f, 0.65f, 1f };
+        TextAnchor[] alineaciones = { TextAnchor.MiddleCenter, TextAnchor.MiddleCenter, TextAnchor.MiddleRight };
+
+        for (int i = 0; i < textos.Length; i++)
+        {
+            GameObject textObj = new GameObject(textos[i] + "Text");
+            textObj.transform.SetParent(padre.transform, false);
+
+            RectTransform textRect = textObj.AddComponent<RectTransform>();
+            textRect.anchorMin = new Vector2(anchorMinX[i], 0);
+            textRect.anchorMax = new Vector2(anchorMaxX[i], 1);
+            textRect.offsetMin = Vector2.zero;
+            textRect.offsetMax = Vector2.zero;
+
+            textObj.AddComponent<CanvasRenderer>();
+
+            TextMeshProUGUI tmp = textObj.AddComponent<TextMeshProUGUI>();
+            tmp.text = textos[i];
+            tmp.color = Color.black;
+            tmp.fontSize = 20;
+            tmp.fontStyle = FontStyles.Bold;
+            tmp.alignment = TextAlignmentOptions.Center;
+        }
     }
 }
